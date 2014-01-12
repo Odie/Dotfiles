@@ -1,0 +1,188 @@
+"=====[ Source everything from individual settings files ]=============
+"for f in split(glob('~/vimfiles/vimrc.d/*.vim'), '\n')
+"	exe 'source' f
+"endfor
+
+"Basic Settings=================================================={{{
+
+"=====[ Color Scheme ]=============
+"color molokai
+color wombat256
+
+"=====[ Font ]=============
+" Setup font for MacVim
+if has('gui_running')
+	set guifont=Anonymous\ Pro\ for\ Powerline:h12
+endif
+
+"=====[ Sane tab settings for vim ]=============
+set noexpandtab
+set tabstop=2 softtabstop=2 shiftwidth=2
+augroup detect_indent
+	autocmd!
+	autocmd BufReadPost * :DetectIndent
+	let g:detectindent_preferred_indent = 2
+augroup END
+
+"=====[ Enable clipboard in terminal ]=============
+if ! has('gui_running')
+	set clipboard=unnamed
+endif
+
+"=====[ Hightlight current line ]=============
+set cursorline										" highlight current line
+"hi CursorLine term=none cterm=none ctermbg=236		" adjust color
+"hi Visual term=reverse ctermbg=236
+
+"=====[ Reload file when modified ]=============
+set autoread
+
+"=====[ Discard changed buffers by default ]=============
+set hidden
+
+"=====[ Remove Trailing white spaces ]=============
+augroup no_trailing_spaces
+  autocmd!
+  autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+augroup END
+
+"=====[ Remove Search Highlighting on esc key ]=============
+if has('gui')
+  nnoremap <silent> <esc> :nohlsearch<return><esc>
+else
+	augroup no_highlight
+		autocmd!
+		autocmd TermResponse * nnoremap <esc> :noh<return><esc>
+	augroup END
+endif
+
+"=====[ Disable bells ]=============
+set noerrorbells visualbell t_vb=
+autocmd GUIEnter * set visualbell t_vb=
+
+set ttyfast
+set lazyredraw
+
+"=====[ Centrally stored swp files ]=============
+"Commented because Janus already does this. This is kept here in case we
+" need a vimrc without using Janus
+"set backup
+"set backupdir=~/.vim.backup/backup
+"set directory=~/.vim.backup/tmp
+
+"==================================================================}}}
+
+"[FileType-specific Settings]======================================{{{
+augroup filetype_vim
+	autocmd!
+	autocmd FileType vim setlocal foldmethod=marker
+augroup END
+
+augroup twig_autocmd
+	autocmd!
+	autocmd FileType twig set syntax=html
+augroup END
+
+augroup filetype_haskell
+	autocmd!
+	autocmd FileType haskell set expandtab
+augroup END
+"==================================================================}}}
+
+"[Plugin Settings]======================================{{{
+
+"=====[ Powerline Settings ]=============
+" Immediately reflect mode changes
+if ! has('gui_running')
+	set ttimeoutlen=10
+	augroup FastEscape
+	autocmd!
+		au InsertEnter * set timeoutlen=0
+		au InsertLeave * set timeoutlen=1000
+	augroup END
+endif
+
+set laststatus=2		" Always show statusline
+set t_Co=256			" Use 256 colours (Use this setting only if your terminal supports 256 colours)
+set noshowmode			" Hide the default mode text (e.g. -- INSERT -- below the statusline)
+set encoding=utf-8		" make sure we can display fancy characters correctly
+
+"=====[ Unite configuartion ]=============
+" Use ag if available
+if executable('ag')
+	let g:unite_source_grep_command = 'ag'
+	let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+	let g:unite_source_grep_recursive_opt = ''
+endif
+
+call unite#custom#source('file_rec', 'ignore_pattern', '/.png$/')
+let g:unite_enable_start_insert = 1
+let g:unite_winheight = 10
+let g:unite_split_rule = 'botright'
+let g:unite_prompt = '>>> '
+let g:unite_source_history_yank_enable = 1
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+"nnoremap <C-p> :Unite file_rec/async<CR>
+"nnoremap <C-i> :Unite -buffer-name=files	file<cr>
+nnoremap <leader>r :Unite -buffer-name=mru		 file_mru<cr>
+nnoremap <leader>o :Unite -buffer-name=outline outline<cr>
+nnoremap <leader>y :Unite -buffer-name=yank		 history/yank<cr>
+nnoremap <leader>b :Unite -buffer-name=buffer -quick-match buffer<cr>
+
+" Custom mappings for the unite buffer
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+	" Play nice with supertab
+	let b:SuperTabDisabled=1
+	nmap <buffer> <ESC>		 <Plug>(unite_exit)
+	" Enable navigation with control-j and control-k in insert mode
+	imap <buffer> <C-j>	<Plug>(unite_select_next_line)
+	imap <buffer> <C-k>	<Plug>(unite_select_previous_line)
+endfunction
+
+"==================================================================}}}
+
+"[Custom functions]================================================{{{
+
+"=====[ Highlight the match in red ]=============
+function! HLNext (totalBlinkTime)
+	highlight WhiteOnRed ctermfg=white ctermbg=red guibg=darkred guifg=white
+	let [bufnum, lnum, col, off] = getpos('.')
+	let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
+	let target_pat = '\c\%#'.@/
+
+	let blinkCount = 1
+	let blinkTime = a:totalBlinkTime/((blinkCount * 2) - 1)
+	let i = 0
+	while i < blinkCount
+		let i += 1
+		let ring = matchadd("WhiteOnRed", target_pat, 101)
+		redraw
+		exec 'sleep ' . float2nr(blinkTime * 1000) . 'm'
+		call matchdelete(ring)
+		redraw
+		if i < blinkCount
+			exec 'sleep ' . float2nr(blinkTime * 1000) . 'm'
+		endif
+	endwhile
+endfunction
+
+"==================================================================}}}
+
+"[Mappings]=========================================================={{{
+
+""=====[ Setup key mappings ]=============
+:nnoremap <leader>ev :vsplit ~/.vimrc.after<cr>
+:nnoremap <leader>sv :source ~/.vimrc.after<cr>:echom "Sourced vimrc"<cr>
+
+"=====[ Highlight matches when jumping to next ]=============
+nnoremap <silent> n n:call HLNext(0.2)<cr>
+nnoremap <silent> N N:call HLNext(0.2)<cr>
+
+"=====[ Setup movement mappings ]=============
+"" Select contents of next or last ()
+:onoremap in( :<c-u>normal! f(vi(<cr>
+:onoremap il( :<c-u>normal! F)vi(<cr>
+
+"==================================================================}}}

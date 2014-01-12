@@ -1,0 +1,25 @@
+set encoding=utf-8
+set guifont=Menlo\ for\ Powerline
+let g:Powerline_symbols = 'fancy'
+
+call janus#disable_plugin('nerdcommenter')	" Using tComment instead
+"call janus#disable_plugin('ctrlp')					" Using Unite instead
+call janus#disable_plugin('buffergator')		" Using Unite instead
+
+"-------------------- Powerline settings begin ---------------------
+set rtp+=$HOME/.janus/powerline/powerline/bindings/vim
+
+
+" -------------------- Syntastic configuration  ---------------------
+let g:syntastic_check_on_open=1
+let g:syntastic_auto_loc_list=1								" open and close the error list automatically
+
+let g:syntastic_mode_map={ 'mode': 'active',
+                     \ 'active_filetypes': [],
+                     \ 'passive_filetypes': ['html', 'lua'] }
+
+let g:syntastic_error_symbol = '✗'						" Better :sign interface symbols
+let g:syntastic_warning_symbol = '!'
+
+let g:syntastic_javascript_checkers = ['jshint']
+"let g:syntastic_lua_checkers = ['luainspect']
