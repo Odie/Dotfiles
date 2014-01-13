@@ -172,6 +172,11 @@ endfunction
 
 "[Mappings]=========================================================={{{
 
+map <C-H> <C-W>h
+map <C-J> <C-W>j
+map <C-K> <C-W>k
+map <C-L> <C-W>l<C-W>_
+
 ""=====[ Setup key mappings ]=============
 :nnoremap <leader>ev :vsplit ~/.vimrc.after<cr>
 :nnoremap <leader>sv :source ~/.vimrc.after<cr>:echom "Sourced vimrc"<cr>
