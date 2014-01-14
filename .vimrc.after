@@ -40,11 +40,6 @@ set autoread
 "=====[ Discard changed buffers by default ]=============
 set hidden
 
-"=====[ Remove Trailing white spaces ]=============
-augroup no_trailing_spaces
-  autocmd!
-  autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-augroup END
 
 "=====[ Remove Search Highlighting on esc key ]=============
 if has('gui')
@@ -73,12 +68,22 @@ set lazyredraw
 "==================================================================}}}
 
 "[FileType-specific Settings]======================================{{{
+"=====[ Remove Trailing white spaces ]=============
+augroup no_trailing_spaces_pre
+	" By default, trailing spaces will be trimmed for all file types.
+	" Space trimming will be applied at BufRead and BufWrite.
+	" This can be disabled on a buffer to buffer basis by setting
+	" b:trim_trailing_spaces = 0
+	autocmd!
+	autocmd FileType * let b:trim_trailing_spaces=1
+augroup END
+
 augroup filetype_vim
 	autocmd!
 	autocmd FileType vim setlocal foldmethod=marker
 augroup END
 
-augroup twig_autocmd
+augroup filetype_twig
 	autocmd!
 	autocmd FileType twig set syntax=html
 augroup END
@@ -86,6 +91,14 @@ augroup END
 augroup filetype_haskell
 	autocmd!
 	autocmd FileType haskell set expandtab
+augroup END
+
+augroup no_trailing_spaces_post
+	autocmd!
+	autocmd BufRead,BufWrite *
+		\ if (! &bin) && b:trim_trailing_spaces |
+		\		silent! %s/\s\+$//ge |
+		\ endif
 augroup END
 "==================================================================}}}
 
@@ -166,6 +179,12 @@ function! HLNext (totalBlinkTime)
 			exec 'sleep ' . float2nr(blinkTime * 1000) . 'm'
 		endif
 	endwhile
+endfunction
+
+" trim trailing whitespace in the current file
+function! RTrim()
+  %s/\v\s+$//e
+  noh
 endfunction
 
 "==================================================================}}}
