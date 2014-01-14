@@ -1,5 +1,5 @@
+let mapleader = ","
 set encoding=utf-8
-set guifont=Menlo\ for\ Powerline
 let g:Powerline_symbols = 'fancy'
 
 call janus#disable_plugin('nerdcommenter')	" Using tComment instead
