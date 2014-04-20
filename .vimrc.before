@@ -10,7 +10,7 @@ call janus#disable_plugin('buffergator')		" Using Unite instead
 set rtp+=$HOME/.janus/powerline/powerline/bindings/vim
 
 
-" -------------------- Syntastic configuration  ---------------------
+"=====[ Syntastic Settings ]=============
 let g:syntastic_check_on_open=1
 let g:syntastic_auto_loc_list=1								" open and close the error list automatically
 
@@ -23,3 +23,12 @@ let g:syntastic_warning_symbol = '!'
 
 let g:syntastic_javascript_checkers = ['jshint']
 "let g:syntastic_lua_checkers = ['luainspect']
+
+"=====[ Yankring Settings ]=============
+"set <m-p> = ^[p
+"set <m-n> = ^[n
+let g:yankring_replace_n_pkey = "π"
+let g:yankring_replace_n_nkey = "˜"
+let g:yankring_history_dir = '~/.vim/_temp'
+
+source ~/.janus.before/ctab.vim
