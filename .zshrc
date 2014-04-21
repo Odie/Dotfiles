@@ -12,6 +12,7 @@ export LANG=en_US.UTF-8
 
 export PATH=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/libexec:$PATH
 export EDITOR="vim -f"
+export VISUAL="vim"
 
 # ------------------------ fasd initialization ----------------------------
 eval "$(fasd --init auto)"
