@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ $# -lt 2 ]; then
-	echo "Usage: swap filename1 filename2"
+if [ $# -lt 1 ]; then
+	echo "Usage: swap filename1 [filename2]"
 	echo "Swaps the filename of the given files"
 	exit 0
 fi
@@ -14,10 +14,49 @@ function checkFileExistsOrDie()
 	fi
 }
 
-checkFileExistsOrDie $1
-checkFileExistsOrDie $2
+file1=$1
+file2=$2
 
+checkFileExistsOrDie $file1
+
+# If a second file (swap target) hasn't been specified...
+if ! [ -n "${2+1}" ]; then
+
+	# Try a to use some default files (.old and .new) to swap to/from
+	candidateExt=(.old .new)
+	for ext in "${candidateExt[@]}"; do
+		fn=$file1$ext
+
+		# If a cooresponding file exists, then use that as the swap target
+		if [ -e $fn ]; then
+			file2=$fn
+			break
+		fi
+	done
+
+	# If a viable swap target has not been found,
+	# there is nothing to swap.
+	# Stop processing.
+	if ! [ -n "${file2+1}" ]; then
+		echo "No viable swap target found for $file1"
+		exit 0
+	fi
+
+	echo "Swapping with $file2"
+fi
+
+checkFileExistsOrDie $file2
+
+# Try to create file/name as a temporary swap space
 tmpfile=$(mktemp $(dirname "$file1")/XXXXXX)
-mv "$1" "$tmpfile"
-mv -i "$2" "$1"
-mv -i "$tmpfile" "$2"
+
+# If we cannot create the temp file, we've probably run into a permission problem.
+# Stop further processing
+if [ $? != 0 ]; then
+	echo "Cannot create temp file for swapping. Swap aborted."
+	exit $?
+fi
+
+mv "$file1" "$tmpfile"
+mv -i "$file2" "$file1"
+mv -i "$tmpfile" "$file2"
