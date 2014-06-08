@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ $# -lt 2 ]; then
+	echo "Usage: swap filename1 filename2"
+	echo "Swaps the filename of the given files"
+	exit 0
+fi
+
+function checkFileExistsOrDie()
+{
+	if ! [ -e $1 ]; then
+		echo "File \"$1\" does not exist"
+		exit 0
+	fi
+}
+
+checkFileExistsOrDie $1
+checkFileExistsOrDie $2
+
+tmpfile=$(mktemp $(dirname "$file1")/XXXXXX)
+mv "$1" "$tmpfile"
+mv -i "$2" "$1"
+mv -i "$tmpfile" "$2"

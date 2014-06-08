@@ -30,14 +30,6 @@ alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias flush="dscacheutil -flushcache" # Flush DNS cache
 alias fp="cd \`finderPath\`"
 
-function swap()
-{
-	tmpfile=$(mktemp $(dirname "$file1")/XXXXXX)
-	mv "$1" "$tmpfile"
-	mv "$2" "$1"
-	mv "$tmpfile" "$2"
-}
-
 function finderPath()
 {
 	osascript -e 'tell application "Finder"'\
