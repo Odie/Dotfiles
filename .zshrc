@@ -10,7 +10,7 @@ export LC_CTYPE=C
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-export PATH=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/libexec:$PATH
+export PATH=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~/bin:~/.composer/vendor/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/libexec:$PATH
 export EDITOR="vim -f"
 export VISUAL="vim"
 
