@@ -38,3 +38,8 @@ function finderPath()
 	-e 'else' -e 'get POSIX path of (desktop as alias)'\
 	-e 'end if' -e 'end tell';
 }
+
+function phpunit()
+{
+	`git-root`/vendor/bin/phpunit -c `git-root`/phpunit.xml
+}
