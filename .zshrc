@@ -28,7 +28,7 @@ alias 'json'='python -mjson.tool'
 
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias flush="dscacheutil -flushcache" # Flush DNS cache
-alias fp="cd \`finderPath\`"
+alias fp="cd \"\`finderPath\`\""
 
 function finderPath()
 {
