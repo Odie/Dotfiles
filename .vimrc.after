@@ -15,7 +15,7 @@ color wombat256
 "=====[ Font ]=============
 " Setup font for MacVim
 if has('gui_running')
-	set guifont=Anonymous\ Pro\ for\ Powerline:h12
+	set guifont=Anonymous\ Pro\ for\ Powerline:h14
 	set columns=999    " create windows with maximum width by default
   set lines=999      " create windows with maximum height by default
 endif
