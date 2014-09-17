@@ -17,7 +17,7 @@ color wombat256
 if has('gui_running')
 	set guifont=Anonymous\ Pro\ for\ Powerline:h14
 	set columns=999    " create windows with maximum width by default
-  set lines=999      " create windows with maximum height by default
+	set lines=999      " create windows with maximum height by default
 endif
 
 "=====[ Sane tab settings for vim ]=============
@@ -29,8 +29,8 @@ set shiftwidth=2
 set tabstop=2
 augroup detect_indent
 	autocmd!
-	autocmd BufReadPost * :DetectIndent
 	let g:detectindent_preferred_indent = 2
+	autocmd BufReadPost * :DetectIndent
 augroup END
 
 "=====[ Enable clipboard in terminal ]=============
@@ -68,6 +68,15 @@ set lazyredraw
 set nobackup
 "set backupdir=~/.vim.backup/backup
 "set directory=~/.vim.backup/tmp
+
+"=====[ Use par for better formatting ]=============
+:set formatprg=par
+
+"=====[ Emmet.vim settings ]=============
+let g:user_emmet_mode='a'                   "enable all function in all mode.
+let g:user_emmet_install_global = 0
+autocmd FileType html,css,hbs EmmetInstall  "enable for specific file types only
+"let g:user_emmet_leader_key='<C-I>'
 
 "==================================================================}}}
 
@@ -167,10 +176,10 @@ if ! has('gui_running')
 	augroup END
 endif
 
-set laststatus=2		" Always show statusline
-set t_Co=256			" Use 256 colours (Use this setting only if your terminal supports 256 colours)
-set noshowmode			" Hide the default mode text (e.g. -- INSERT -- below the statusline)
-set encoding=utf-8		" make sure we can display fancy characters correctly
+set laststatus=2    " Always show statusline
+set t_Co=256        " Use 256 colours (Use this setting only if your terminal supports 256 colours)
+set noshowmode      " Hide the default mode text (e.g. -- INSERT -- below the statusline)
+set encoding=utf-8  " make sure we can display fancy characters correctly
 
 "=====[ Unite configuartion ]=============
 " Use ag if available
@@ -239,6 +248,31 @@ function! RTrim()
   noh
 endfunction
 
+function! Stab()
+  let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
+  if l:tabstop > 0
+    let &l:sts = l:tabstop
+    let &l:ts = l:tabstop
+    let &l:sw = l:tabstop
+  endif
+  call SummarizeTabs()
+endfunction
+
+function! SummarizeTabs()
+  try
+    echohl ModeMsg
+    echon 'tabstop='.&l:ts
+    echon ' shiftwidth='.&l:sw
+    echon ' softtabstop='.&l:sts
+    if &l:et
+      echon ' expandtab'
+    else
+      echon ' noexpandtab'
+    endif
+  finally
+    echohl None
+  endtry
+endfunction
 "==================================================================}}}
 
 "[Mappings]=========================================================={{{
