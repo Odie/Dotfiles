@@ -1,0 +1,4 @@
+" Swap ; and : to make it easy to enter command mode
+nnoremap ; :
+nnoremap : ;
+
