@@ -17,8 +17,8 @@ NeoBundleFetch 'Shougo/neobundle.vim'                      " NeoBundle, required
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Bundle definitions
-
 " Add or remove your Bundles here:
+
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
       \     'windows' : 'tools\\update-dll-mingw',
@@ -28,12 +28,38 @@ NeoBundle 'Shougo/vimproc.vim', {
       \    },
       \ }
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ~> Bundle: Auto-completion
+
+let g:neocomplete#enable_at_startup = 1
+NeoBundle 'Shougo/neocomplete.vim'
+
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
 NeoBundle 'Shougo/neosnippet.vim'
 NeoBundle 'Shougo/neosnippet-snippets'
+
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'kien/ctrlp.vim'
+
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Lokaltog/powerline'
 NeoBundle 'vim-scripts/Smart-Tabs'
@@ -45,12 +71,15 @@ NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'tpope/vim-markdown'
 
 NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'chriskempson/base16-vim'
 
-let g:neocomplete#enable_at_startup = 1
-NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'jordwalke/VimAutoMakeDirectory'
+
+NeoBundle 'vim-scripts/TaskList.vim'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> NeoBundle finish initialization
