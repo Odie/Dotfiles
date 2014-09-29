@@ -1,51 +1,42 @@
 require("colorize")
 require("pathname")
+require("find")
 
 task :default => [:install]
 
-# Creates a cooresponding symlink in targetDir for each file found in rootDir
-# Returns a list of directories encountered but were not linked
-def linkDirContents(rootDir, targetDir, linkDirs = false)
-	dirs = Array.new
+# Recreates the directory structure from rootDir in targetDir.
+# Any files found within will be sym_linked
+def linkDirContents(rootDir, targetDir)
 	rootDir = Pathname.new(rootDir)
 	targetDir = Pathname.new(targetDir)
 
-	filePattern = File.join(rootDir, "{*,.*}")
+	# Recurisvely visit all files in the rootDir
+	Find.find(rootDir) { |srcFullPath|
+		srcFullPath = Pathname.new(srcFullPath)
+		relativePath = srcFullPath.relative_path_from(rootDir)
 
-	Dir.glob(filePattern) { |item|
-		# Filter out any items that are . or ..
-		basename = File.basename(item)
-		if basename == "." or basename == ".."
+		case relativePath.to_s
+		when '.'
 			next
-		end
 
-		# Skip any .git directory
-		if basename == ".git"
-			next
+		# ignore git directory and children
+		when '.git'
+			Find.prune
 		end
-
-		srcFullPath = Pathname.new(item)
-		targetFullPath = targetDir + srcFullPath.relative_path_from(rootDir)
 
 		# Skip this rake file
-		if srcFullPath.to_s == __FILE__
-			next
+		next if srcFullPath.to_s == __FILE__
+
+		targetFullPath = targetDir + relativePath
+
+		if srcFullPath.directory?
+			puts "making dir: #{targetFullPath}"
+			FileUtils.mkdir_p(targetFullPath)
 		end
 
-		# Skip directory itself, but collect them to be returned
-		if File.directory?(srcFullPath)
-			if not linkDirs
-				dirs.push(item)
-				next
-			end
-		end
-
-		# Link all individual files
+		puts "#{srcFullPath} => #{targetFullPath}"
 		FileUtils.ln_sf(srcFullPath, targetFullPath)
-		puts("#{srcFullPath} => #{targetFullPath}")
 	}
-
-	return dirs
 end
 
 task :install do
@@ -54,18 +45,7 @@ task :install do
 	rootDir = Pathname.new(File.dirname(__FILE__))
 	targetDir = Pathname.new(Dir.home)
 
-	# Link the contents of dotfile/* to ~
-	dirs = linkDirContents(rootDir, targetDir)
+	linkDirContents(rootDir, targetDir)
 
-	# Now link the contents of dotfile/{dir}/* to ~/{dir}/*
-	# This is done so we essentially merge with the contents of the top level home directories
-	# instead of replacing them.
-	dirs.each{|absItemPath|
-		childRootDir = absItemPath
-		childTargetDir = targetDir + Pathname.new(absItemPath).relative_path_from(rootDir)
-		FileUtils.mkdir_p(childTargetDir)
-		linkDirContents(childRootDir, childTargetDir, true)
-	}
-
-	puts("Done!".green)
+	puts("\nDone!".green)
 end
