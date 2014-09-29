@@ -1,10 +1,9 @@
 let mapleader = ","
-set encoding=utf-8
 let g:Powerline_symbols = 'fancy'
 
-call janus#disable_plugin('nerdcommenter')	" Using tComment instead
+"call janus#disable_plugin('nerdcommenter')	" Using tComment instead
 "call janus#disable_plugin('ctrlp')					" Using Unite instead
-call janus#disable_plugin('buffergator')		" Using Unite instead
+"call janus#disable_plugin('buffergator')		" Using Unite instead
 
 "-------------------- Powerline settings begin ---------------------
 set rtp+=$HOME/.janus/powerline/powerline/bindings/vim
@@ -27,8 +26,7 @@ let g:syntastic_javascript_checkers = ['jshint']
 "=====[ Yankring Settings ]=============
 "set <m-p> = ^[p
 "set <m-n> = ^[n
-let g:yankring_replace_n_pkey = "π"
-let g:yankring_replace_n_nkey = "˜"
-let g:yankring_history_dir = '~/.vim/_temp'
+"let g:yankring_replace_n_pkey = "π"
+"let g:yankring_replace_n_nkey = "˜"
+"let g:yankring_history_dir = '~/.vim/_temp'
 
-source ~/.janus.before/ctab.vim
