@@ -44,8 +44,13 @@ NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'tpope/vim-surround'
 
+NeoBundle 'tomtom/tcomment_vim'
+
 NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'chriskempson/base16-vim'
+
+let g:neocomplete#enable_at_startup = 1
+NeoBundle 'Shougo/neocomplete.vim'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> NeoBundle finish initialization
