@@ -39,21 +39,29 @@ imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
+NeoBundle 'SirVer/ultisnips'
+NeoBundle 'Odie/Smart-Tabs'
 
-" For snippet_complete marker.
-if has('conceal')
-  set conceallevel=2 concealcursor=i
+" Use <tab> and <s-tab> to expand a snippet and move between fields
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" Integrate SmartTab and Ultisnip
+let g:ulti_expand_or_jump_res = 0
+function! Ulti_ExpandOrJump_and_getRes()
+ call UltiSnips#ExpandSnippetOrJump()
+ return g:ulti_expand_or_jump_res
+endfunction
+
+if neobundle#tap('ultisnips')
+	function! neobundle#hooks.on_source(bundle)
+		inoremap <tab> <C-R>=(Ulti_ExpandOrJump_and_getRes() > 0)?"":InsertSmartTab()<CR>
+	endfunction
+	call neobundle#untap()
 endif
 
-NeoBundle 'Shougo/neosnippet.vim'
-NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'honza/vim-snippets'
 
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
@@ -62,7 +70,6 @@ NeoBundle 'kien/ctrlp.vim'
 
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Lokaltog/powerline'
-NeoBundle 'vim-scripts/Smart-Tabs'
 NeoBundle 'chrisbra/SudoEdit.vim'
 NeoBundle 'rking/ag.vim'
 NeoBundle 'tpope/vim-unimpaired'
