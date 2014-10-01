@@ -24,6 +24,7 @@ alias ll="ls -Glh" # long list, excludes dot files
 alias lla="ls -Gla" # long list all, includes dot files
 
 alias v='f -e vim' # quick opening files with vim
+alias em='emacs'
 alias 'json'='python -mjson.tool'
 
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
