@@ -15,6 +15,7 @@
 	br = branch
 	ctags = !.git/hooks/ctags
 	unpushed = log --stat origin/master..HEAD
+	tree = log --graph --all --decorate --pretty=oneline --abbrev-commit
 
 [merge]
 	tool = araxis
