@@ -118,6 +118,9 @@ augroup no_trailing_spaces_pre
 	autocmd BufNewFile,BufRead * let b:trim_trailing_spaces=1
 augroup END
 
+" Files ending in .json are javascript files
+autocmd BufRead,BufNewFile *.json set filetype=javascript
+
 augroup filetype_vim
 	autocmd!
 	autocmd FileType vim setlocal foldmethod=marker
