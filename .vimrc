@@ -88,6 +88,13 @@ NeoBundle 'jordwalke/VimAutoMakeDirectory'
 
 NeoBundle 'vim-scripts/TaskList.vim'
 
+NeoBundle 'xolox/vim-misc'
+NeoBundle 'xolox/vim-easytags'
+let g:easytags_async = 1          " Run ctags asynchronously
+
+let g:easytags_dynamic_files = 1  " Generate tags local to a project
+set tags=./tags;                  " Where to store tag files local to the project
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> NeoBundle finish initialization
 
