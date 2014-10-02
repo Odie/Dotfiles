@@ -32,6 +32,7 @@ def linkDirContents(rootDir, targetDir)
 		if srcFullPath.directory?
 			puts "making dir: #{targetFullPath}"
 			FileUtils.mkdir_p(targetFullPath)
+			next
 		end
 
 		puts "#{srcFullPath} => #{targetFullPath}"
