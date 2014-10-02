@@ -7,8 +7,9 @@ set background=dark
 "color monokai
 "color wombat256
 "color railscasts
-let base16colorspace=256
-color base16-railscasts
+"let base16colorspace=256
+"color base16-railscasts
+color zenburn
 "color solarized
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
