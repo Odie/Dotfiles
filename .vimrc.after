@@ -202,14 +202,14 @@ augroup END
 
 "=====[ Powerline Settings ]=============
 " Immediately reflect mode changes
-if ! has('gui_running')
-	set ttimeoutlen=10
-	augroup FastEscape
-	autocmd!
-		au InsertEnter * set timeoutlen=0
-		au InsertLeave * set timeoutlen=1000
-	augroup END
-endif
+" if ! has('gui_running')
+" 	set ttimeoutlen=10
+" 	augroup FastEscape
+" 	autocmd!
+" 		au InsertEnter * set timeoutlen=0
+" 		au InsertLeave * set timeoutlen=1000
+" 	augroup END
+" endif
 
 set laststatus=2		  " Always show statusline
 set t_Co=256			    " Use 256 colours (Use this setting only if your terminal supports 256 colours)
@@ -313,8 +313,14 @@ endfunction
 "[Mappings]=========================================================={{{
 
 "=====[ Faster ':' commands ]=============
+
+" Switch ":" and ";"
 nnoremap ; :
 nnoremap : ;
+
+" kj to escape insert mode
+inoremap <special> kj <Esc>
+
 
 map <C-H> <C-W>h
 map <C-J> <C-W>j
