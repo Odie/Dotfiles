@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+#
+# update-dotfiles
+#
+# This script sets up the dotfiles are placed into the current user's directory.
+# This script should be symlinked into ~/bin and should be available to the user
+# at all times.
+#
+# All the real work is already done in the "rake install" task. So all we need
+# to do is to locate the dotfiles repository and invoke the task.
+
+if File.symlink?(__FILE__)
+	realPath = File.readlink(__FILE__)
+	Dir.chdir(File.dirname(realPath))
+end
+
+system 'rake install'
