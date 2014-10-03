@@ -67,6 +67,8 @@ NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'kien/ctrlp.vim'
+let g:ctrlp_follow_symlinks = 2   " Always follow symlinks
+
 
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Lokaltog/powerline'
