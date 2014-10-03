@@ -43,4 +43,7 @@
 (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char)
 
 ; Enter "kj" to escape from insert mode back to normal mode
-(key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
+(define-key evil-insert-state-map (kbd "kj") 'evil-normal-state)
+
+; Use "C-p" for super fast file navigation, aka "goto anything"
+(define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
