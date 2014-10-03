@@ -233,12 +233,6 @@ let g:unite_prompt = '>>> '
 let g:unite_source_history_yank_enable = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
-"nnoremap <C-p> :Unite file_rec/async<CR>
-"nnoremap <C-i> :Unite -buffer-name=files	file<cr>
-nnoremap <leader>r :Unite -buffer-name=mru		 file_mru<cr>
-nnoremap <leader>o :Unite -buffer-name=outline outline<cr>
-nnoremap <leader>y :Unite -buffer-name=yank		 history/yank<cr>
-nnoremap <leader>b :Unite -buffer-name=buffer -quick-match buffer<cr>
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
@@ -322,12 +316,40 @@ nnoremap : ;
 " kj to escape insert mode
 inoremap <special> kj <Esc>
 
+" Shortcut to regenerate tags
+nnoremap <leader><leader>rt :UpdateTags -R .<CR>
 
+" Open NerdTree quickly
+nnoremap <leader>n :NERDTreeToggle<CR>
+
+" Unite keys
+nnoremap <leader><C-p> :Unite -no-split -auto-preview -start-insert tag<CR>
+nnoremap <leader>r :Unite -buffer-name=mru		 file_mru<cr>
+nnoremap <leader>o :Unite -buffer-name=outline outline<cr>
+nnoremap <leader>y :Unite -buffer-name=yank		 history/yank<cr>
+nnoremap <leader>b :Unite -buffer-name=buffer -quick-match buffer<cr>
+"nnoremap <C-p> :Unite file_rec/async<CR>
+"nnoremap <C-i> :Unite -buffer-name=files	file<cr>
+
+" Fugitive keys
+nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gl :Glog<CR>
+nnoremap <leader>gc :Gcommit<CR>
+nnoremap <leader>gp :Gpush<CR>
+
+" Navigate windows faster
 map <C-H> <C-W>h
 map <C-J> <C-W>j
 map <C-K> <C-W>k
-map <C-L> <C-W>l<C-W>_
+map <C-L> <C-W>l
+
+" Toggle paste mode
 nnoremap <leader>p :set invpaste paste?<CR>
+
+" Quickly delete a buffer without altering layout
+nnoremap <Leader>q :Bdelete<CR>
 
 "=====[ Setup key mappings ]=============
 :nnoremap <leader>ev :vsplit ~/.vimrc.after<cr>

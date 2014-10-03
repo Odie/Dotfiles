@@ -65,14 +65,18 @@ NeoBundle 'honza/vim-snippets'
 
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-eunuch'
+
 NeoBundle 'kien/ctrlp.vim'
 let g:ctrlp_follow_symlinks = 2   " Always follow symlinks
 
+NeoBundle 'scrooloose/nerdtree'
 
 NeoBundle 'scrooloose/syntastic'
+
 NeoBundle 'Lokaltog/powerline'
-NeoBundle 'chrisbra/SudoEdit.vim'
 NeoBundle 'rking/ag.vim'
 NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'Lokaltog/vim-easymotion'
@@ -92,10 +96,18 @@ NeoBundle 'vim-scripts/TaskList.vim'
 
 NeoBundle 'xolox/vim-misc'
 NeoBundle 'xolox/vim-easytags'
-let g:easytags_async = 1          " Run ctags asynchronously
+let g:easytags_cmd = '/usr/local/bin/ctags'   " Where to find ctags?
+let g:easytags_async = 1                      " Run ctags asynchronously
+let g:easytags_always_enabled = 0             " Don't always run
+let g:easytags_auto_highlight = 0             " Don't try to highlight tags. Unacceptably slow on larger projects.
+let g:easytags_dynamic_files = 1              " Generate tags local to a project
+set tags=./.git/tags;                  " Where to store tag files local to the project
 
-let g:easytags_dynamic_files = 1  " Generate tags local to a project
-set tags=./tags;                  " Where to store tag files local to the project
+NeoBundle 'godlygeek/tabular'
+
+NeoBundle 'moll/vim-bbye'
+
+NeoBundle 'suan/vim-instant-markdown'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> NeoBundle finish initialization
