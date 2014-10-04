@@ -34,17 +34,21 @@
       ;; default Latin font (e.g. Consolas)
       (set-face-attribute 'default nil :family "Anonymous Pro")
 
+    (if (eq (display-pixel-width) 1440)
+        (progn
       ;; default font size (point * 10)
-      (set-face-attribute 'default nil :height 180)
+            (set-face-attribute 'default nil :height 140)
 
-      ;; use specific font for Korean charset.
-      ;; if you want to use different font size for specific charset,
-      ;; add :size POINT-SIZE in the font-spec.
-      (set-fontset-font t 'hangul (font-spec :name "NanumGothicCoding"))
+            ;; Set the frame to something more reasonable
+            (set-frame-size (selected-frame) 125 60))
+
+        (progn
+            ;; default font size (point * 10)
+            (set-face-attribute 'default nil :height 180)
 
       ;; Set the frame to something more reasonable
       (set-frame-size (selected-frame) 125 64)
-      )
+          )))
 
 
 
