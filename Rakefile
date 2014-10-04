@@ -29,12 +29,23 @@ def linkDirContents(rootDir, targetDir)
 
 		targetFullPath = targetDir + relativePath
 
+		# Copy symlinks directly
+		if srcFullPath.symlink?
+			linkTarget = srcFullPath.readlink
+			puts "Copying symlink: #{targetFullPath} => #{linkTarget}"
+			FileUtils.rm_f(targetFullPath)
+			`cp -R #{srcFullPath} #{targetFullPath}`
+			next
+		end
+
+		# Recreate any directory structures
 		if srcFullPath.directory?
 			puts "making dir: #{targetFullPath}"
 			FileUtils.mkdir_p(targetFullPath)
 			next
 		end
 
+		# Symlink any loose files
 		puts "#{srcFullPath} => #{targetFullPath}"
 		FileUtils.ln_sf(srcFullPath, targetFullPath)
 	}
