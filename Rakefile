@@ -11,7 +11,7 @@ def linkDirContents(rootDir, targetDir)
 	targetDir = Pathname.new(targetDir)
 
 	# Recurisvely visit all files in the rootDir
-	Find.find(rootDir) { |srcFullPath|
+	Find.find(rootDir.to_s) { |srcFullPath|
 		srcFullPath = Pathname.new(srcFullPath)
 		relativePath = srcFullPath.relative_path_from(rootDir)
 
