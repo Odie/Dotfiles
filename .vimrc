@@ -80,6 +80,8 @@ NeoBundle 'Lokaltog/powerline'
 NeoBundle 'rking/ag.vim'
 NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'Lokaltog/vim-easymotion'
+map <Leader> <Plug>(easymotion-prefix)
+
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'tpope/vim-surround'
 

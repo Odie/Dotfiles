@@ -1,4 +1,5 @@
-let mapleader = ","
+nnoremap <SPACE> <Nop>
+let mapleader = " "
 let g:Powerline_symbols = 'fancy'
 
 "call janus#disable_plugin('nerdcommenter')	" Using tComment instead
