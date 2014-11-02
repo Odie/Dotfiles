@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [[ ! -e ~/.cask ]]
+then
+    echo "Cloning Cask repo"
+    git clone git@github.com:cask/cask.git ~/.cask
+fi
+
+if [[ $(grep "cask/bin" ~/.zshrc) == "" ]]
+then
+    echo "Adding \$HOME/.cask/bin to \$PATH in ~/.zshrc"
+    echo '' >> ~/.zshrc
+    echo "# Added by ~/.emacs.d/install.sh" >> ~/.zshrc
+    echo "export PATH=\$HOME/.cask/bin:\$PATH" >> ~/.zshrc
+		source ~/.zshrc
+fi
+
+echo "Installing packages"
+cd ~/.emacs.d
+cask install
+

@@ -1,21 +1,13 @@
-;;; PersonalSettings --- Personal settings for Odie
-;;; Commentary:
-;;; Code:
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
+(require 'pallet)
+(pallet-mode t)
 
-(defun load-directory (dir)
-  "`load' all elisp libraries in directory DIR which are not already loaded."
-  (interactive "D")
-  (let ((libraries-loaded (mapcar #'file-name-sans-extension
-                                  (delq nil (mapcar #'car load-history)))))
-    (dolist (file (directory-files dir t ".+\\.elc?$"))
-      (let ((library (file-name-sans-extension file)))
-        (unless (member library libraries-loaded)
-          (load library nil t)
-          (push library libraries-loaded))))))
+; Tell emacs where the theme files live
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-; Load all files in the elisp and config directory
-(load-directory (expand-file-name "elisp" prelude-personal-dir))
-(load-directory (expand-file-name "config" prelude-personal-dir))
+; Tell emacs which theme we'd like to use
+(load-theme 'zenburn t)
 
 ; Turn on line numbers
 ; "linum-off.el" deals with turning line numbers off when appropriate
@@ -23,10 +15,6 @@
 
 ; Turn off scrollbar
 (scroll-bar-mode -1)
-
-; Tell emacs where the theme files live
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-
 
 ; Additional settings when we're running in graphical mode
 (when (display-graphic-p)
@@ -67,8 +55,29 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (custom-set-variables
- ; Turn off whitespace highlighting
- '(prelude-whitespace nil)
-
  ; Turn on trailing whitespace highlighting
  '(show-trailing-whitespace t))
+
+
+(require 'use-package)
+
+(use-package powerline
+	:init
+	(progn
+		(powerline-default-theme)
+		))
+
+(defun load-directory (dir)
+  "`load' all elisp libraries in directory DIR which are not already loaded."
+  (interactive "D")
+  (let ((libraries-loaded (mapcar #'file-name-sans-extension
+                                  (delq nil (mapcar #'car load-history)))))
+    (dolist (file (directory-files dir t ".+\\.elc?$"))
+      (let ((library (file-name-sans-extension file)))
+        (unless (member library libraries-loaded)
+          (load library nil t)
+          (push library libraries-loaded))))))
+
+; Load all files in the elisp and config directory
+(load-directory "~/.emacs.d/elisp")
+(load-directory "~/.emacs.d/config")
