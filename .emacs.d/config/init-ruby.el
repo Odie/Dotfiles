@@ -15,5 +15,10 @@
 					("\\.podspec\\'" . ruby-mode)
 					("Puppetfile\\'" . ruby-mode)
 					("Berksfile\\'" . ruby-mode)
-					("Appraisals\\'" . ruby-mode)
-				))
+					("Appraisals\\'" . ruby-mode))
+
+	:config
+	(progn
+	  (smart-tabs-advice ruby-indent-line ruby-indent-level)
+	  (setq ruby-indent-tabs-mode t)
+	  ))

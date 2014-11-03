@@ -39,26 +39,7 @@
           )))
 
 
-
-;==============================================================================
-; Tab settings
-
-; Set default tab-width
-(setq-default tab-width 2)
-
-
-
-;==============================================================================
-; Whitespace settings
-
-; Remove trailing whitespace on file save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(custom-set-variables
- ; Turn on trailing whitespace highlighting
- '(show-trailing-whitespace t))
-
-
+; Load all files in the elisp and config directory
 (require 'use-package)
 
 (use-package powerline
@@ -78,6 +59,5 @@
           (load library nil t)
           (push library libraries-loaded))))))
 
-; Load all files in the elisp and config directory
 (load-directory "~/.emacs.d/elisp")
 (load-directory "~/.emacs.d/config")

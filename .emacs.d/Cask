@@ -26,6 +26,7 @@
 (depends-on "powerline")
 (depends-on "powerline-evil")
 (depends-on "projectile")
+(depends-on "smart-tabs-mode")
 (depends-on "use-package")
 (depends-on "yaml-mode")
 (depends-on "zenburn-theme")
