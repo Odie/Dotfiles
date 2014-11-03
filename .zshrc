@@ -32,6 +32,10 @@ alias flush="dscacheutil -flushcache" # Flush DNS cache
 
 alias dh="dirs -v"
 
+alias art="./artisan"
+alias phpspec="vendor/bin/phpspec"
+alias codecept="vendor/bin/codecept"
+
 function phpunit()
 {
 	`git-root`/vendor/bin/phpunit -c `git-root`/phpunit.xml
