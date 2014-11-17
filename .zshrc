@@ -36,6 +36,11 @@ alias art="./artisan"
 alias phpspec="vendor/bin/phpspec"
 alias codecept="vendor/bin/codecept"
 
+function grt()
+{
+	cd `git-root`
+}
+
 function phpunit()
 {
 	`git-root`/vendor/bin/phpunit -c `git-root`/phpunit.xml
