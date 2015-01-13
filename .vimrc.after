@@ -148,6 +148,12 @@ augroup filetype_yaml
 	autocmd FileType yaml setlocal expandtab
 augroup END
 
+augroup filetype_nim
+	autocmd!
+	autocmd BufRead,BufNewFile *.nim set filetype=nim
+	autocmd FileType nim setlocal expandtab
+augroup END
+
 augroup filetype_markdown
 	autocmd!
 	autocmd FileType markdown let b:trim_trailing_spaces=0

@@ -117,6 +117,7 @@ NeoBundle 'suan/vim-instant-markdown'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'xsbeats/vim-blade'
 NeoBundle 'vim-scripts/matchit.zip'
+NeoBundle 'zah/nimrod.vim'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> NeoBundle finish initialization
