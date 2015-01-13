@@ -126,7 +126,10 @@ augroup no_trailing_spaces_pre
 augroup END
 
 " Files ending in .json are javascript files
-autocmd BufRead,BufNewFile *.json set filetype=javascript
+augroup filetype_json
+	autocmd!
+	autocmd BufRead,BufNewFile *.json set filetype=javascript
+augroup END
 
 augroup filetype_vim
 	autocmd!
