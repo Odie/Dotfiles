@@ -68,6 +68,7 @@ endif
 
 set noexpandtab
 set copyindent
+set smartindent
 set preserveindent
 set softtabstop=0
 set shiftwidth=2
