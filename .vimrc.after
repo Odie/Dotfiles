@@ -26,6 +26,11 @@ set backspace=indent,eol,start      " Erase autoindents, join lines
 set autoread            " Reload file when modified
 set hidden              " Hide buffers instead of closing them
 
+set listchars+=tab:▸\ ,trail:·				" How to show invisible characters
+hi SpecialKey ctermfg=243 guifg=gray	" What color to show them in
+
+set ttimeoutlen=100
+set timeoutlen=3000
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Search behaviors
@@ -202,16 +207,6 @@ augroup END
 "[Plugin Settings]======================================{{{
 
 "=====[ Powerline Settings ]=============
-" Immediately reflect mode changes
-" if ! has('gui_running')
-" 	set ttimeoutlen=10
-" 	augroup FastEscape
-" 	autocmd!
-" 		au InsertEnter * set timeoutlen=0
-" 		au InsertLeave * set timeoutlen=1000
-" 	augroup END
-" endif
-
 set laststatus=2		  " Always show statusline
 set t_Co=256			    " Use 256 colours (Use this setting only if your terminal supports 256 colours)
 set noshowmode			  " Hide the default mode text (e.g. -- INSERT -- below the statusline)
