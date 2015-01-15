@@ -19,6 +19,9 @@ NeoBundleFetch 'Shougo/neobundle.vim'                      " NeoBundle, required
 " ~> Bundle definitions
 " Add or remove your Bundles here:
 
+NeoBundle 'bling/vim-airline'
+let g:airline_powerline_fonts = 1
+
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
       \     'windows' : 'tools\\update-dll-mingw',
