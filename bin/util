@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+###############################################################################
+# Util command
+#
+# Ever wanted to run a command on the commandline when you're several levels
+# into a project's file hiearchy?
+#
+# This helper script will traverse up the directory tree looking for a 'util'
+# script then invoke it with all the parameters that was passed to this helper
+# command.
+#
+
+require('pathname')
+
+binName = File.basename(__FILE__)
+
+cwd = Pathname.new(Dir.pwd)
+dirCursor = cwd
+candidate = nil
+
+while(true) do
+	candidate = dirCursor + binName
+	if File.executable?(candidate)
+		Dir.chdir(dirCursor)
+		exec "./#{binName} " + ARGV.join(" ")
+		exit(0)
+	end
+
+	# Check terminating condition
+	# If we reached the home directory or the root directory, stop trying
+	if dirCursor.to_s == Dir.home or dirCursor.to_s == '/'
+		puts "\"#{binName}\" command could not be located!"
+		exit(1)
+	end
+
+	dirCursor = dirCursor.parent
+end
+
