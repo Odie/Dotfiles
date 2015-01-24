@@ -58,8 +58,8 @@ function! Ulti_ExpandOrJump_and_getRes()
 endfunction
 
 if neobundle#tap('ultisnips')
-	function! neobundle#hooks.on_source(bundle)
-		inoremap <tab> <C-R>=(Ulti_ExpandOrJump_and_getRes() > 0)?"":InsertSmartTab()<CR>
+	function! neobundle#hooks.on_post_source(bundle)
+		inoremap <silent> <tab> <C-R>=(Ulti_ExpandOrJump_and_getRes() > 0)?"":InsertSmartTab()<CR>
 	endfunction
 	call neobundle#untap()
 endif
