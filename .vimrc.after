@@ -109,7 +109,7 @@ set directory=~/.vim/tmp
 "=====[ Emmet.vim settings ]=============
 let g:user_emmet_mode='a'                   "enable all function in all mode.
 let g:user_emmet_install_global = 0
-autocmd FileType html,css,hbs EmmetInstall  "enable for specific file types only
+autocmd FileType html,css,hbs,blade EmmetInstall  "enable for specific file types only
 "let g:user_emmet_leader_key='<C-I>'
 
 "==================================================================}}}
