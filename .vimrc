@@ -37,11 +37,6 @@ NeoBundle 'Shougo/vimproc.vim', {
 let g:neocomplete#enable_at_startup = 1
 NeoBundle 'Shougo/neocomplete.vim'
 
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
 NeoBundle 'SirVer/ultisnips'
 NeoBundle 'Odie/Smart-Tabs'
 
