@@ -27,6 +27,7 @@ set autoread            " Reload file when modified
 set hidden              " Hide buffers instead of closing them
 
 set listchars+=tab:▸\ ,trail:·				" How to show invisible characters
+set showbreak=⇇
 hi SpecialKey ctermfg=243 guifg=gray	" What color to show them in
 
 set ttimeoutlen=100
@@ -320,6 +321,10 @@ nnoremap : ;
 
 " kj to escape insert mode
 inoremap <special> kj <Esc>
+
+" kj move between visual lines
+noremap j gj
+noremap k gk
 
 " Shortcut to regenerate tags
 nnoremap <leader><leader>rt :UpdateTags -R .<CR>
