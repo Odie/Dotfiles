@@ -16,6 +16,9 @@
 ; Turn off scrollbar
 (scroll-bar-mode -1)
 
+; Turn off the toolbar
+(tool-bar-mode -1)
+
 ; Additional settings when we're running in graphical mode
 (when (display-graphic-p)
 
