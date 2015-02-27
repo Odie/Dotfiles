@@ -9,3 +9,10 @@
 	(progn
 	  (helm-mode 1)
 	  ))
+
+(use-package helm-config
+	:config
+	(progn
+		(when (memq window-system '(mac ns))
+  		(exec-path-from-shell-initialize))
+	  ))

@@ -1,6 +1,9 @@
 (source gnu)
 (source melpa)
 
+(depends-on "base16-theme")
+(depends-on "cider")
+(depends-on "clojure-mode")
 (depends-on "emmet-mode")
 (depends-on "evil")
 (depends-on "evil-exchange")
@@ -10,6 +13,7 @@
 (depends-on "evil-matchit")
 (depends-on "evil-nerd-commenter")
 (depends-on "evil-org")
+(depends-on "evil-paredit")
 (depends-on "evil-search-highlight-persist")
 (depends-on "evil-surround")
 (depends-on "evil-visualstar")
@@ -30,3 +34,5 @@
 (depends-on "use-package")
 (depends-on "yaml-mode")
 (depends-on "zenburn-theme")
+(depends-on "exec-path-from-shell")
+
