@@ -97,11 +97,10 @@ autocmd GUIEnter * set visualbell t_vb=
 set ttyfast
 set lazyredraw
 
-"=====[ Centrally stored swp files ]=============
-"Commented because Janus already does this. This is kept here in case we
-" need a vimrc without using Janus
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ~> Swapfile settings
+" Centrally store swap files
 set nobackup
-"set backupdir=~/.vim.backup/backup
 set directory=~/.vim/tmp
 
 "=====[ Use par for better formatting ]=============
@@ -251,6 +250,8 @@ function! s:unite_settings()
 	imap <buffer> <C-k>	<Plug>(unite_select_previous_line)
 endfunction
 
+" Easymotion: Make sure we can see the first key in a 2 key target
+hi link EasyMotionTarget2First EasyMotionTargetDefault
 "==================================================================}}}
 
 "[Custom functions]================================================{{{
