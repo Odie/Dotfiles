@@ -45,12 +45,6 @@
 ; Load all files in the elisp and config directory
 (require 'use-package)
 
-(use-package powerline
-	:init
-	(progn
-		(powerline-default-theme)
-		))
-
 (defun load-directory (dir)
   "`load' all elisp libraries in directory DIR which are not already loaded."
   (interactive "D")

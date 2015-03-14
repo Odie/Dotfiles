@@ -66,7 +66,7 @@
 	:config
 	(progn
 		(global-evil-leader-mode t)
-		(evil-leader/set-leader ",")
+		(evil-leader/set-leader "<SPC>")
 		))
 
 (use-package evil-surround

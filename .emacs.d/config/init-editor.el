@@ -4,8 +4,7 @@
 ; Set default tab-width
 (setq-default tab-width 2)
 (setq-default smart-tabs-mode t)
-
-
+(setq-default evil-shift-width tab-width)
 
 ;==============================================================================
 ; Whitespace settings
@@ -25,3 +24,4 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
+(show-paren-mode 1)
