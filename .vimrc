@@ -123,6 +123,8 @@ NeoBundle 'zah/nimrod.vim'
 NeoBundle 'groenewege/vim-less'
 NeoBundle 'nacitar/a.vim'
 
+NeoBundle 'nathanaelkane/vim-indent-guides'
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> NeoBundle finish initialization
 

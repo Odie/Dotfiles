@@ -1,7 +1,6 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Color Scheme
 
-set background=dark
 
 "color molokai
 "color monokai
@@ -11,6 +10,7 @@ set background=dark
 "color base16-railscasts
 color zenburn
 "color solarized
+"set background=dark
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Basic Settings
@@ -252,6 +252,10 @@ endfunction
 
 " Easymotion: Make sure we can see the first key in a 2 key target
 hi link EasyMotionTarget2First EasyMotionTargetDefault
+
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=DarkGray ctermbg=DarkGray
+
 "==================================================================}}}
 
 "[Custom functions]================================================{{{
