@@ -32,7 +32,7 @@ alias flush="dscacheutil -flushcache" # Flush DNS cache
 
 alias dh="dirs -v"
 
-alias art="./artisan"
+alias art="artisan"
 alias phpspec="vendor/bin/phpspec"
 alias codecept="vendor/bin/codecept"
 
