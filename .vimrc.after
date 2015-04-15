@@ -355,10 +355,13 @@ nnoremap <leader>gc :Gcommit<CR>
 nnoremap <leader>gp :Gpush<CR>
 
 " Navigate windows faster
-map <C-H> <C-W>h
-map <C-J> <C-W>j
-map <C-K> <C-W>k
-map <C-L> <C-W>l
+nnoremap <C-H> <C-W>h
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+nnoremap <C-L> <C-W>l
+if has('nvim')
+	nnoremap <bs> <C-W>h
+endif
 
 " Toggle paste mode
 nnoremap <leader>p :set invpaste paste?<CR>

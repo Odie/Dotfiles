@@ -11,8 +11,8 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 export PATH=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~/bin:~/.composer/vendor/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/libexec:$PATH
-export EDITOR="vim -f"
-export VISUAL="vim"
+export EDITOR="nvim -f"
+export VISUAL="nvim"
 
 # ------------------------ fasd initialization ----------------------------
 eval "$(fasd --init auto)"
@@ -23,6 +23,8 @@ alias la="ls -Ga" # list all, includes dot files
 alias ll="ls -Glh" # long list, excludes dot files
 alias lla="ls -Gla" # long list all, includes dot files
 
+alias vim="nvim"
+alias vi="nvim"
 alias v='f -e vim' # quick opening files with vim
 alias em='emacs'
 alias 'json'='python -mjson.tool'
@@ -62,3 +64,4 @@ BASE16_SHELL="$HOME/.config/base16-shell/base16-$BASE16_SCHEME.dark.sh"
 
 # Added by ~/.emacs.d/install.sh
 export PATH=$HOME/.cask/bin:$PATH
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
