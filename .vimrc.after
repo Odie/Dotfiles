@@ -260,7 +260,8 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=DarkGray ctermbg=DarkG
 
 "[Custom functions]================================================{{{
 
-"=====[ Highlight the match in red ]=============
+"======================================================================
+" Highlight the match in red
 function! HLNext (totalBlinkTime)
 	highlight WhiteOnRed ctermfg=white ctermbg=red guibg=darkred guifg=white
 	let [bufnum, lnum, col, off] = getpos('.')
@@ -281,6 +282,14 @@ function! HLNext (totalBlinkTime)
 			exec 'sleep ' . float2nr(blinkTime * 1000) . 'm'
 		endif
 	endwhile
+endfunction
+
+"======================================================================
+" If cursor is in first or last line of window, scroll to middle line.
+function s:MaybeMiddle()
+  if winline() == 1 || winline() == winheight(0)
+    normal! zz
+  endif
 endfunction
 
 " trim trailing whitespace in the current file
@@ -314,6 +323,8 @@ function! SummarizeTabs()
     echohl None
   endtry
 endfunction
+
+command! -nargs=1 -range SuperRetab <line1>,<line2>s/\v%(^ *)@<= {<args>}/\t/g
 "==================================================================}}}
 
 "[Mappings]=========================================================={{{
@@ -374,8 +385,8 @@ nnoremap <Leader>q :Bdelete<CR>
 :nnoremap <leader>sv :source ~/.vimrc.after<cr>:echom "Sourced vimrc"<cr>
 
 "=====[ Highlight matches when jumping to next ]=============
-nnoremap <silent> n n:call HLNext(0.2)<cr>
-nnoremap <silent> N N:call HLNext(0.2)<cr>
+nnoremap <silent> n n:call <SID>MaybeMiddle()<cr>:call HLNext(0.125)<cr>
+nnoremap <silent> N N:call <SID>MaybeMiddle()<cr>:call HLNext(0.125)<cr>
 
 "=====[ Setup movement mappings ]=============
 "" Select contents of next or last ()
