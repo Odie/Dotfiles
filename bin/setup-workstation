@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Holding keys means "repeat" not "show me alternate characters"
+defaults write -g ApplePressAndHoldEnabled -bool false
