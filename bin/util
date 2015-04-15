@@ -12,6 +12,7 @@
 #
 
 require('pathname')
+require('shellwords')
 
 binName = File.basename(__FILE__)
 
@@ -23,7 +24,7 @@ while(true) do
 	candidate = dirCursor + binName
 	if File.executable?(candidate)
 		Dir.chdir(dirCursor)
-		exec "./#{binName} " + ARGV.join(" ")
+		exec "./#{binName} " + ARGV.map{|v| Shellwords.escape(v)}.join(" ")
 		exit(0)
 	end
 
