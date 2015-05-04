@@ -93,7 +93,11 @@ Plug 'godlygeek/tabular'
 
 Plug 'moll/vim-bbye'
 
-Plug 'suan/vim-instant-markdown'
+" Plug 'suan/vim-instant-markdown'
+Plug 'shime/vim-livedown'
+let g:livedown_autorun = 1
+let g:livedown_open = 1
+let g:livedown_port = 2000
 
 Plug 'mattn/emmet-vim'
 Plug 'xsbeats/vim-blade'
