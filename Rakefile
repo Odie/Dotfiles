@@ -24,10 +24,21 @@ def linkDirContents(rootDir, targetDir)
 			Find.prune
 		end
 
+		# Skip .git* files meant to be settings for this repo
+		next if relativePath.to_s.start_with? ".git"
+
 		# Skip this rake file
 		next if srcFullPath.to_s == __FILE__
 
-		targetFullPath = targetDir + relativePath
+
+		if relativePath.to_s.start_with? "_git"
+			remappedPath = relativePath.dup.to_s
+			remappedPath[0] = '.'
+
+			targetFullPath = targetDir + remappedPath
+		else
+			targetFullPath = targetDir + relativePath
+		end
 
 		# Copy symlinks directly
 		if srcFullPath.symlink?
