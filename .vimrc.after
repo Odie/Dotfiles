@@ -114,108 +114,27 @@ autocmd FileType html,css,hbs,blade EmmetInstall  "enable for specific file type
 
 "==================================================================}}}
 
-"[FileType-specific Settings]======================================{{{
-"=====[ Remove Trailing white spaces ]=============
-augroup no_trailing_spaces_pre
+augroup no_trailing_spaces
 	" By default, trailing spaces will be trimmed for all file types.
-	" Space trimming will be applied at BufRead and BufWrite.
+	" Space trimming will be applied on BufWrite.
 	" This can be disabled on a buffer to buffer basis by setting
 	" b:trim_trailing_spaces = 0
 	autocmd!
-	autocmd BufNewFile,BufRead * let b:trim_trailing_spaces=1
-augroup END
+	autocmd BufNewFile,BufRead *
+		\ if !exists("b:trim_trailing_spaces")  |
+		\   let b:trim_trailing_spaces=1        |
+		\ endif
 
-" Files ending in .json are javascript files
-augroup filetype_json
-	autocmd!
-	autocmd BufRead,BufNewFile *.json set filetype=javascript
-augroup END
-
-augroup filetype_vim
-	autocmd!
-	autocmd FileType vim setlocal foldmethod=marker
-augroup END
-
-augroup filetype_twig
-	autocmd!
-	autocmd FileType twig set syntax=html
-augroup END
-
-augroup filetype_haskell
-	autocmd!
-	autocmd FileType haskell set expandtab
-augroup END
-
-augroup filetype_yaml
-	autocmd!
-	autocmd FileType yaml setlocal expandtab
-augroup END
-
-augroup filetype_nim
-	autocmd!
-	autocmd BufRead,BufNewFile *.nim set filetype=nim
-	autocmd FileType nim setlocal expandtab
-augroup END
-
-augroup filetype_markdown
-	autocmd!
-	autocmd FileType markdown let b:trim_trailing_spaces=0
-	autocmd FileType markdown set nolist
-	autocmd FileType markdown set tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
-	autocmd FileType markdown set textwidth=79
-	autocmd FileType markdown setlocal foldmethod=expr
-	autocmd Filetype markdown setlocal foldexpr=OrderedListFold(v:lnum)
-
-
-	" Search backwards for a line that starts with a number
-	function! NextNumberHeading(lnum)
-		let numlines = line('$')
-		let current = a:lnum + 1
-
-		while current <= numlines
-			if getline(current) =~? '\v^\d+\.'
-				return current
-			endif
-
-			let current += 1
-		endwhile
-
-		return -2
-	endfunction
-
-	function! IsNumberHeading(lnum)
-		if getline(a:lnum) =~? '\v^\d+\.'
-			return 1
-		else
-			return 0
-		endif
-	endfunction
-
-	function! OrderedListFold(lnum)
-		let current = a:lnum
-
-		" We're interested in folding markdown that's being explicitly or
-		" auto-numbered.
-		" This means we're only interested in classifying lines into the
-		" following categories:
-		" 1. A number heading
-		" 2. Not a number heading
-		if IsNumberHeading(current+1)
-			return 0
-		else
-			return 1
-		endif
-	endfunction
-augroup end
-
-augroup no_trailing_spaces_post
-	autocmd!
-	autocmd BufRead,BufWrite *
+	autocmd BufWrite *
 		\ if (! &bin) && b:trim_trailing_spaces |
 		\		silent! %s/\s\+$//ge |
 		\ endif
 augroup END
-"==================================================================}}}
+
+augroup filetype_detect
+	autocmd!
+	autocmd BufRead,BufNewFile *.nim setlocal filetype=nim
+augroup END
 
 "[Plugin Settings]======================================{{{
 
