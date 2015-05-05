@@ -3,7 +3,7 @@ if has('vim_starting')
 endif
 
 if has('nvim')
-  let running_nvim=1
+  let is_nvim=1
 endif
 
 "-------------------------------------------------------------------------------
@@ -23,12 +23,24 @@ let g:airline_powerline_fonts = 1
 
 Plug 'Odie/Smart-Tabs'
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-nnoremap <silent> <C-P> :FZF<CR>
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+" nnoremap <silent> <C-P> :FZF<CR>
+
+Plug 'kien/ctrlp.vim'
+let g:ctrlp_follow_symlinks = 2   " Always follow symlinks
+let g:ctrlp_user_command = {
+	\ 'types': {
+ 	\     1: ['.git', 'cd %s && git ls-files --cached --exclude-standard --others'],
+ 	\     2: ['.hg', 'hg --cwd %s locate -I .'],
+ 	\   },
+ 	\   'fallback': 'find %s -type f'
+	\ }
+
 
 Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
 let g:ycm_key_invoke_completion = '<C-K>'
-let g:ycm_key_list_select_completion = ['<Down>', '<Enter>']
+let g:ycm_key_list_select_completion = ['<Down>', '<C-N>']
+let g:ycm_key_list_previous_completion = ['<UP>', '<C-P>']
 let g:ycm_autoclose_preview_window_after_insertion=1
 " let g:ycm_autoclose_preview_window_after_completion=1
 " autocmd CompleteDone * pclose
