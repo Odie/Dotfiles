@@ -32,6 +32,7 @@
 (depends-on "powerline")
 (depends-on "powerline-evil")
 (depends-on "projectile")
+(depends-on "rainbow-delimiters")
 (depends-on "smart-tabs-mode")
 (depends-on "use-package")
 (depends-on "yaml-mode")
