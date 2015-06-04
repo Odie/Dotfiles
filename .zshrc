@@ -28,7 +28,7 @@ alias em='emacs'
 alias 'json'='python -mjson.tool'
 
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
-alias flush="dscacheutil -flushcache" # Flush DNS cache
+alias dnsflush="sudo discoveryutil mdnsflushcache" # Flush DNS cache
 
 alias dh="dirs -v"
 
