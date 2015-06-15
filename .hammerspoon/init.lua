@@ -40,10 +40,56 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "M", function()
 	local origFrame = maxWindowOrigFrame[focusedWindow:id()]
 
 	if origFrame ~= nil then
-		focusedWindow:setFrame(origFrame)	
+		focusedWindow:setFrame(origFrame)
 		maxWindowOrigFrame[focusedWindow:id()] = nil
 	else
-		maxWindowOrigFrame[focusedWindow:id()] = focusedWindow:frame()	
+		maxWindowOrigFrame[focusedWindow:id()] = focusedWindow:frame()
 		focusedWindow:maximize()
 	end
+end)
+
+-------------------------------------------------------------------------------
+-- Split window right and left
+-------------------------------------------------------------------------------
+
+-- Resize the window to half of the screen and algin it to left
+-- or right of the screen.
+-- The param "rightOrLeft" should either the string "right" or "left"
+local function halfScreen(window, rightOrLeft)
+	local xMultiple = 0
+
+	-- Input param sanity check
+	if rightOrLeft == "right" then
+		 xMultiple = 1
+	elseif rightOrLeft == "left" then
+		 xMultiple = 0
+	else
+		return
+	end
+
+	-- Which screen is the window on?
+	local screen = window:screen()
+
+	-- Figure out the new window frame based on screen size
+	local fullFrame = screen:frame()
+	local newFrame = {}
+
+	newFrame.h = fullFrame.h
+	newFrame.y = fullFrame.y
+
+	newFrame.x = xMultiple * (fullFrame.w / 2)
+	newFrame.w = fullFrame.w / 2
+
+	-- Set the new frame for the specified window
+	window:setFrame(newFrame)
+end
+
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "left", function()
+	local focusedWindow = hs.window.focusedWindow()
+	halfScreen(focusedWindow, "left")
+end)
+
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "right", function()
+	local focusedWindow = hs.window.focusedWindow()
+	halfScreen(focusedWindow, "right")
 end)
