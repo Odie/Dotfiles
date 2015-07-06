@@ -35,17 +35,23 @@ end)
 -- Maximize & Restore windows
 -------------------------------------------------------------------------------
 local maxWindowOrigFrame = {}
+local function maximizeOrRestoreWindow(window)
+	forceMaximize = forceMaximize or false
+	local origFrame = maxWindowOrigFrame[window:id()]
+
+	if forceMaximize ~= true and origFrame ~= nil then
+		window:setFrame(origFrame)
+		maxWindowOrigFrame[window:id()] = nil
+	else
+		maxWindowOrigFrame[window:id()] = window:frame()
+		window:maximize()
+	end
+end
+
+
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "M", function()
 	local focusedWindow = hs.window.focusedWindow()
-	local origFrame = maxWindowOrigFrame[focusedWindow:id()]
-
-	if origFrame ~= nil then
-		focusedWindow:setFrame(origFrame)
-		maxWindowOrigFrame[focusedWindow:id()] = nil
-	else
-		maxWindowOrigFrame[focusedWindow:id()] = focusedWindow:frame()
-		focusedWindow:maximize()
-	end
+	maximizeOrRestoreWindow(focusedWindow)
 end)
 
 -------------------------------------------------------------------------------
@@ -87,6 +93,10 @@ end
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "left", function()
 	local focusedWindow = hs.window.focusedWindow()
 	halfScreen(focusedWindow, "left")
+
+	-- Is the window already maximized?
+	-- If so, move the window to the previous screen
+	-- and maximize it
 end)
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "right", function()
