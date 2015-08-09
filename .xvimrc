@@ -2,3 +2,10 @@
 nnoremap ; :
 nnoremap : ;
 
+set cursorline          " highlight current line
+set incsearch           " Always do incremental search
+set hlsearch            " Highlight search results
+set ignorecase          " Search is case-insensitive
+set smartcase           " Unless we type in a caps letter somewhere
+set ignorecase
+set clipboard=unnamed
