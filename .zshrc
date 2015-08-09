@@ -8,7 +8,7 @@ export LC_CTYPE=C
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-export PATH=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~/bin:~/.composer/vendor/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/libexec:$PATH
+export PATH=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~/bin:~/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/libexec:$PATH
 export EDITOR="nvim -f"
 export VISUAL="nvim"
 
@@ -21,14 +21,14 @@ alias la="ls -Ga" # list all, includes dot files
 alias ll="ls -Glh" # long list, excludes dot files
 alias lla="ls -Gla" # long list all, includes dot files
 
-alias vim="nvim"
-alias vi="nvim"
+# alias vim="nvim"
+# alias vi="nvim"
 alias v='f -e vim' # quick opening files with vim
 alias em='emacs'
 alias 'json'='python -mjson.tool'
 
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
-alias dnsflush="sudo discoveryutil mdnsflushcache" # Flush DNS cache
+alias dnsflush="sudo killall -HUP mDNSResponder" # Flush DNS cache
 
 alias dh="dirs -v"
 
