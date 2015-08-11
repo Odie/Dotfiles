@@ -1,0 +1,23 @@
+set relativenumber      " Show relative line numbers
+set number              " Show line numbers
+set cursorline          " highlight current line
+
+set incsearch           " Always do incremental search
+set hlsearch            " Highlight search results
+set ignorecase          " Search is case-insensitive
+set smartcase           " Unless we type in a caps letter somewhere
+set ignorecase
+set clipboard=unnamed
+
+" Switch ":" and ";"
+nnoremap ; :
+nnoremap : ;
+
+" kj to escape insert mode
+inoremap <special> kj <Esc>
+
+" Navigate windows faster
+nnoremap <C-H> <C-W>h
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+nnoremap <C-L> <C-W>l
