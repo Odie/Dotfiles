@@ -119,6 +119,11 @@ Plug 'nacitar/a.vim'
 
 Plug 'nathanaelkane/vim-indent-guides'
 
+Plug 'junegunn/goyo.vim'
+
+Plug 'rizzatti/dash.vim'
+:nmap <silent> <leader>d <Plug>DashSearch
+
 call plug#end()
 filetype plugin indent on
 
