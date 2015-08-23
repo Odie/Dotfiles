@@ -23,18 +23,18 @@ let g:airline_powerline_fonts = 1
 
 Plug 'Odie/Smart-Tabs'
 
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-" nnoremap <silent> <C-P> :FZF<CR>
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+nnoremap <silent> <C-P> :FZF<CR>
 
-Plug 'kien/ctrlp.vim'
-let g:ctrlp_follow_symlinks = 2   " Always follow symlinks
-let g:ctrlp_user_command = {
-	\ 'types': {
- 	\     1: ['.git', 'cd %s && git ls-files --cached --exclude-standard --others'],
- 	\     2: ['.hg', 'hg --cwd %s locate -I .'],
- 	\   },
- 	\   'fallback': 'find %s -type f'
-	\ }
+" Plug 'kien/ctrlp.vim'
+" let g:ctrlp_follow_symlinks = 2   " Always follow symlinks
+" let g:ctrlp_user_command = {
+" 	\ 'types': {
+"  	\     1: ['.git', 'cd %s && git ls-files --cached --exclude-standard --others'],
+"  	\     2: ['.hg', 'hg --cwd %s locate -I .'],
+"  	\   },
+"  	\   'fallback': 'find %s -type f'
+" 	\ }
 
 
 Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
