@@ -9,8 +9,8 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 export PATH=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~/bin:~/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/libexec:$PATH
-export EDITOR="nvim -f"
 export VISUAL="nvim"
+export EDITOR="${VISUAL} -f"
 
 # ------------------------ fasd initialization ----------------------------
 eval "$(fasd --init auto)"
@@ -21,9 +21,8 @@ alias la="ls -Ga" # list all, includes dot files
 alias ll="ls -Glh" # long list, excludes dot files
 alias lla="ls -Gla" # long list all, includes dot files
 
-# alias vim="nvim"
-# alias vi="nvim"
-alias v='f -e vim' # quick opening files with vim
+alias vim="nvim"
+alias vi="nvim"
 alias em='emacs'
 alias 'json'='python -mjson.tool'
 
@@ -45,6 +44,27 @@ function phpunit()
 {
 	`git-root`/vendor/bin/phpunit -c `git-root`/phpunit.xml
 }
+
+# ------------------------ Faster navigation ----------------------------
+# Currently, things are implemented using fasd + fzf
+# -----------------------------------------------------------------------
+
+function v() {
+	local file
+	file=$(ag -l -g "" | fzf) && ${VISUAL} ${file}
+}
+
+unalias j
+function j() {
+  if [[ -z "$*" ]]; then
+    cd "$(fasd_cd -Rdl | fzf --no-sort | sed 's/^[0-9,.]* *//')"
+  else
+    fasd_cd -d "$@"
+  fi
+}
+
+unalias z
+alias z=j
 
 # ------------------------ zsh options  ----------------------------
 
