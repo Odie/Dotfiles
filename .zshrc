@@ -83,3 +83,7 @@ BASE16_SHELL="$HOME/.config/base16-shell/base16-$BASE16_SCHEME.dark.sh"
 # Added by ~/.emacs.d/install.sh
 export PATH=$HOME/.cask/bin:$PATH
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export JAVA_HOME=$(/usr/libexec/java_home)
+export M2_HOME=`brew --prefix maven`/libexec
+export M2=`brew --prefix maven`/libexec/bin
