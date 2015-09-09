@@ -124,6 +124,8 @@ Plug 'junegunn/goyo.vim'
 Plug 'rizzatti/dash.vim'
 :nmap <silent> <leader>d <Plug>DashSearch
 
+Plug 'tpope/vim-fugitive'
+
 call plug#end()
 filetype plugin indent on
 
