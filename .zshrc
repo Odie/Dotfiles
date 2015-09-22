@@ -12,6 +12,9 @@ export PATH=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~/bin:~/.co
 export VISUAL="nvim"
 export EDITOR="${VISUAL} -f"
 
+# FZF should respect gitignore settings
+export FZF_DEFAULT_COMMAND='ag -l -g ""'
+
 # ------------------------ fasd initialization ----------------------------
 eval "$(fasd --init auto)"
 
