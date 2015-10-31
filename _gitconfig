@@ -48,6 +48,6 @@
 	trustExitCode = true
 
 [push]
-	default = simple
+	default = current
 #[init]
 #	templatedir = ~/.git_template
