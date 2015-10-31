@@ -74,6 +74,7 @@ let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_lua_checkers = ['luainspect']
 
 Plug 'rking/ag.vim'
+Plug 'gabesoft/vim-ags'
 Plug 'tpope/vim-unimpaired'
 Plug 'Lokaltog/vim-easymotion'
 map <Leader> <Plug>(easymotion-prefix)
@@ -125,6 +126,10 @@ Plug 'rizzatti/dash.vim'
 :nmap <silent> <leader>d <Plug>DashSearch
 
 Plug 'tpope/vim-fugitive'
+
+" Python syntax support
+Plug 'hdima/python-syntax'
+
 
 call plug#end()
 filetype plugin indent on
