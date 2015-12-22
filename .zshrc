@@ -77,12 +77,6 @@ setopt AUTO_CD
 # Automatically pushd when we cd
 setopt AUTO_PUSHD
 
-# Base16 Shell
-BASE16_SCHEME="railscasts"
-BASE16_SHELL="$HOME/.config/base16-shell/base16-$BASE16_SCHEME.dark.sh"
-[[ -s $BASE16_SHELL ]] && . $BASE16_SHELL
-
-
 # Added by ~/.emacs.d/install.sh
 export PATH=$HOME/.cask/bin:$PATH
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
