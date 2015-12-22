@@ -66,22 +66,25 @@ Plug 'tpope/vim-eunuch'
 """ "<Leader>n" to toggle on and off
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
-""" Syntax highlighting
-Plug 'scrooloose/syntastic'
-let g:syntastic_check_on_open=1
-let g:syntastic_auto_loc_list=1								" open and close the error list automatically
+""" Syntax checking
+Plug 'benekastah/neomake'
+autocmd! BufWritePost * Neomake
 
-let g:syntastic_mode_map={
-			\ 'mode': 'active',
-      \ 'active_filetypes': [],
-      \ 'passive_filetypes': ['html', 'lua']
-			\ }
-
-let g:syntastic_error_symbol = '✗'						" Better :sign interface symbols
-let g:syntastic_warning_symbol = '!'
-
-let g:syntastic_javascript_checkers = ['jshint']
-let g:syntastic_lua_checkers = ['luainspect']
+" Plug 'scrooloose/syntastic'
+" let g:syntastic_check_on_open=1
+" let g:syntastic_auto_loc_list=1								" open and close the error list automatically
+"
+" let g:syntastic_mode_map={
+" 			\ 'mode': 'active',
+"       \ 'active_filetypes': [],
+"       \ 'passive_filetypes': ['html', 'lua', 'python']
+" 			\ }
+"
+" let g:syntastic_error_symbol = '✗'						" Better :sign interface symbols
+" let g:syntastic_warning_symbol = '!'
+"
+" let g:syntastic_javascript_checkers = ['jshint']
+" let g:syntastic_lua_checkers = ['luainspect']
 
 """ Better search support via ag
 """ ":Ag" and ":Ags" to search
