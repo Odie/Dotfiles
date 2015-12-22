@@ -23,6 +23,7 @@ Plug 'vim-scripts/listmaps.vim'
 """ Better looking status line
 Plug 'bling/vim-airline'
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
 
 """ Try to use tabs where possible
 Plug 'Odie/Smart-Tabs'
