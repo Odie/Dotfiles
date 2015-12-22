@@ -106,9 +106,12 @@ Plug 'tpope/vim-surround'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-repeat'
 
-""" Color schemes
+"-------------------------------------------------------------------------------
+" Color schemes
+"-------------------------------------------------------------------------------
 Plug 'flazz/vim-colorschemes'
 Plug 'chriskempson/base16-vim'
+Plug 'morhetz/gruvbox'
 
 """ Automatically make containing directory when opening a new buffer
 Plug 'jordwalke/VimAutoMakeDirectory'
@@ -192,6 +195,7 @@ Plug 'tpope/vim-markdown'
 """ Python Linter
 """ Requires flake8
 Plug 'nvie/vim-flake8'
+
 
 call plug#end()
 filetype plugin indent on

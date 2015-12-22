@@ -1,16 +1,11 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Color Scheme
 
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-"color molokai
-"color monokai
-"color wombat256
-"color railscasts
-"let base16colorspace=256
-"color base16-railscasts
-color zenburn
-"color solarized
-"set background=dark
+"color zenburn
+set background=dark
+color gruvbox
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Basic Settings
