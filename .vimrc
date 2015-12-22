@@ -103,10 +103,6 @@ Plug 'tpope/vim-surround'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-repeat'
 
-""" Sane clipboard
-""" Deleting no longer puts items in the yank history
-
-Plug 'svermeulen/vim-easyclip'
 """ Color schemes
 Plug 'flazz/vim-colorschemes'
 Plug 'chriskempson/base16-vim'
