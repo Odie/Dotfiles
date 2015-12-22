@@ -40,10 +40,7 @@ set smartcase           " Unless we type in a caps letter somewhere
 if has('gui')
   nnoremap <silent> <esc> :nohlsearch<return><esc>
 else
-	augroup no_highlight
-		autocmd!
-		autocmd TermResponse * nnoremap <esc> :noh<return><esc>
-	augroup END
+	nnoremap <esc> :noh<return><esc>
 endif
 
 
