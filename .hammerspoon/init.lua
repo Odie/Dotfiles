@@ -90,13 +90,59 @@ local function halfScreen(window, rightOrLeft)
 	window:setFrame(newFrame)
 end
 
+local function centerScreen(window)
+
+	-- Which screen is the window on?
+	local screen = window:screen()
+
+	-- Figure out the new window frame based on screen size
+	local fullFrame = screen:frame()
+	local windowFrame = window:frame()
+	local newFrame = {}
+
+	newFrame.h = windowFrame.h
+	newFrame.y = fullFrame.y
+
+	newFrame.x = (fullFrame.w - windowFrame.w)/2
+	newFrame.w = windowFrame.w
+
+	-- Set the new frame for the specified window
+	window:setFrame(newFrame)
+end
+
+local function fullHeight(window)
+
+	-- Which screen is the window on?
+	local screen = window:screen()
+
+	-- Figure out the new window frame based on screen size
+	local fullFrame = screen:frame()
+	local windowFrame = window:frame()
+	local newFrame = {}
+
+	newFrame.h = fullFrame.h
+	newFrame.y = fullFrame.y
+
+	newFrame.x = windowFrame.x
+	newFrame.w = windowFrame.w
+
+	-- Set the new frame for the specified window
+	window:setFrame(newFrame)
+end
+
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "HOME", function()
+	local focusedWindow = hs.window.focusedWindow()
+	centerScreen(focusedWindow)
+end)
+
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "END", function()
+	local focusedWindow = hs.window.focusedWindow()
+	fullHeight(focusedWindow)
+end)
+
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "left", function()
 	local focusedWindow = hs.window.focusedWindow()
 	halfScreen(focusedWindow, "left")
-
-	-- Is the window already maximized?
-	-- If so, move the window to the previous screen
-	-- and maximize it
 end)
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "right", function()
