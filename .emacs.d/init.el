@@ -7,7 +7,7 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
 ; Tell emacs which theme we'd like to use
-(load-theme 'zenburn t)
+(load-theme 'gruvbox t)
 
 ; Turn on line numbers
 ; "linum-off.el" deals with turning line numbers off when appropriate
@@ -58,3 +58,18 @@
 
 (load-directory "~/.emacs.d/elisp")
 (load-directory "~/.emacs.d/config")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+	 (quote
+		("badc4f9ae3ee82a5ca711f3fd48c3f49ebe20e6303bba1912d4e2d19dd60ec98" default)))
+ '(show-trailing-whitespace t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
