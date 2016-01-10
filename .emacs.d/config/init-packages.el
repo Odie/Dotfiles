@@ -59,3 +59,6 @@
 		(when (memq window-system '(mac ns))
   		(exec-path-from-shell-initialize))
 	  ))
+
+; Always turn on company mode (auto-completion)
+(add-hook 'after-init-hook 'global-company-mode)
