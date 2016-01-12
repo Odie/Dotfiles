@@ -28,13 +28,21 @@
       ;; default Latin font (e.g. Consolas)
       (set-face-attribute 'default nil :family "Anonymous Pro")
 
-    (if (eq (display-pixel-width) 1440)
+    (if (eq (display-pixel-height) 1440)
         (progn
-      ;; default font size (point * 10)
-            (set-face-attribute 'default nil :height 140)
+      			;; default font size (point * 10)
+            (set-face-attribute 'default nil :height 160)
 
             ;; Set the frame to something more reasonable
-            (set-frame-size (selected-frame) 125 60))
+            (set-frame-size (selected-frame) 200 60)
+
+            ;; Place the frame at the top center of the monitor
+						(set-frame-position (selected-frame)
+						                    (/ (-
+						                         (display-pixel-width)
+						                         (frame-pixel-width (selected-frame)))
+						                       2)
+						                    0))
 
         (progn
             ;; default font size (point * 10)
