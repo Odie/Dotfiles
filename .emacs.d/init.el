@@ -13,6 +13,9 @@
 ; "linum-off.el" deals with turning line numbers off when appropriate
 (global-linum-mode t)
 
+; Always highlight the current line
+(global-hl-line-mode t)
+
 ; Turn off scrollbar
 (scroll-bar-mode -1)
 
