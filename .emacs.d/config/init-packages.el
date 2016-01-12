@@ -62,3 +62,7 @@
 
 ; Always turn on company mode (auto-completion)
 (add-hook 'after-init-hook 'global-company-mode)
+
+(projectile-global-mode)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
