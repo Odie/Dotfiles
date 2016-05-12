@@ -19,6 +19,7 @@
 	feature-merge = merge --no-ff
 	clean-merged = "!git branch --merged | grep  -v '\\*\\|master\\|dev' | xargs -n 1 git branch -d"
 	graph=git log --graph --oneline --decorate --all
+	branch-age = "!git for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'"
 
 [merge]
 	tool = araxis
