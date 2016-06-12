@@ -294,6 +294,9 @@ nnoremap <leader>p :set invpaste paste?<CR>
 " Quickly delete a buffer without altering layout
 nnoremap <Leader>q :Bdelete<CR>
 
+" Don't enter Ex mode
+:nnoremap Q <Nop>
+
 "=====[ Setup key mappings ]=============
 :nnoremap <leader>ev :vsplit ~/.vimrc.after<cr>
 :nnoremap <leader>sv :source ~/.vimrc.after<cr>:echom "Sourced vimrc"<cr>
