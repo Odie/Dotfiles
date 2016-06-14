@@ -21,12 +21,31 @@ endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Color Scheme
-
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-"color zenburn
 set background=dark
 color gruvbox
+
+let g:terminal_color_0="#353535"
+let g:terminal_color_1="#d73a26"
+let g:terminal_color_2="#a8a522"
+let g:terminal_color_3="#dfa82a"
+let g:terminal_color_4="#54979a"
+let g:terminal_color_5="#c07998"
+let g:terminal_color_6="#79ab7d"
+let g:terminal_color_7="#c9bca4"
+
+let g:terminal_color_8="#8f8277"
+let g:terminal_color_9="#fc6143"
+let g:terminal_color_10="#c5c431"
+let g:terminal_color_11="#fcc73c"
+let g:terminal_color_12="#95b3a9"
+let g:terminal_color_13="#dd9aab"
+let g:terminal_color_14="#9eca8e"
+let g:terminal_color_15="#efe1bf"
+
+let g:terminal_color_background="#282828"
+let g:terminal_color_foreground="#ebdca8"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Basic Settings

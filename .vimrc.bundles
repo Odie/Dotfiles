@@ -19,6 +19,7 @@ Plug 'Odie/Smart-Tabs'
 """ Commandline utility written in Go
 """ Requires separate installation
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf.vim'
 nnoremap <silent> <C-P> :FZF<CR>
 
 """ Auto-completion
