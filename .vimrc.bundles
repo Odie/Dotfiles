@@ -13,7 +13,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
 """ Try to use tabs where possible
-Plug 'Odie/Smart-Tabs'
+"Plug 'Odie/Smart-Tabs'
 
 """ control-p to jump between files
 """ Commandline utility written in Go
@@ -22,21 +22,19 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'junegunn/fzf.vim'
 nnoremap <silent> <C-P> :FZF<CR>
 
-""" Auto-completion
+""" Auto-completion & snippets
+Plug 'ervandew/supertab'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
-let g:ycm_key_invoke_completion = '<C-K>'
-let g:ycm_key_list_select_completion = ['<Down>', '<C-N>']
-let g:ycm_key_list_previous_completion = ['<UP>', '<C-P>']
-let g:ycm_autoclose_preview_window_after_insertion=1
-" let g:ycm_autoclose_preview_window_after_completion=1
-" autocmd CompleteDone * pclose
-
-""" Snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-let g:UltiSnipsExpandTrigger="<C-J>"
-let g:UltiSnipsJumpForwardTrigger="<C-N>"
-let g:UltiSnipsJumpBackwardTrigger="<C-P>"
+
+let g:ycm_key_list_select_completion   = ['<C-j>', '<C-n>']
+let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>']
+let g:SuperTabDefaultCompletionType    = '<C-n>'
+let g:SuperTabCrMapping                = 0
+let g:UltiSnipsExpandTrigger           = '<tab>'
+let g:UltiSnipsJumpForwardTrigger      = '<tab>'
+let g:UltiSnipsJumpBackwardTrigger     = '<s-tab>'
 
 
 """ Unix helpers
