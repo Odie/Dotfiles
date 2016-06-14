@@ -108,13 +108,7 @@ Plug 'vim-scripts/TaskList.vim'
 Plug 'xolox/vim-misc'
 
 """ Automate tag file generation
-Plug 'xolox/vim-easytags'
-let g:easytags_cmd = '/usr/local/bin/ctags'   " Where to find ctags?
-let g:easytags_async = 1                      " Run ctags asynchronously
-let g:easytags_always_enabled = 0             " Don't always run
-let g:easytags_auto_highlight = 0             " Don't try to highlight tags. Unacceptably slow on larger projects.
-let g:easytags_dynamic_files = 1              " Generate tags local to a project
-set tags=./.git/tags;                         " Where to store tag files local to the project
+Plug 'ludovicchabant/vim-gutentags'
 
 """ Shortcuts for aligning text
 Plug 'godlygeek/tabular'
