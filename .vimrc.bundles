@@ -37,11 +37,6 @@ let g:UltiSnipsExpandTrigger="<C-J>"
 let g:UltiSnipsJumpForwardTrigger="<C-N>"
 let g:UltiSnipsJumpBackwardTrigger="<C-P>"
 
-""" Manage and jump between buffers
-""" Note: Consider removing "unite" related plugins
-""" It was mostly used to jump back to previous buffers.
-Plug 'Shougo/unite.vim'
-Plug 'tsukkee/unite-tag'
 
 """ Unix helpers
 """ ":SudoWrite" to write a file with sudo

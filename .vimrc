@@ -157,34 +157,6 @@ set t_Co=256			    " Use 256 colours (Use this setting only if your terminal sup
 set noshowmode			  " Hide the default mode text (e.g. -- INSERT -- below the statusline)
 set encoding=utf-8		" make sure we can display fancy characters correctly
 
-"=====[ Unite configuartion ]=============
-" Use ag if available
-if executable('ag')
-	let g:unite_source_grep_command = 'ag'
-	let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-	let g:unite_source_grep_recursive_opt = ''
-endif
-
-call unite#custom#source('file_rec', 'ignore_pattern', '/.png$/')
-let g:unite_enable_start_insert = 1
-let g:unite_winheight = 10
-let g:unite_split_rule = 'botright'
-let g:unite_prompt = '>>> '
-let g:unite_source_history_yank_enable = 1
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-
-" Custom mappings for the unite buffer
-autocmd FileType unite call s:unite_settings()
-function! s:unite_settings()
-	" Play nice with supertab
-	let b:SuperTabDisabled=1
-	nmap <buffer> <ESC>		 <Plug>(unite_exit)
-	" Enable navigation with control-j and control-k in insert mode
-	imap <buffer> <C-j>	<Plug>(unite_select_next_line)
-	imap <buffer> <C-k>	<Plug>(unite_select_previous_line)
-endfunction
-
 " Easymotion: Make sure we can see the first key in a 2 key target
 hi link EasyMotionTarget2First EasyMotionTargetDefault
 
