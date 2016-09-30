@@ -27,6 +27,7 @@ values."
      ;; better-defaults
      emacs-lisp
      clojure
+     html
      ;; git
      markdown
      org
@@ -298,6 +299,7 @@ layers configuration. You are free to put any user code."
   (with-eval-after-load 'org
     (setq org-agenda-files (list "~/org")))
 
+  ;;(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
