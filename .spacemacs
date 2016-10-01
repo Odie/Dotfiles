@@ -296,8 +296,25 @@ layers configuration. You are free to put any user code."
     (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
     )
 
-  (with-eval-after-load 'org
-    (setq org-agenda-files (list "~/org")))
+  ;; Define where the org agenda files are
+  ;; These files are used by org-mode to find where the TODO items are
+  ;; Without this setting, org-mode agenda will always show an empty agenda
+  ;; because there are no known TODO items.
+  (use-package org
+    :config
+    (setq org-agenda-files (list "~/org/" "~/org/projects/")))
+
+  (use-package org-agenda
+    :config
+    (progn
+      (evilified-state-evilify-map org-agenda-mode-map
+        :mode org-agenda-mode
+        :bindings
+        (kbd "C-h") 'evil-window-left
+        (kbd "C-j") 'evil-window-down
+        (kbd "C-k") 'evil-window-up
+        (kbd "C-l") 'evil-window-right)
+      ))
 
   ;;(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
   )
