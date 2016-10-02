@@ -314,6 +314,15 @@ layers configuration. You are free to put any user code."
           (kbd "C-l") 'evil-window-right)))
 
   ;;(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+
+  ;; Don't ask about symbolic links that links to version controlled files
+  ;; More specifically, the .spacemacs file is under source control. Without this
+  ;; option, emacs would ask whether to follow the link each time the spacemacs
+  ;; file is opened.
+  ;;
+  ;; Since we're almost always working with git, it does not matter if we just start
+  ;; modifying the file without any sort of vc specific locking operation.
+  (setq vc-follow-symlinks t)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
