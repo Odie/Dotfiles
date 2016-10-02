@@ -243,20 +243,51 @@ values."
 	`(eval-after-load ,feature
      '(progn ,@body)))
 
+(defun user/display-type ()
+    (let ((width (display-pixel-width))
+          (height (display-pixel-height)))
+
+      (if (and (eq width 1440)
+               (eq height 900))
+               'MBP
+        'bla)
+      ))
+
+(defun center-frame-x ()
+  "Get the horizontal position where the frame should be centered"
+  (/ (- (display-pixel-width) (frame-pixel-width)) 2))
+
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
 It is called immediately after `dotspacemacs/init'.  You are free to put almost
 any user code here.  The exception is org related code, which should be placed
 in `dotspacemacs/user-config'."
-  (when (display-graphic-p)
 
-    (if (eq (display-pixel-width) 1440)
+  )
+
+(defun dotspacemacs/user-config ()
+  "Configuration function for user code.
+This function is called at the very end of Spacemacs initialization after
+layers configuration. You are free to put any user code."
+
+  ;; If we're using a graphical display, update the frame of the emacs application
+  ;; so it's a reasonable size for the display as well as centered.
+  (when (display-graphic-p)
+    (if (eq (user/display-type) 'MBP) 
         (progn
           ;; default font size (point * 10)
           (set-face-attribute 'default nil :height 140)
 
           ;; Set the frame to something more reasonable
-          (set-frame-size (selected-frame) 125 60))
+          (set-frame-size (selected-frame) 125 61)
+
+          ;; Try to center the frame so it doesn't look lopsided and require
+          ;; manual adjustment
+          (set-frame-position (selected-frame) (center-frame-x) 0)
+
+          ;; Go fullscreen on a MBP. There is otherwise too little room to work.
+          (spacemacs/toggle-fullscreen-frame)
+          )
 
       (progn
         ;; default font size (point * 10)
@@ -264,13 +295,10 @@ in `dotspacemacs/user-config'."
 
         ;; Set the frame to something more reasonable
         (set-frame-size (selected-frame) 125 64)
-        )))
-  )
 
-(defun dotspacemacs/user-config ()
-  "Configuration function for user code.
-This function is called at the very end of Spacemacs initialization after
-layers configuration. You are free to put any user code."
+        ;; Try to center the frame so it doesn't look lopsided and require
+        ;; manual adjustment
+        (set-frame-position (selected-frame) (center-frame-x) 0))))
 
   (use-package evil
     :config
