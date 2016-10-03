@@ -288,7 +288,7 @@ layers configuration. You are free to put any user code."
 
       (progn
         ;; Set the frame to something more reasonable
-        (set-frame-size (selected-frame) 125 64)
+        (set-frame-size (selected-frame) 125 77)
 
         ;; Try to center the frame so it doesn't look lopsided and require
         ;; manual adjustment
