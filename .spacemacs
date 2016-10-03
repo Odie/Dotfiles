@@ -275,9 +275,6 @@ layers configuration. You are free to put any user code."
   (when (display-graphic-p)
     (if (eq (user/display-type) 'MBP) 
         (progn
-          ;; default font size (point * 10)
-          (set-face-attribute 'default nil :height 140)
-
           ;; Set the frame to something more reasonable
           (set-frame-size (selected-frame) 125 61)
 
@@ -290,9 +287,6 @@ layers configuration. You are free to put any user code."
           )
 
       (progn
-        ;; default font size (point * 10)
-        (set-face-attribute 'default nil :height 180)
-
         ;; Set the frame to something more reasonable
         (set-frame-size (selected-frame) 125 64)
 
