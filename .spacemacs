@@ -273,7 +273,7 @@ layers configuration. You are free to put any user code."
   ;; If we're using a graphical display, update the frame of the emacs application
   ;; so it's a reasonable size for the display as well as centered.
   (when (display-graphic-p)
-    (if (eq (user/display-type) 'MBP) 
+    (if (eq (user/display-type) 'MBP)
         (progn
           ;; Set the frame to something more reasonable
           (set-frame-size (selected-frame) 125 61)
@@ -330,10 +330,10 @@ layers configuration. You are free to put any user code."
     :config
     (progn
       (evil-define-key 'evilified org-agenda-mode-map
-          (kbd "C-h") 'evil-window-left
-          (kbd "C-j") 'evil-window-down
-          (kbd "C-k") 'evil-window-up
-          (kbd "C-l") 'evil-window-right)))
+        (kbd "C-h") 'evil-window-left
+        (kbd "C-j") 'evil-window-down
+        (kbd "C-k") 'evil-window-up
+        (kbd "C-l") 'evil-window-right)))
 
   ;;(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 
