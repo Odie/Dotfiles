@@ -330,9 +330,9 @@ layers configuration. You are free to put any user code."
     :config
     (progn
       (evil-define-key 'evilified org-agenda-mode-map
-        (kbd "C-h") 'evil-window-left
-        (kbd "C-j") 'evil-window-down
-        (kbd "C-k") 'evil-window-up
+          (kbd "C-h") 'evil-window-left
+          (kbd "C-j") 'evil-window-down
+          (kbd "C-k") 'evil-window-up
           (kbd "C-l") 'evil-window-right)))
 
   ;;(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
