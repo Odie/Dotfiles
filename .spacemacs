@@ -417,6 +417,7 @@ you should place your code here."
     ;; (add-hook 'org-mode-hook 'org-indent-mode t)
 
     :config
+    (setq org-startup-truncated nil)
     (setq org-startup-indented t)
     (setq org-agenda-files (list "~/org/" "~/org/projects/")))
 
@@ -455,6 +456,10 @@ you should place your code here."
     :config
     (with-eval-after-load 'diminish
       (diminish 'auto-dim-other-buffers-mode)))
+
+  ;; If we're looking at plain text, enable soft-wrapping at word boundaries.
+  (add-hook 'org-mode-hook 'toggle-word-wrap)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
