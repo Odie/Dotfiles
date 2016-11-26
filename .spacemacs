@@ -319,6 +319,9 @@ before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   )
 
+(defun user/scroll-line-to-center (orig-fun &rest args)
+  (call-interactively 'evil-scroll-line-to-center))
+
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -374,6 +377,8 @@ you should place your code here."
     (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
     (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer)
     (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
+
+    (advice-add 'evil-goto-mark-line :after #'user/scroll-line-to-center)
     )
 
   ;; Define where the org agenda files are
