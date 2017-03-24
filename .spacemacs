@@ -340,6 +340,10 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  (setq mac-option-key-is-meta nil
+        mac-command-key-is-meta t
+        mac-command-modifier 'meta
+        mac-option-modifier 'none)
 
   ;; If we're using a graphical display, update the frame of the emacs application
   ;; so it's a reasonable size for the display as well as centered.
@@ -380,11 +384,12 @@ you should place your code here."
 
     ;; Emulate ctrl-p
     (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
+
     ;; Move around windows faster
-    (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-    (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-    (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-    (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+    (global-set-key (kbd "C-h") 'evil-window-left)
+    (global-set-key (kbd "C-j") 'evil-window-down)
+    (global-set-key (kbd "C-k") 'evil-window-up)
+    (global-set-key (kbd "C-l") 'evil-window-right)
     (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer)
     (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
 
