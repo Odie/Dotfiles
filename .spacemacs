@@ -329,6 +329,51 @@ values."
         'other)
       ))
 
+(defvar user/display-configs
+  '(
+    ((config-name . workstation)
+     (resolution . (3440 . 1440))
+     (frame-size . (213 . 99))
+     (frame-position . top-center))
+
+    ((config-name . MBP)
+     (resolution . (1440 . 900))
+     (frame-size . (125 . 61))
+     (frame-position . top-center))))
+
+(defun user/match-display-config (display-configs)
+  "Given a list of display configs, retrieve the one that matches the current display or nil"
+
+  ;; What is the current width & height of the current display?
+  (let ((cur-resolution (cons (display-pixel-width) (display-pixel-height)))
+        (result))
+
+    ;; Loop through the configs and find a match
+    (dolist (config display-configs)
+
+      ;; Grab the item that matches the current display
+      (if (equal cur-resolution (alist-get 'resolution config))
+          (setq result config)))
+
+    ;; Return the found item
+    result))
+
+(defun cons->list (c)
+  (list (car c) (cdr c)))
+
+(defun user/config-frame-for-display (display-config)
+  "Given a display config, update the current frame's size and position to match"
+  (let ((frame-size (or (alist-get 'frame-size display-config) (cons 100 10)))
+        (frame-pos (or (alist-get 'frame-position display-config) (cons 0 0))))
+
+    (apply 'set-frame-size (selected-frame) (cons->list frame-size))
+
+    (cond ((consp frame-pos)
+           (apply 'set-frame-position (selected-frame) (cons->list frame-pos)))
+
+          ((equal frame-pos 'top-center)
+           (set-frame-position (selected-frame) (center-frame-x) 0)))))
+
 (defun center-frame-x ()
   "Get the horizontal position where the frame should be centered"
   (/ (- (display-pixel-width) (frame-pixel-width)) 2))
