@@ -41,7 +41,8 @@ values."
      auto-completion
      ;; better-defaults
      emacs-lisp
-     clojure
+     (clojure :variables
+              clojure-enable-fancify-symbols t)
      octave
      html
      git
