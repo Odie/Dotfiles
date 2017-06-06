@@ -402,8 +402,6 @@ you should place your code here."
     (global-set-key (kbd "C-j") 'evil-window-down)
     (global-set-key (kbd "C-k") 'evil-window-up)
     (global-set-key (kbd "C-l") 'evil-window-right)
-    (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer)
-    (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
 
     (advice-add 'evil-goto-mark-line :after #'user/scroll-line-to-center)
     )
