@@ -406,26 +406,19 @@ you should place your code here."
   ;; If we're using a graphical display, update the frame of the emacs application
   ;; so it's a reasonable size for the display as well as centered.
   (when (display-graphic-p)
-    (if (eq (user/display-type) 'MBP)
-        (progn
-          ;; Set the frame to something more reasonable
-          (set-frame-size (selected-frame) 125 61)
+    ;; Grab a config suitable for the current display
+    (let ((display-config (or (user/match-display-config user/display-configs)
+                              '((config-name . default)
+                                (frame-size . (100 . 10))
+                                (frame-position . (0 . 0))))))
 
-          ;; Try to center the frame so it doesn't look lopsided and require
-          ;; manual adjustment
-          (set-frame-position (selected-frame) (center-frame-x) 0)
+      ;; Apply the said config
+      (user/config-frame-for-display display-config)
 
-          ;; Go fullscreen on a MBP. There is otherwise too little room to work.
-          (spacemacs/toggle-fullscreen-frame)
-          )
-
-      (progn
-        ;; Set the frame to something more reasonable
-        (set-frame-size (selected-frame) 200 99)
-
-        ;; Try to center the frame so it doesn't look lopsided and require
-        ;; manual adjustment
-        (set-frame-position (selected-frame) (center-frame-x) 0))))
+      ;; Perform any other custom behavior not handled by config-frame-for-display
+      (when (eq (alist-get 'config-name display-config) 'MBP)
+        ;; Go fullscreen on a MBP. There is otherwise too little room to work.
+        (spacemacs/toggle-fullscreen-frame))))
 
   (use-package evil
     :config
