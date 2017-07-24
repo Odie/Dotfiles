@@ -212,7 +212,7 @@ endfunction
 
 "======================================================================
 " If cursor is in first or last line of window, scroll to middle line.
-function s:MaybeMiddle()
+function! s:MaybeMiddle()
   if winline() == 1 || winline() == winheight(0)
     normal! zz
   endif
@@ -303,15 +303,12 @@ endif
 " Toggle paste mode
 nnoremap <leader>p :set invpaste paste?<CR>
 
-" Quickly delete a buffer without altering layout
-nnoremap <Leader>q :Bdelete<CR>
-
 " Don't enter Ex mode
-:nnoremap Q <Nop>
+nnoremap Q <Nop>
 
-"=====[ Setup key mappings ]=============
-:nnoremap <leader>ev :vsplit ~/.vimrc<cr>
-:nnoremap <leader>sv :source ~/.vimrc<cr>:echom "Sourced vimrc"<cr>
+"=====[ vimrc file ]=============
+nnoremap <leader>fed :vsplit ~/.vimrc<cr>
+nnoremap <leader>feR :source ~/.vimrc<cr>:echom "Sourced vimrc"<cr>
 
 "=====[ Highlight matches when jumping to next ]=============
 nnoremap <silent> n n:call <SID>MaybeMiddle()<cr>:call HLNext(0.125)<cr>
@@ -319,7 +316,12 @@ nnoremap <silent> N N:call <SID>MaybeMiddle()<cr>:call HLNext(0.125)<cr>
 
 "=====[ Setup movement mappings ]=============
 "" Select contents of next or last ()
-:onoremap in( :<c-u>normal! f(vi(<cr>
-:onoremap il( :<c-u>normal! F)vi(<cr>
+onoremap in( :<c-u>normal! f(vi(<cr>
+onoremap il( :<c-u>normal! F)vi(<cr>
+
+"=====[ Buffer maniulation ]=============
+nnoremap <silent> <leader>bb :Buffer<cr>
+nnoremap <Leader>bd :Bdelete<CR>
+nnoremap <silent> <leader><tab> <c-^>
 
 "==================================================================}}}
