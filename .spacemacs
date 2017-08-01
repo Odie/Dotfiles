@@ -32,6 +32,7 @@ values."
    dotspacemacs-configuration-layers
    '(
      yaml
+     python
      lua
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -157,15 +158,14 @@ values."
    ;; (default "SPC")
    dotspacemacs-emacs-command-key "SPC"
    ;; The key used for Vim Ex commands (default ":")
-   dotspacemacs-ex-command-key ":"
+   dotspacemacs-ex-command-key ";"
    ;; The leader key accessible in `emacs state' and `insert state'
-   ;; (default "M-m")
    dotspacemacs-emacs-leader-key "M-m"
    ;; Major mode leader key is a shortcut key which is the equivalent of
    ;; pressing `<leader> m`. Set it to `nil` to disable it. (default ",")
    dotspacemacs-major-mode-leader-key ","
    ;; Major mode leader key accessible in `emacs state' and `insert state'.
-   ;; (default "C-M-m)
+   ;; (default "C-M-m")
    dotspacemacs-major-mode-emacs-leader-key "C-M-m"
    ;; These variables control whether separate commands are bound in the GUI to
    ;; the key pairs C-i, TAB and C-m, RET.
@@ -311,8 +311,8 @@ values."
   (add-to-list 'configuration-layer--elpa-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
   (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
   (add-to-list 'package-pinned-packages '(clj-refactor . "melpa-stable") t)
-  (add-to-list 'package-pinned-packages '(cljr-helm . "melpa-stable") t)
   (add-to-list 'package-pinned-packages '(ac-cider . "melpa-stable") t)
+  (user/spacemacs-init)
   )
 
 (defmacro after (feature &rest body)
@@ -376,6 +376,23 @@ values."
           ((equal frame-pos 'top-center)
            (set-frame-position (selected-frame) (center-frame-x) 0)))))
 
+(defun user/spacemacs-init ()
+  (setq dotspacemacs-default-font
+        (cond
+         ((eq (user/display-type) 'MBP)
+          '("Anonymous Pro"
+            :size 13
+            :weight normal
+            :width normal
+            :powerline-scale 1.4))
+
+         (:else
+          '("Anonymous Pro"
+            :size 14
+            :weight normal
+            :width normal
+            :powerline-scale 1.4)))))
+
 (defun center-frame-x ()
   "Get the horizontal position where the frame should be centered"
   (/ (- (display-pixel-width) (frame-pixel-width)) 2))
@@ -400,10 +417,9 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  (setq mac-option-key-is-meta nil
-        mac-command-key-is-meta t
-        mac-command-modifier 'meta
-        mac-option-modifier 'none)
+  ;;;---------------------------------------------------------------------------
+  ;;; Configure startup frame size
+  ;;;
 
   ;; If we're using a graphical display, update the frame of the emacs application
   ;; so it's a reasonable size for the display as well as centered.
@@ -421,6 +437,15 @@ you should place your code here."
       (when (eq (alist-get 'config-name display-config) 'MBP)
         ;; Go fullscreen on a MBP. There is otherwise too little room to work.
         (spacemacs/toggle-fullscreen-frame))))
+
+  ;;;---------------------------------------------------------------------------
+  ;;; Global editor behaviors
+  ;;;
+
+  (setq mac-option-key-is-meta nil
+        mac-command-key-is-meta t
+        mac-command-modifier 'meta
+        mac-option-modifier 'none)
 
   (use-package evil
     :config
@@ -444,8 +469,32 @@ you should place your code here."
     (global-set-key (kbd "C-k") 'evil-window-up)
     (global-set-key (kbd "C-l") 'evil-window-right)
 
-    (advice-add 'evil-goto-mark-line :after #'user/scroll-line-to-center)
-    )
+    (advice-add 'evil-goto-mark-line :after #'user/scroll-line-to-center))
+
+  ;; Don't ask about symbolic links that links to version controlled files
+  ;; More specifically, the .spacemacs file is under source control. Without this
+  ;; option, emacs would ask whether to follow the link each time the spacemacs
+  ;; file is opened.
+  ;;
+  ;; Since we're almost always working with git, it does not matter if we just start
+  ;; modifying the file without any sort of vc specific locking operation.
+  (setq vc-follow-symlinks t)
+
+  ;; Always delete trailing whitespace
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+  ;; Automatically dim buffers that are not in focus
+  (use-package auto-dim-other-buffers
+    :ensure t
+    :init
+    (auto-dim-other-buffers-mode t)
+    :config
+    (with-eval-after-load 'diminish
+      (diminish 'auto-dim-other-buffers-mode)))
+
+  ;;;---------------------------------------------------------------------------
+  ;;; ORG mode
+  ;;;
 
   ;; Define where the org agenda files are
   ;; These files are used by org-mode to find where the TODO items are
@@ -458,26 +507,25 @@ you should place your code here."
     :config
     (setq org-startup-truncated nil)
     (setq org-startup-indented t)
-    (setq org-agenda-files (list "~/org/" "~/org/projects/")))
+    (setq org-agenda-files (list "~/org/" "~/org/projects/"))
+    (spacemacs/set-leader-keys-for-major-mode 'org-mode
+      "it" 'org-inlinetask-insert-task))
 
   (use-package org-agenda
     :config
-    (progn
-      (evil-define-key 'evilified org-agenda-mode-map
-        (kbd "C-h") 'evil-window-left
-        (kbd "C-j") 'evil-window-down
-        (kbd "C-k") 'evil-window-up
-        (kbd "C-l") 'evil-window-right)))
+    (evil-define-key 'evilified org-agenda-mode-map
+      (kbd "C-h") 'evil-window-left
+      (kbd "C-j") 'evil-window-down
+      (kbd "C-k") 'evil-window-up
+      (kbd "C-l") 'evil-window-right))
+
+  (require 'org-inlinetask)  ;; allow inline todos
+  (add-hook 'org-mode-hook 'toggle-word-wrap) ;; enable soft-wrapping at word boundaries.
 
 
-  ;; Don't ask about symbolic links that links to version controlled files
-  ;; More specifically, the .spacemacs file is under source control. Without this
-  ;; option, emacs would ask whether to follow the link each time the spacemacs
-  ;; file is opened.
-  ;;
-  ;; Since we're almost always working with git, it does not matter if we just start
-  ;; modifying the file without any sort of vc specific locking operation.
-  (setq vc-follow-symlinks t)
+  ;;;---------------------------------------------------------------------------
+  ;;; Cider
+  ;;;
 
   (use-package cider
     :init
@@ -485,19 +533,7 @@ you should place your code here."
     :config
     (cider-repl-toggle-pretty-printing))
 
-  ;; Always delete trailing whitespace
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-  (use-package auto-dim-other-buffers
-    :ensure t
-    :init
-    (auto-dim-other-buffers-mode t)
-    :config
-    (with-eval-after-load 'diminish
-      (diminish 'auto-dim-other-buffers-mode)))
-
-  ;; If we're looking at plain text, enable soft-wrapping at word boundaries.
-  (add-hook 'org-mode-hook 'toggle-word-wrap)
 
   )
 
@@ -518,7 +554,7 @@ you should place your code here."
       nil))))
  '(package-selected-packages
    (quote
-    (yaml-mode sql-indent winum fuzzy lua-mode parinfer smeargle orgit magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor auto-dim-other-buffers smooth-scroll pug-mode hide-comnt inflections edn multiple-cursors paredit peg cider seq queue clojure-mode powerline spinner org markdown-mode hydra parent-mode projectile pos-tip flycheck pkg-info epl flx smartparens iedit anzu evil goto-chg undo-tree eval-sexp-fu highlight s diminish bind-map bind-key yasnippet packed dash helm avy helm-core async popup package-build company auto-complete uuidgen request osx-dictionary org-projectile org-download link-hint flyspell-correct-helm flyspell-correct eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff dumb-jump f column-enforce-mode clojure-snippets web-mode tagedit slim-mode scss-mode sass-mode less-css-mode jade-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data toc-org reveal-in-osx-finder pbcopy osx-trash org-repo-todo org-present org-pomodoro alert log4e gntp org-plus-contrib org-bullets launchctl htmlize gnuplot ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin persp-mode pcre2el paradox page-break-lines open-junk-file neotree move-text mmm-mode markdown-toc macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flyspell helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag gruvbox-theme google-translate golden-ratio gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu elisp-slime-nav define-word company-statistics company-quickhelp clj-refactor clean-aindent-mode cider-eval-sexp-fu buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (sql-indent yaml-mode python-x folding yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic winum fuzzy lua-mode parinfer smeargle orgit magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor auto-dim-other-buffers smooth-scroll pug-mode hide-comnt inflections edn multiple-cursors paredit peg cider seq queue clojure-mode powerline spinner org markdown-mode hydra parent-mode projectile pos-tip flycheck pkg-info epl flx smartparens iedit anzu evil goto-chg undo-tree eval-sexp-fu highlight s diminish bind-map bind-key yasnippet packed dash helm avy helm-core async popup package-build company auto-complete uuidgen request osx-dictionary org-projectile org-download link-hint flyspell-correct-helm flyspell-correct eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff dumb-jump f column-enforce-mode clojure-snippets web-mode tagedit slim-mode scss-mode sass-mode less-css-mode jade-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data toc-org reveal-in-osx-finder pbcopy osx-trash org-repo-todo org-present org-pomodoro alert log4e gntp org-plus-contrib org-bullets launchctl htmlize gnuplot ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin persp-mode pcre2el paradox page-break-lines open-junk-file neotree move-text mmm-mode markdown-toc macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flyspell helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag gruvbox-theme google-translate golden-ratio gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu elisp-slime-nav define-word company-statistics company-quickhelp clj-refactor clean-aindent-mode cider-eval-sexp-fu buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
