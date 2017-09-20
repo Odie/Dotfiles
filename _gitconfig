@@ -43,7 +43,7 @@
 
 [difftool "sourcetree"]
 	cmd = /usr/local/bin/ksdiff -w \"$LOCAL\" \"$REMOTE\"
-	path =
+	path = 
 
 [mergetool "sourcetree"]
 	cmd = /usr/local/bin/ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
@@ -53,3 +53,5 @@
 	default = current
 #[init]
 #	templatedir = ~/.git_template
+[magit]
+	hideCampaign = true
