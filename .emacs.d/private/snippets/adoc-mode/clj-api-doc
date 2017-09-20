@@ -1,0 +1,31 @@
+# -*- mode: snippet -*-
+#name : clj-api-doc
+#key : clj-api-doc
+#contributor : Odie
+# --
+:source-lang: clojure
+Short 1 line description of what a var/function is/does.
+As much as possible, the line should be free of jargon.
+The idea is to help the user intuitively understand what the function does.
+
+== Parameters
+list of parameters and their expected types
+
+== Return value
+list of return values and their expected types
+
+== Examples
+Short, idiomatic clojure example that shows the expected usage pattern.
+
+== Description
+Any lengthy description of the function goes here.
+
+== Exceptions
+List of possible exceptions that might be thrown and when they will be thrown.
+
+== See Also
+Links to related functions.
+We might want to add some additional preprocessing to automatically create links here.
+
+== Further Reading
+Links to other official & unofficial documentation
