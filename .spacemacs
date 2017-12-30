@@ -153,7 +153,8 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Anonymous Pro"
+   dotspacemacs-default-font '(;;"DejaVu Sans Mono"
+                               "DejaVu Sans Mono for Powerline"
                                :size 14
                                :weight normal
                                :width normal
@@ -386,18 +387,22 @@ values."
   (setq dotspacemacs-default-font
         (cond
          ((eq (user/display-type) 'MBP)
-          '("Anonymous Pro"
+          '(;;"Anonymous Pro"
+            "Fira Code"
             :size 13
             :weight normal
             :width normal
             :powerline-scale 1.4))
 
          (:else
-          '("Anonymous Pro"
-            :size 14
+          '(;;"Anonymous Pro"
+            "Fira Code"
+            :size 13
             :weight normal
             :width normal
-            :powerline-scale 1.4)))))
+            :powerline-scale 1.4))))
+  (mac-auto-operator-composition-mode)
+  )
 
 (defun center-frame-x ()
   "Get the horizontal position where the frame should be centered"
