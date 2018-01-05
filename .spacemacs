@@ -55,7 +55,7 @@ values."
      html
      git
      (markdown :variables markdown-live-preview-engine 'vmd)
-     org
+     (org :variables org-want-todo-bindings t)
      sql
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -314,11 +314,6 @@ values."
    dotspacemacs-whitespace-cleanup nil
    )
 
-  (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
-  (add-to-list 'configuration-layer--elpa-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
-  (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
-  (add-to-list 'package-pinned-packages '(clj-refactor . "melpa-stable") t)
-  (add-to-list 'package-pinned-packages '(ac-cider . "melpa-stable") t)
   (user/spacemacs-init)
   )
 
@@ -588,11 +583,11 @@ you should place your code here."
        (when (evil-insert-state-p)
          (define-key evil-insert-state-map (kbd "C-k") nil)))))
 
-  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode
+  (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode
     "ee" 'user/clj-eval-last-sexp)
-  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode
+  (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode
     "eb" 'user/clj-eval-buffer)
-  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode
+  (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode
     "ef" 'user/clj-eval-defun-at-point)
   )
 
@@ -633,12 +628,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(cider-pprint-fn (quote fipp))
- '(evil-want-Y-yank-to-eol nil)
- '(inf-clojure-generic-cmd "lumo -d")
- '(js2-strict-missing-semi-warning nil)
  '(org-agenda-custom-commands
    (quote
     (("o" "Overdue todo items" tags "+SCHEDULED<\"<now>\"&-activity" nil)
@@ -648,19 +638,14 @@ This function is called at the very end of Spacemacs initialization."
       nil))))
  '(package-selected-packages
    (quote
-    (adoc-mode markup-faces sql-indent yaml-mode python-x folding yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic winum fuzzy lua-mode parinfer smeargle orgit magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor auto-dim-other-buffers smooth-scroll pug-mode hide-comnt inflections edn multiple-cursors paredit peg cider seq queue clojure-mode powerline spinner org markdown-mode hydra parent-mode projectile pos-tip flycheck pkg-info epl flx smartparens iedit anzu evil goto-chg undo-tree eval-sexp-fu highlight s diminish bind-map bind-key yasnippet packed dash helm avy helm-core async popup package-build company auto-complete uuidgen request osx-dictionary org-projectile org-download link-hint flyspell-correct-helm flyspell-correct eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff dumb-jump f column-enforce-mode clojure-snippets web-mode tagedit slim-mode scss-mode sass-mode less-css-mode jade-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data toc-org reveal-in-osx-finder pbcopy osx-trash org-repo-todo org-present org-pomodoro alert log4e gntp org-plus-contrib org-bullets launchctl htmlize gnuplot ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin persp-mode pcre2el paradox page-break-lines open-junk-file neotree move-text mmm-mode markdown-toc macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flyspell helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag gruvbox-theme google-translate golden-ratio gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu elisp-slime-nav define-word company-statistics company-quickhelp clj-refactor clean-aindent-mode cider-eval-sexp-fu buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (zenburn-theme web-beautify vmd-mode symon string-inflection solarized-theme sayid password-generator overseer org-category-capture org-brain nameless monokai-theme livid-mode skewer-mode json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc inf-clojure impatient-mode simple-httpd helm-purpose window-purpose imenu-list autothemer evil-org ghub let-alist evil-lion editorconfig company-tern dash-functional tern company-lua coffee-mode clojure-cheatsheet adoc-mode markup-faces sql-indent yaml-mode python-x folding yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic winum fuzzy lua-mode parinfer smeargle orgit magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor auto-dim-other-buffers smooth-scroll pug-mode hide-comnt inflections edn multiple-cursors paredit peg cider seq queue clojure-mode powerline spinner org markdown-mode hydra parent-mode projectile pos-tip flycheck pkg-info epl flx smartparens iedit anzu evil goto-chg undo-tree eval-sexp-fu highlight s diminish bind-map bind-key yasnippet packed dash helm avy helm-core async popup package-build company auto-complete uuidgen request osx-dictionary org-projectile org-download link-hint flyspell-correct-helm flyspell-correct eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff dumb-jump f column-enforce-mode clojure-snippets web-mode tagedit slim-mode scss-mode sass-mode less-css-mode jade-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data toc-org reveal-in-osx-finder pbcopy osx-trash org-repo-todo org-present org-pomodoro alert log4e gntp org-plus-contrib org-bullets launchctl htmlize gnuplot ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin persp-mode pcre2el paradox page-break-lines open-junk-file neotree move-text mmm-mode markdown-toc macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flyspell helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag gruvbox-theme google-translate golden-ratio gh-md flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu elisp-slime-nav define-word company-statistics company-quickhelp clj-refactor clean-aindent-mode cider-eval-sexp-fu buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(safe-local-variable-values
    (quote
-    ((initial-major-mode . clojure-mode)
-     (major-mode . clojure-mode)
-     (inf-clojure-boot-cmd concat "lumo -d -c "
-                           (f-read
-                            (concat
-                             (inf-clojure-project-root)
-                             "cp")))
-     (js2-missing-semi-one-line-override)
-     (js2-strict-missing-semi-warning)
-     (inf-clojure-boot-cmd . "lumo -d")))))
+    ((eval setq inf-clojure-boot-cmd
+           (concat "lumo -d -c "
+                   (concat
+                    (inf-clojure-project-root)
+                    "src")))))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -669,17 +654,5 @@ This function is called at the very end of Spacemacs initialization."
  '(default ((t (:background "#282828" :foreground "#fdf4c1"))))
  '(auto-dim-other-buffers-face ((t (:background "gray23"))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(markup-list-face ((t (:inherit markup-meta-face :foreground "plum1"))))
- '(markup-meta-face ((t (:stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal))))
- '(markup-meta-hide-face ((t (:inherit markup-meta-face))))
- '(markup-secondary-text-face ((t (:inherit markup-gen-face :foreground "firebrick"))))
- '(markup-title-0-face ((t (:inherit markup-gen-face :weight bold))))
- '(markup-title-1-face ((t (:inherit markup-gen-face :weight bold))))
- '(markup-title-2-face ((t (:inherit markup-gen-face :weight bold))))
- '(markup-title-3-face ((t (:inherit markup-gen-face :weight bold))))
- '(markup-title-4-face ((t (:inherit markup-gen-face :weight bold))))
- '(markup-title-5-face ((t (:inherit markup-gen-face :weight bold))))
- '(markup-value-face ((t nil)))
- '(markup-verbatim-face ((t nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 )
