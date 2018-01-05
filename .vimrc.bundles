@@ -18,7 +18,7 @@ let g:airline#extensions#tabline#enabled = 1
 """ control-p to jump between files
 """ Commandline utility written in Go
 """ Requires separate installation
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 nnoremap <silent> <C-P> :FZF<CR>
 
@@ -190,6 +190,8 @@ Plug 'tpope/vim-markdown'
 """ Requires flake8
 Plug 'nvie/vim-flake8'
 
+""" Syntax highlighting for swift
+Plug 'keith/swift.vim'
 
 call plug#end()
 filetype plugin indent on
