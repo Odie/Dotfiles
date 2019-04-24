@@ -174,8 +174,10 @@ function gridInfoFromWindow(window)
   local cellHeight = round(fullFrame.h / rowCount, 0)
   local cellWidth = round(fullFrame.w / columnCount, 0)
 
-  return {row = math.floor(windowFrame.y / cellHeight),
-          column = math.floor(windowFrame.x / cellWidth),
+  return {row = round(windowFrame.y / cellHeight, 0),
+          column = round(windowFrame.x / cellWidth, 0),
+          rowExact = windowFrame.y / cellHeight,
+          columnExact = windowFrame.x / cellWidth,
           rowCount = rowCount,
           columnCount = columnCount,
           cellWidth = cellWidth,
@@ -323,6 +325,11 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "left", function()
     -- What kind of grid is the window on right now?
     local gridInfo = gridInfoFromWindow(window)
 
+    -- If the window isn't on the grid, we'll want to re-interpret which the cell it is in
+    if gridInfo.columnExact % 1 > 0.1 then
+      gridInfo.column = math.ceil(gridInfo.columnExact)
+    end
+
     -- Move to the previous column if possible
     if gridInfo.column ~= 0 then
       gridInfo.column = math.max(gridInfo.column - 1, 0)
@@ -345,6 +352,10 @@ end)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "right", function()
     local window = hs.window.focusedWindow()
     local gridInfo = gridInfoFromWindow(window)
+
+    if gridInfo.columnExact % 1 > 0.1 then
+      gridInfo.column = math.floor(gridInfo.columnExact)
+    end
 
     if gridInfo.column ~= gridInfo.columnCount - 1 then
       gridInfo.column = math.min(gridInfo.column + 1, gridInfo.columnCount - 1)
@@ -369,6 +380,10 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "up", function()
     local window = hs.window.focusedWindow()
     local gridInfo = gridInfoFromWindow(window)
 
+    if gridInfo.rowExact % 1 > 0.1 then
+      gridInfo.row = math.ceil(gridInfo.rowExact)
+    end
+
     -- Move to the a row up if possible
     if gridInfo.row ~= 0 then
       gridInfo.row = math.max(gridInfo.row - 1, 0)
@@ -390,6 +405,10 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "down", function()
     local window = hs.window.focusedWindow()
     local gridInfo = gridInfoFromWindow(window)
 
+    if gridInfo.rowExact % 1 > 0.1 then
+      gridInfo.row = math.floor(gridInfo.rowExact)
+    end
+
     if gridInfo.row ~= gridInfo.rowCount - 1 then
       gridInfo.row = math.min(gridInfo.row + 1, gridInfo.rowCount - 1)
       window:setFrame(frameFromGridInfo(gridInfo))
@@ -408,3 +427,299 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "down", function()
       window:setFrame(newFrame)
     end
 end)
+
+
+
+--------------------------------------------------------------------------------
+-- Custom key handling
+--
+-- We watch for the keydown event and match against some keycode to triggered
+-- the handler.
+--------------------------------------------------------------------------------
+
+local function keyDispatch(event)
+  return false
+end
+
+-- Stop the keyboard event watcher if it has already been defined
+-- This allows config reloading without stacking watchers
+if keyboardTap ~= nil then
+  keyboardTap:stop()
+end
+
+local keyboardTap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
+    if keyDispatch(event) then
+      return true
+    else
+      -- hs.printf("key down!")
+      -- hs.printf(hs.inspect.inspect(event:getFlags()))
+      -- hs.printf(hs.inspect.inspect(event:getKeyCode()))
+      return false
+    end
+end)
+
+keyboardTap:start()
+
+local function clone (t) -- deep-copy a table
+  if type(t) ~= "table" then return t end
+  local meta = getmetatable(t)
+  local target = {}
+  for k, v in pairs(t) do
+    if type(v) == "table" then
+      target[k] = clone(v)
+    else
+      target[k] = v
+    end
+  end
+  setmetatable(target, meta)
+  return target
+end
+
+local function flashRect(rect)
+  local obj = hs.drawing.rectangle(rect)
+
+  obj:show(0.5)
+  hs.timer.doAfter(1, function()
+      obj:hide(0.5)
+      hs.timer.doAfter(0.5, function()
+          obj:delete()
+      end)
+  end)
+end
+
+local function rectTop(rect)
+  return rect.y
+end
+
+local function rectBottom(rect)
+  return rect.y + rect.h
+end
+
+local function rectLeft(rect)
+  return rect.x
+end
+
+local function rectRight(rect)
+  return rect.x + rect.w
+end
+
+local function rectSetRight(rect, value)
+  rect.x = value - rect.w
+  return rect
+end
+
+local function rectSetBottom(rect, value)
+  rect.y = value - rect.h
+  return rect
+end
+
+local function rectCenterX(rect, value)
+  return rect.x + rect.w/2
+end
+
+local function rectCenterY(rect, value)
+  return rect.y + rect.h/2
+end
+
+local function rectSetCenterX(rect, value)
+  rect.x = value - rect.w/2
+  return rect
+end
+
+local function rectSetCenterY(rect, value)
+  rect.y = value - rect.h/2
+  return rect
+end
+
+local function rectAlignY(rect, value, alignment)
+  if alignment == "center" then
+    return rectSetCenterY(rect, value)
+  elseif alignment == "top" then
+    return rectSetTop(rect, value)
+  elseif alignment == "bottom" then
+    return rectSetBottom(rect, value)
+  else
+    return rect
+  end
+end
+
+-- Generates all rectangles that represents snappable hotspots
+local function generateSnapHotspots()
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+
+    local corner_size = 10
+    local ann_size = 10
+    rects = {}
+
+    local rectPrototype = {x=screenFrame.x, y=screenFrame.y, w=corner_size, h=corner_size}
+
+    -- Corners
+    -- These are supposed to snap the window to quarter screen size
+    rects.top_left = clone(rectPrototype)
+
+    rects.top_right =
+      rectSetRight(
+        clone(rectPrototype),
+        rectRight(screenFrame))
+
+    rects.bottom_left =
+      rectSetBottom(
+        clone(rectPrototype),
+        rectBottom(screenFrame))
+
+    rects.bottom_right = clone(rectPrototype)
+    rectSetBottom(rects.bottom_right, rectBottom(screenFrame))
+    rectSetRight(rects.bottom_right, rectRight(screenFrame))
+
+
+    -- Edges
+    -- These are supposed to snap the window to half screen sizes
+    local sideEdgePrototype = {x=screenFrame.x, y=screenFrame.y, w=ann_size, h=screenFrame.h * 0.60}
+    rects.left_edge =
+      rectSetCenterY(
+        clone(sideEdgePrototype),
+        rectCenterY(screenFrame))
+
+    rects.right_edge =
+      rectSetRight(
+        clone(rects.left_edge),
+        rectRight(screenFrame))
+
+    rects.top_edge =
+      rectSetCenterX(
+        {x=screenFrame.x, y = screenFrame.y, w=screenFrame.w*0.75, h = ann_size},
+        rectCenterX(screenFrame))
+
+    local sideSmallEdgePrototype = {x=screenFrame.x, y=screenFrame.y, w=ann_size, h=(rects.left_edge.y-screenFrame.y) * 0.75}
+
+    rects.left_upper_edge =
+      rectSetCenterY(
+        clone(sideSmallEdgePrototype),
+        rectBottom(rects.top_left) + (rects.left_edge.y - rectBottom(rects.top_left))/2)
+
+    rects.left_lower_edge =
+      rectSetCenterY(
+        clone(sideSmallEdgePrototype),
+        rectBottom(rects.left_edge) + (rects.bottom_left.y - rectBottom(rects.left_edge))/2)
+
+    rects.right_upper_edge =
+      rectSetRight(
+        clone(rects.left_upper_edge),
+        rectRight(screenFrame))
+
+    rects.right_lower_edge =
+      rectSetRight(
+        clone(rects.left_lower_edge),
+        rectRight(screenFrame))
+
+    return rects
+end
+
+local memoize = require("memoize")
+
+-- Memoize generateSnapHotspots so we:
+-- 1. Don't have to regenerate the rects over and over again
+-- 2. Can compare rects using the == operator
+local getSnapHotspots = memoize(generateSnapHotspots)
+
+hs.hotkey.bind({"cmd", "alt"}, "left", function()
+    local rects = getSnapHotspots()
+
+    for idx, rect in pairs(rects) do
+      flashRect(rect)
+    end
+end)
+
+-- local function reverse(tbl)
+--   for i=1, math.floor(#tbl / 2) do
+--     tbl[i], tbl[#tbl - i + 1] = tbl[#tbl - i + 1], tbl[i]
+--   end
+
+--   return tbl
+-- end
+
+-- local function getWindowUnderMouse()
+-- 	-- Invoke `hs.application` because `hs.window.orderedWindows()` doesn't do it
+-- 	-- and breaks itself
+-- 	local _ = hs.application
+
+-- 	local pos = hs.geometry.new(hs.mouse.getAbsolutePosition())
+-- 	local screen = hs.mouse.getCurrentScreen()
+
+--   return hs.fnutils.find(hs.window.allWindows(), function(w)
+--                            return screen == w:screen() and pos:inside(w:frame())
+--   end)
+-- end
+
+
+-- local function printWindows(windows)
+--   print("vvvvv")
+--   for idx, win in ipairs(windows) do
+
+--     local name = win:application():name()
+--     if name == nil then
+--       name = ""
+--     end
+
+--     -- print(name)
+--     -- hs.printf("%i %i   %s", idx, win:id(), name)
+--     hs.printf("%s  %s", hs.inspect(win:id()), name)
+--   end
+--   print("^^^^^")
+-- end
+
+-- if mouseTap ~= nil then
+--   mouseTap:stop()
+-- end
+
+-- local drag_last_win_id = nil
+-- local drag_last_win_frame = nil
+-- local drag_last_process_time = 0
+-- local mouseTap = hs.eventtap.new({hs.eventtap.event.types.leftMouseDragged}, function(event)
+
+--     -- Rate limit processing
+--     local cur_time = hs.timer.secondsSinceEpoch()
+--     if cur_time - drag_last_process_time < 0.5 then
+--       return false
+--     end
+--     drag_last_process_time = cur_time
+
+--     -- print("can run")
+
+--     -- Which window is the mouse over?
+--     -- local event_window = getWindowUnderMouse()
+--     local event_window = hs.window.focusedWindow()
+
+--     -- If the mouse isn't over any window, don't do anything...
+--     if not event_window then
+--       return false
+--     end
+
+--     -- printWindows(hs.window.allWindows())
+
+--     -- local win_id = event_window:id()
+--     -- local win_frame = event_window:frame()
+
+--     print(event_window:application():name())
+--     print("has window:", win_id)
+--     print("last win:", drag_last_win_id)
+
+
+--     -- -- If the window is being dragged, then
+--     -- -- 1. The mouse needs to be over the window
+--     -- -- 2. The window is being moved
+--     -- if win_id == drag_last_win_id and
+--     --   win_frame.x ~= drag_last_win_frame.x and
+--     --   win_frame.y ~= drag_last_win_frame.y
+--     -- then
+--     --   hs.printf("window %i moved!", win_id)
+--     -- end
+
+--     -- Record which window the drag event occurred over
+--     drag_last_win_id = win_id
+--     drag_last_win_frame = win_frame
+
+--     return false
+-- end)
+
+-- mouseTap:start()
