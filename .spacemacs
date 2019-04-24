@@ -466,12 +466,10 @@ It should only modify the values of Spacemacs settings."
       (if (and (eq width 1440)
                (eq height 900))
                'MBP
-        'other)
-      ))
+        'other)))
 
 (defvar user/display-configs
-  '(
-    ((config-name . workstation)
+  '(((config-name . workstation)
      (resolution . (3440 . 1440))
      (frame-size . (213 . 99))
      (frame-position . top-center))
@@ -579,6 +577,23 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (if (user/mode-active? 'inf-clojure-minor-mode)
       (inf-clojure-eval-defun)
     (cider-eval-defun-at-point)))
+
+(defun user/clj-zp-format-defun-at-point ()
+  "Formats the sexp at point using zprint"
+  (interactive)
+
+  ;; Grab the bounds of the top level sexp at the cursor
+  (let ((defun-bounds (cider-defun-at-point 't)))
+
+    ;; Run zprint-filter over the region and replace the contents
+    (shell-command-on-region (car defun-bounds) (cadr defun-bounds) "zprint-filter" (current-buffer) 't)))
+
+(defun user/clj-zp-format-buffer ()
+  "Formats the sexp at point using zprint"
+  (interactive)
+
+  ;; Run zprint-filter over the region and replace the contents
+  (shell-command-on-region (point-min) (point-max) "zprint-filter" (current-buffer) 't))
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -706,6 +721,7 @@ before packages are loaded."
 
   ;; Turn on docstring popup when scrolling through the autocomplete window
   (add-hook 'clojure-mode-hook 'company-quickhelp-mode)
+  (add-hook 'cider-repl-mode-hook '(lambda () (setq scroll-conservatively 101)))
   (setq company-quickhelp-delay 0.1)
 
   ;; Fix C-k to scroll up
@@ -720,13 +736,18 @@ before packages are loaded."
   ;; Disable line wrapping to speed up the repl
   (add-hook 'clojure-repl-mode-hook 'spacemacs/toggle-truncate-lines-on)
 
-  (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode
-    "ee" 'user/clj-eval-last-sexp)
-  (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode
-    "eb" 'user/clj-eval-buffer)
-  (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode
-    "ef" 'user/clj-eval-defun-at-point)
-  )
+  ;; (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode
+  ;;   "ee" 'user/clj-eval-last-sexp)
+  ;; (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode
+  ;;   "eb" 'user/clj-eval-buffer)
+  ;; (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode
+  ;;   "ef" 'user/clj-eval-defun-at-point)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode
+    "fb" 'user/clj-zp-format-buffer
+    "ff" 'user/clj-zp-format-defun-at-point)
+  (spacemacs/set-leader-keys-for-major-mode 'clojurec-mode
+    "fb" 'user/clj-zp-format-buffer
+    "ff" 'user/clj-zp-format-defun-at-point))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
