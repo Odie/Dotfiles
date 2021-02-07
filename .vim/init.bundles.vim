@@ -5,9 +5,6 @@
 call plug#begin('~/.vim/plugged')
 
 Plug 'liuchengxu/vim-which-key'
-autocmd! FileType which_key
-autocmd  FileType which_key set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 """ ":Listmaps" lists all mappings in all sourced files in a separate buffer
 Plug 'vim-scripts/listmaps.vim'
@@ -16,49 +13,30 @@ Plug 'vim-scripts/listmaps.vim'
 """ Better looking status line
 Plug 'hoob3rt/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'ryanoasis/vim-devicons'
 
 Plug 'romgrk/barbar.nvim'
 
+" Set working directory automatically to git/project root
+Plug 'airblade/vim-rooter'
+let g:rooter_silent_chdir = 1
+let g:rooter_resolve_links = 1
 
 """ control-p to jump between files
 """ Commandline utility written in Go
 """ Requires separate installation
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-nnoremap <silent> <C-P> :FZF<CR>
-Plug 'airblade/vim-rooter'
-let g:rooter_silent_chdir = 1
-let g:rooter_resolve_links = 1
-" Set working directory automatically
-" This helps FZF to show the files for the project
-
-" Customize fzf colors to match your color scheme
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 """ Auto-completion & snippets
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
-
 
 "---------------------------------------------------------------------------
 " Aniseed
 "---------------------------------------------------------------------------
 Plug 'Olical/aniseed', { 'tag': 'v3.14.0' }
 Plug 'bakpakin/fennel.vim' " Fennel syntax highlighting
-
 
 "---------------------------------------------------------------------------
 " Clojure plugins
@@ -139,26 +117,15 @@ Plug 'tpope/vim-eunuch'
 """ File explorer
 """ "<Leader>n" to toggle on and off
 Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+augroup ChadtreeHijackNetrw
+	autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  au BufEnter,VimEnter * if isdirectory(expand('%:p')) | echo "entered!" | execute "CHADopen --always-focus ".expand('%:p') | endif
+augroup END
 
 """ Syntax checking
 Plug 'benekastah/neomake'
 autocmd! BufWritePost * Neomake
-
-" Plug 'scrooloose/syntastic'
-" let g:syntastic_check_on_open=1
-" let g:syntastic_auto_loc_list=1								" open and close the error list automatically
-"
-" let g:syntastic_mode_map={
-" 			\ 'mode': 'active',
-"       \ 'active_filetypes': [],
-"       \ 'passive_filetypes': ['html', 'lua', 'python']
-" 			\ }
-"
-" let g:syntastic_error_symbol = '✗'						" Better :sign interface symbols
-" let g:syntastic_warning_symbol = '!'
-"
-" let g:syntastic_javascript_checkers = ['jshint']
-" let g:syntastic_lua_checkers = ['luainspect']
 
 """ Better search support via ag
 """ ":Ag" and ":Ags" to search
@@ -167,9 +134,19 @@ let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
 let g:ack_use_cword_for_empty_search = 1 " Any empty ack search will search for the work the cursor is on
 
 Plug 'gabesoft/vim-ags'
+let g:ags_agexe = 'rg'
+let g:ags_agargs = {
+  \ '--column'         : ['', ''],
+  \ '--line-number'    : ['', ''],
+  \ '--context'        : ['g:ags_agcontext', '-C'],
+  \ '--max-count'      : ['g:ags_agmaxcount', ''],
+  \ '--heading'        : ['',''],
+  \ '--smart-case'     : ['','-S'],
+  \ '--color'          : ['always',''],
+  \ '--colors'         : [['match:fg:green', 'match:bg:black', 'match:style:nobold', 'path:fg:red', 'path:style:bold', 'line:fg:black', 'line:style:bold'] ,''],
+  \ }
 
-""" Ag always searches from the project root
-let g:ag_working_path_mode="r"
+Plug   'eugen0329/vim-esearch'
 
 """ Adds various ex command shortcuts
 """ [b and ]b to switch to previous and next buffer
