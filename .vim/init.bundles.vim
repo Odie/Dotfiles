@@ -14,14 +14,12 @@ Plug 'vim-scripts/listmaps.vim'
 
 
 """ Better looking status line
-Plug 'vim-airline/vim-airline'
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_left_sep=''
-let g:airline_right_sep=''
+Plug 'hoob3rt/lualine.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'ryanoasis/vim-devicons'
 
-""" Try to use tabs where possible
-"Plug 'Odie/Smart-Tabs'
+Plug 'romgrk/barbar.nvim'
+
 
 """ control-p to jump between files
 """ Commandline utility written in Go
@@ -58,7 +56,7 @@ Plug 'sheerun/vim-polyglot'
 "---------------------------------------------------------------------------
 " Aniseed
 "---------------------------------------------------------------------------
-Plug 'Olical/aniseed', { 'tag': 'v3.1.0' }
+Plug 'Olical/aniseed', { 'tag': 'v3.14.0' }
 Plug 'bakpakin/fennel.vim' " Fennel syntax highlighting
 
 
@@ -140,7 +138,7 @@ Plug 'tpope/vim-eunuch'
 
 """ File explorer
 """ "<Leader>n" to toggle on and off
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 
 """ Syntax checking
 Plug 'benekastah/neomake'
@@ -164,7 +162,10 @@ autocmd! BufWritePost * Neomake
 
 """ Better search support via ag
 """ ":Ag" and ":Ags" to search
-Plug 'rking/ag.vim'
+Plug 'mileszs/ack.vim'
+let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
+let g:ack_use_cword_for_empty_search = 1 " Any empty ack search will search for the work the cursor is on
+
 Plug 'gabesoft/vim-ags'
 
 """ Ag always searches from the project root
