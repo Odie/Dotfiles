@@ -32,6 +32,10 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 
+Plug 'nvim-lua/completion-nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'onsails/lspkind-nvim'
+
 "---------------------------------------------------------------------------
 " Aniseed
 "---------------------------------------------------------------------------
@@ -130,7 +134,7 @@ autocmd! BufWritePost * Neomake
 """ Better search support via ag
 """ ":Ag" and ":Ags" to search
 Plug 'mileszs/ack.vim'
-let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
+let g:ackprg = 'rg --vimgrep --smart-case --hidden --follow --glob "!.git"'
 let g:ack_use_cword_for_empty_search = 1 " Any empty ack search will search for the work the cursor is on
 
 Plug 'gabesoft/vim-ags'
@@ -146,7 +150,7 @@ let g:ags_agargs = {
   \ '--colors'         : [['match:fg:green', 'match:bg:black', 'match:style:nobold', 'path:fg:red', 'path:style:bold', 'line:fg:black', 'line:style:bold'] ,''],
   \ }
 
-Plug   'eugen0329/vim-esearch'
+" Plug   'eugen0329/vim-esearch'
 
 """ Adds various ex command shortcuts
 """ [b and ]b to switch to previous and next buffer
@@ -154,7 +158,6 @@ Plug 'tpope/vim-unimpaired'
 
 """ Jump to location in buffer faster
 Plug 'Lokaltog/vim-easymotion'
-map <Leader> <Plug>(easymotion-prefix)
 
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-surround'
@@ -227,6 +230,8 @@ Plug 'tpope/vim-fugitive'
 """ Fancier start page
 Plug 'mhinz/vim-startify'
 
+""" Visualize colors
+Plug 'norcalli/nvim-colorizer.lua'
 
 "-------------------------------------------------------------------------------
 " Syntax highlighting
