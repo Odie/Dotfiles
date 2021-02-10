@@ -38,13 +38,12 @@ let g:which_key_map.f = { 'name' : '+files' }
 let g:which_key_map.f.e = { 'name' : '+editor' }
 let g:which_key_map.h = { 'name' : '+help' }
 let g:which_key_map.t = { 'name' : '+toggle' }
-let g:which_key_map.q = [':close', 'Close window']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Color Scheme
 
 set background=dark
-color gruvbox
+color gruvbox-material
 
 let g:terminal_color_0="#353535"
 let g:terminal_color_1="#d73a26"
@@ -315,8 +314,6 @@ inoremap <expr> <C-J> pumvisible() ? "<C-n>" : "<C-J>"
 cnoremap <expr> <C-K> pumvisible() ? "<C-p>" : "<C-K>"
 cnoremap <expr> <C-J> pumvisible() ? "<C-n>" : "<C-J>"
 
-" nnoremap <silent> <C-P> <cmd>Telescope find_files find_command=rg,--follow,--ignore,--hidden,--files<cr>
-" nnoremap <silent> <C-P> <cmd>Telescope find_files find_command=rg,--follow,--ignore,--hidden,--files<cr>
 nnoremap <silent> <C-P> <cmd>lua require'odie.telescope'.find_files()<cr>
 
 
@@ -326,13 +323,16 @@ nnoremap <silent> <C-P> <cmd>lua require'odie.telescope'.find_files()<cr>
 " Don't enter Ex mode
 nnoremap Q <Nop>
 
-" Search
-nnoremap <Leader>/ :Ack!<Space>
+" Project-wide Search
+nnoremap <silent> <Leader>/ :call esearch#init()<cr>
 let g:which_key_map['/'] = 'Search project'
+
 let g:which_key_map.n = ['CHADopen', 'File tree']
 
 "=====[ Buffer maniulation ]=============
 nnoremap <silent> <leader><tab> <c-^>
+let g:which_key_map['<tab>'] = 'Last Buffer'
+
 nnoremap <leader>bb <cmd>Telescope buffers<cr>
 let g:which_key_map.b.b = 'Buffers'
 let g:which_key_map.b.d = ['BufferClose', 'Delete Buffer']
@@ -425,7 +425,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gt <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
@@ -525,6 +525,8 @@ let g:which_key_map.t.i = ['IndentGuidesToggle', "Indent guide"]
 
 let g:which_key_map.t.l = ['set wrap!', "Line wrap"]
 nnoremap <leader>tl :set wrap!<cr>
+
+let g:which_key_map.q = [':close', 'Close window']
 "=================================================================}}}
 
 

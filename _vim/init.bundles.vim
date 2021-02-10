@@ -133,10 +133,6 @@ autocmd! BufWritePost * Neomake
 
 """ Better search support via ag
 """ ":Ag" and ":Ags" to search
-Plug 'mileszs/ack.vim'
-let g:ackprg = 'rg --vimgrep --smart-case --hidden --follow --glob "!.git"'
-let g:ack_use_cword_for_empty_search = 1 " Any empty ack search will search for the work the cursor is on
-
 Plug 'gabesoft/vim-ags'
 let g:ags_agexe = 'rg'
 let g:ags_agargs = {
@@ -150,7 +146,10 @@ let g:ags_agargs = {
   \ '--colors'         : [['match:fg:green', 'match:bg:black', 'match:style:nobold', 'path:fg:red', 'path:style:bold', 'line:fg:black', 'line:style:bold'] ,''],
   \ }
 
-" Plug   'eugen0329/vim-esearch'
+""" Better project-wide search
+let g:esearch = {}
+let g:esearch.default_mappings = 0
+Plug   'eugen0329/vim-esearch'
 
 """ Adds various ex command shortcuts
 """ [b and ]b to switch to previous and next buffer
@@ -174,6 +173,7 @@ Plug 'tpope/vim-repeat'
 Plug 'flazz/vim-colorschemes'
 Plug 'chriskempson/base16-vim'
 Plug 'morhetz/gruvbox'
+Plug 'sainnhe/gruvbox-material'
 
 """ Automatically make containing directory when opening a new buffer
 Plug 'jordwalke/VimAutoMakeDirectory'
