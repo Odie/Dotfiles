@@ -104,14 +104,7 @@ nnoremap <silent> <esc> :nohlsearch<return><esc>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> GUI settings
 
-if exists('g:neovide')
-	"set guifont=Anonymice\ Nerd\ Font:h10
-	set guifont=Fira\ Code\ Font:h9
-elseif has('gui_running')
-	" set guifont=Anonymous\ Pro\ for\ Powerline:h14
-	set guifont=Anonymice\ Nerd\ Font:h14
-endif
-
+set guifont=FiraCodeNerdFontComplete-Regular:h14
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -157,17 +150,6 @@ set directory=~/.vim/tmp
 "=====[ Use par for better formatting ]=============
 set formatprg=par
 
-"=====[ Emmet.vim settings ]=============
-let g:user_emmet_mode='a'                   "enable all function in all mode.
-let g:user_emmet_install_global = 0
-augroup EnableEmmet
-	au!
-	autocmd FileType html,css,hbs,blade EmmetInstall  "enable for specific file types only
-augroup END
-
-"=====[ Clojure settings ]=============
-" Nothing here
-
 "==================================================================}}}
 
 augroup no_trailing_spaces
@@ -187,10 +169,6 @@ augroup no_trailing_spaces
 		\ endif
 augroup END
 
-augroup filetype_detect
-	autocmd!
-	autocmd BufRead,BufNewFile *.nim setlocal filetype=nim
-augroup END
 
 "[Plugin Settings]======================================{{{
 
@@ -206,6 +184,22 @@ hi link EasyMotionTarget2First EasyMotionTargetDefault
 let g:indent_guides_auto_colors = 0
 " autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=DarkGray ctermbg=DarkGray
 
+"=====[ Emmet.vim settings ]=============
+let g:user_emmet_mode='a'                   "enable all function in all mode.
+let g:user_emmet_install_global = 0
+augroup EnableEmmet
+	au!
+	autocmd FileType html,css,hbs,blade EmmetInstall  "enable for specific file types only
+augroup END
+
+"=====[ Clojure settings ]=============
+" Nothing here
+
+"=====[ Nim settings ]=============
+augroup filetype_detect
+	autocmd!
+	autocmd BufRead,BufNewFile *.nim setlocal filetype=nim
+augroup END
 "==================================================================}}}
 
 "[Custom functions]================================================{{{
