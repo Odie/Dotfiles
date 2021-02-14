@@ -9,6 +9,7 @@ Plug 'liuchengxu/vim-which-key'
 """ ":Listmaps" lists all mappings in all sourced files in a separate buffer
 Plug 'vim-scripts/listmaps.vim'
 
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 """ Better looking status line
 Plug 'hoob3rt/lualine.nvim'
