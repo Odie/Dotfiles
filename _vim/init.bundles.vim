@@ -40,8 +40,10 @@ Plug 'onsails/lspkind-nvim'
 "---------------------------------------------------------------------------
 " Aniseed
 "---------------------------------------------------------------------------
-Plug 'Olical/aniseed', { 'tag': 'v3.14.0' }
+Plug 'Olical/aniseed', { 'tag': 'v3.15.0' }
+Plug 'Olical/conjure', {'tag': 'v4.14.1'}
 Plug 'bakpakin/fennel.vim' " Fennel syntax highlighting
+let g:aniseed#env = v:true
 
 "---------------------------------------------------------------------------
 " Clojure plugins
@@ -148,8 +150,45 @@ let g:ags_agargs = {
   \ }
 
 """ Better project-wide search
-let g:esearch = {}
-let g:esearch.default_mappings = 0
+let g:esearch = {
+      \ 'default_mappings' : 0,
+      \ 'win_map' : [
+      \  ['n',  'R',    '<plug>(esearch-win-reload)',           ],
+      \  ['n',  't',    '<plug>(esearch-win-tabopen)',          ],
+      \  ['n',  'T',    '<plug>(esearch-win-tabopen:stay)',     ],
+      \  ['n',  'o',    '<plug>(esearch-win-split)',            ],
+      \  ['n',  'O',    '<plug>(esearch-win-split:reuse:stay)', ],
+      \  ['n',  's',    '<plug>(esearch-win-vsplit)',           ],
+      \  ['n',  'S',    '<plug>(esearch-win-vsplit:reuse:stay)',],
+      \  ['n',  '<cr>', '<plug>(esearch-win-open)',             ],
+      \  ['n',  'p',    '<plug>(esearch-win-preview)',          ],
+      \  ['n',  'P',    '100<plug>(esearch-win-preview:enter)', ],
+      \  ['n',  '<esc>','<plug>(esearch-win-preview:close)',    ],
+      \  [' ',  'J',    '<plug>(esearch-win-jump:entry:down)'   ],
+      \  [' ',  'K',    '<plug>(esearch-win-jump:entry:up)'     ],
+      \  [' ',  '}',    '<plug>(esearch-win-jump:filename:down)'],
+      \  [' ',  '{',    '<plug>(esearch-win-jump:filename:up)'  ],
+      \  [' ',  ')',    '<plug>(esearch-win-jump:dirname:down)' ],
+      \  [' ',  '(',    '<plug>(esearch-win-jump:dirname:up)'   ],
+      \  ['ov', 'im',   '<plug>(textobj-esearch-match-i)',      ],
+      \  ['ov', 'am',   '<plug>(textobj-esearch-match-a)',      ],
+      \  ['ic', '<cr>', '<plug>(esearch-cr)', {'nowait': 1}     ],
+      \  ['n',  'I',    '<plug>(esearch-I)'                     ],
+      \  ['x',  'x',    '<plug>(esearch-d)'                     ],
+      \  ['nx', 'd',    '<plug>(esearch-d)'                     ],
+      \  ['n',  'dd',   '<plug>(esearch-dd)'                    ],
+      \  ['nx', 'c',    '<plug>(esearch-c)'                     ],
+      \  ['n',  'cc',   '<plug>(esearch-cc)'                    ],
+      \  ['nx', 'C',    '<plug>(esearch-C)'                     ],
+      \  ['nx', 'D',    '<plug>(esearch-D)'                     ],
+      \  ['x',  's',    '<plug>(esearch-c)'                     ],
+      \  ['n',  '.',    '<plug>(esearch-.)'                     ],
+      \  ['n',  '@:',   '<plug>(esearch-@:)'                    ],
+      \  ['n', 'za',    '<plug>(esearch-za)'                    ],
+      \  ['n', 'zc',    '<plug>(esearch-zc)'                    ],
+      \  ['n', 'zM',    '<plug>(esearch-zM)'                    ],
+      \],
+      \}
 Plug   'eugen0329/vim-esearch'
 
 """ Adds various ex command shortcuts
@@ -227,6 +266,10 @@ Plug 'rizzatti/dash.vim'
 
 """ Git integration with vim
 Plug 'tpope/vim-fugitive'
+Plug 'lambdalisue/gina.vim'
+Plug 'jreybert/vimagit'
+
+Plug '~/dev/vim/luajob'
 
 """ Fancier start page
 Plug 'mhinz/vim-startify'
@@ -259,6 +302,9 @@ Plug 'nvie/vim-flake8'
 
 """ Syntax highlighting for swift
 Plug 'keith/swift.vim'
+
+Plug '~/dev/vim/tigam'
+let g:tigma_dev = 1
 
 call plug#end()
 filetype plugin indent on

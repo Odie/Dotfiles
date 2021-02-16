@@ -18,8 +18,8 @@ if filereadable(expand("~/.vim/init.bundles.vim"))
   source ~/.vim/init.bundles.vim
 endif
 
-lua require("start")
-lua require("bootstrap")
+lua require("config/start")
+" lua require("config/bootstrap")
 
 set ttimeoutlen=100
 set timeoutlen=500
@@ -330,6 +330,7 @@ let g:which_key_map['<tab>'] = 'Last Buffer'
 nnoremap <leader>bb <cmd>Telescope buffers<cr>
 let g:which_key_map.b.b = 'Buffers'
 let g:which_key_map.b.d = ['BufferClose', 'Delete Buffer']
+let g:which_key_map.b.D = ['BufferClose!', 'Delete Buffer (force)']
 let g:which_key_map.b.p = ['bprev', 'Next buffer']
 let g:which_key_map.b.n = ['bnext', 'Prev buffer']
 
