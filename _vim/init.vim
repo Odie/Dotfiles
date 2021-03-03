@@ -18,8 +18,14 @@ if filereadable(expand("~/.vim/init.bundles.vim"))
   source ~/.vim/init.bundles.vim
 endif
 
+lua require("plugins")
+augroup AutoCompilePlugins
+  au!
+  autocmd BufWritePost plugins.lua PackerCompile
+augroup end
+
 lua require("config/start")
-" lua require("config/bootstrap")
+let g:gitabra_dev = 1
 
 set ttimeoutlen=100
 set timeoutlen=500
@@ -38,6 +44,9 @@ let g:which_key_map.f = { 'name' : '+files' }
 let g:which_key_map.f.e = { 'name' : '+editor' }
 let g:which_key_map.h = { 'name' : '+help' }
 let g:which_key_map.t = { 'name' : '+toggle' }
+
+call which_key#register(',', "g:which_key_local_map")
+let g:which_key_local_map =  {}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> Color Scheme
@@ -104,7 +113,7 @@ nnoremap <silent> <esc> :nohlsearch<return><esc>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ~> GUI settings
 
-set guifont=FiraCodeNerdFontComplete-Regular:h14
+set guifont=FiraCodeNerdFontComplete-Regular:h13
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -269,6 +278,14 @@ function! SummarizeTabs()
 endfunction
 
 command! -nargs=1 -range SuperRetab <line1>,<line2>s/\v%(^ *)@<= {<args>}/\t/g
+
+function DeleteHiddenBuffers()
+    let tpbl=[]
+    call map(range(1, tabpagenr('$')), 'extend(tpbl, tabpagebuflist(v:val))')
+    for buf in filter(range(1, bufnr('$')), 'bufexists(v:val) && index(tpbl, v:val)==-1')
+        silent execute 'bwipeout' buf
+    endfor
+endfunction
 "==================================================================}}}
 
 "[Mappings]=========================================================={{{
@@ -325,9 +342,10 @@ let g:which_key_map.n = ['CHADopen', 'File tree']
 
 "=====[ Buffer maniulation ]=============
 nnoremap <silent> <leader><tab> <c-^>
-let g:which_key_map['<tab>'] = 'Last Buffer'
+" let g:which_key_map['<TAB>'] = 'Last Buffer'
 
 nnoremap <leader>bb <cmd>Telescope buffers<cr>
+nnoremap <leader>bda <cmd>call DeleteHiddenBuffers()<cr>
 let g:which_key_map.b.b = 'Buffers'
 let g:which_key_map.b.d = ['BufferClose', 'Delete Buffer']
 let g:which_key_map.b.D = ['BufferClose!', 'Delete Buffer (force)']
@@ -355,7 +373,7 @@ nnoremap <leader>gb <cmd>Telescope git_branches<CR>
 let g:which_key_map.g.b = 'Switch Branch'
 
 nnoremap <leader>gB :Gblame<CR>
-nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gs :Gitabra<CR>
 nnoremap <leader>gd :Gdiff<CR>
 nnoremap <leader>gl :Glog<CR>
 nnoremap <leader>gc :Gcommit<CR>
@@ -522,6 +540,9 @@ let g:which_key_map.t.l = ['set wrap!', "Line wrap"]
 nnoremap <leader>tl :set wrap!<cr>
 
 let g:which_key_map.q = [':close', 'Close window']
+
+nnoremap <leader>ntn :tabnext<cr>
+nnoremap <leader>ntp :tabprev<cr>
 "=================================================================}}}
 
 

@@ -2,7 +2,7 @@
 "-------------------------------------------------------------------------------
 " Bundle definitions
 "-------------------------------------------------------------------------------
-call plug#begin('~/.vim/plugged')
+call plug#begin(stdpath('data') . '/plugged')
 
 Plug 'liuchengxu/vim-which-key'
 
@@ -37,6 +37,10 @@ Plug 'nvim-lua/completion-nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'onsails/lspkind-nvim'
 
+""" Workspace management
+Plug 'thaerkh/vim-workspace'
+let g:workspace_session_directory = $HOME . '/.vim/sessions/'
+
 "---------------------------------------------------------------------------
 " Aniseed
 "---------------------------------------------------------------------------
@@ -44,6 +48,7 @@ Plug 'Olical/aniseed', { 'tag': 'v3.15.0' }
 Plug 'Olical/conjure', {'tag': 'v4.14.1'}
 Plug 'bakpakin/fennel.vim' " Fennel syntax highlighting
 let g:aniseed#env = v:true
+let g:conjure#log#botright = v:true
 
 "---------------------------------------------------------------------------
 " Clojure plugins
@@ -277,6 +282,8 @@ Plug 'mhinz/vim-startify'
 """ Visualize colors
 Plug 'norcalli/nvim-colorizer.lua'
 
+Plug 'AndrewRadev/bufferize.vim'
+
 "-------------------------------------------------------------------------------
 " Syntax highlighting
 "-------------------------------------------------------------------------------
@@ -303,8 +310,8 @@ Plug 'nvie/vim-flake8'
 """ Syntax highlighting for swift
 Plug 'keith/swift.vim'
 
-Plug '~/dev/vim/tigam'
-let g:tigma_dev = 1
+" Plug '~/dev/vim/gitabra'
+" let g:gitabra_dev = 1
 
 call plug#end()
 filetype plugin indent on

@@ -29,9 +29,8 @@ vim.api.nvim_command([[
 
 end
 
-require("lsp/nvim-lua")
+require("lsp/nvim-lua").setup(custom_attach)
 require'lspconfig'.zls.setup{
 	on_attach = custom_attach
 }
-
 
