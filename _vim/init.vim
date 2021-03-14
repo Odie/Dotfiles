@@ -338,7 +338,7 @@ nnoremap Q <Nop>
 nnoremap <silent> <Leader>/ :call esearch#init()<cr>
 let g:which_key_map['/'] = 'Search project'
 
-let g:which_key_map.n = ['CHADopen', 'File tree']
+let g:which_key_map.n = ['NvimTreeToggle', 'File tree']
 
 "=====[ Buffer maniulation ]=============
 nnoremap <silent> <leader><tab> <c-^>
@@ -365,7 +365,7 @@ let g:which_key_map.f.f = 'Find by name'
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep({find_command = require'odie.telescope'.find_command})<cr>
 let g:which_key_map.f.g = 'Grep in file'
 
-let g:which_key_map.f.t = ['CHADopen', 'File tree']
+let g:which_key_map.f.t = ['NvimTreeToggle', 'File tree']
 
 
 "=====[ Git ]=============
@@ -373,7 +373,7 @@ nnoremap <leader>gb <cmd>Telescope git_branches<CR>
 let g:which_key_map.g.b = 'Switch Branch'
 
 nnoremap <leader>gB :Gblame<CR>
-nnoremap <leader>gs :Gitabra<CR>
+nnoremap <silent> <leader>gs :Gitabra<CR>
 nnoremap <leader>gd :Gdiff<CR>
 nnoremap <leader>gl :Glog<CR>
 nnoremap <leader>gc :Gcommit<CR>

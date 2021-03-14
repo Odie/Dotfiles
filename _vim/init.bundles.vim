@@ -128,12 +128,7 @@ Plug 'tpope/vim-eunuch'
 
 """ File explorer
 """ "<Leader>n" to toggle on and off
-Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
-augroup ChadtreeHijackNetrw
-	autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  au BufEnter,VimEnter * if isdirectory(expand('%:p')) | echo "entered!" | execute "CHADopen --always-focus ".expand('%:p') | endif
-augroup END
+Plug 'kyazdani42/nvim-tree.lua'
 
 """ Syntax checking
 Plug 'benekastah/neomake'
