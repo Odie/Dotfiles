@@ -30,10 +30,11 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
 """ Auto-completion & snippets
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 
-Plug 'nvim-lua/completion-nvim'
+" Plug 'nvim-lua/completion-nvim'
+Plug 'hrsh7th/nvim-compe'
 Plug 'neovim/nvim-lspconfig'
 Plug 'onsails/lspkind-nvim'
 
@@ -116,7 +117,7 @@ let g:sexp_mappings = {
 Plug 'tpope/vim-sexp-mappings-for-regular-people', 	{'for': ['clojure', 'fennel']}
 Plug 'liquidz/vim-iced', 			{'for': 'clojure'}
 let g:iced_enable_default_key_mappings = v:false
-Plug 'liquidz/vim-iced-coc-source', 								{'for': 'clojure'}
+" Plug 'liquidz/vim-iced-coc-source', 								{'for': 'clojure'}
 
 
 """ Unix helpers
