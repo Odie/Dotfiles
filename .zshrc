@@ -21,10 +21,10 @@ export FZF_DEFAULT_COMMAND="rg --smart-case --files --hidden --follow --glob '!.
 eval "$(fasd --init auto)"
 
 # ------------------------ commandline utils  ----------------------------
-alias ls="ls -G" # list
-alias la="ls -Ga" # list all, includes dot files
-alias ll="ls -Glh" # long list, excludes dot files
-alias lla="ls -Gla" # long list all, includes dot files
+alias ls="exa" # list
+alias la="exa -a" # list all, includes dot files
+alias ll="exa -lh" # long list, excludes dot files
+alias lla="exa -lha" # long list all, includes dot files
 
 alias vim="nvim"
 alias vi="nvim"
