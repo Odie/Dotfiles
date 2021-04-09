@@ -12,8 +12,8 @@ packadd packer.nvim
 try
 
 lua << END
-local package_path_str = "/Users/Odie/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/Users/Odie/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/Users/Odie/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/Users/Odie/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/Users/Odie/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+local package_path_str = "/Users/odie/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/Users/odie/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/Users/odie/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/Users/odie/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/Users/odie/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -36,12 +36,12 @@ _G.packer_plugins = {
     commands = { "Gitabra" },
     loaded = false,
     needs_bufread = false,
-    path = "/Users/Odie/.local/share/nvim/site/pack/packer/opt/gitabra"
+    path = "/Users/odie/.local/share/nvim/site/pack/packer/opt/gitabra"
   },
   ["packer.nvim"] = {
     loaded = false,
     needs_bufread = false,
-    path = "/Users/Odie/.local/share/nvim/site/pack/packer/opt/packer.nvim"
+    path = "/Users/odie/.local/share/nvim/site/pack/packer/opt/packer.nvim"
   }
 }
 
