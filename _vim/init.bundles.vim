@@ -118,9 +118,6 @@ let g:sexp_mappings = {
 
 
 Plug 'tpope/vim-sexp-mappings-for-regular-people', 	{'for': ['clojure', 'fennel']}
-Plug 'liquidz/vim-iced', 			{'for': 'clojure'}
-let g:iced_enable_default_key_mappings = v:false
-" Plug 'liquidz/vim-iced-coc-source', 								{'for': 'clojure'}
 
 
 """ Unix helpers
