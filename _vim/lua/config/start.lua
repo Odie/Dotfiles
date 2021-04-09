@@ -18,3 +18,10 @@ require("config/nvim-compe")
 require'lspkind'.init()
 require('lsp/config')
 
+require('nvim-treesitter.configs').setup {
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    disable = { "clojure" },  -- list of language that will be disabled
+  },
+}
+
