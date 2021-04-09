@@ -77,6 +77,10 @@ setopt AUTO_CD
 # Automatically pushd when we cd
 setopt AUTO_PUSHD
 
+if [ -f "~/.secrets.rc" ]; then
+  source "~/.secrets.rc"
+fi
+
 # Added by ~/.emacs.d/install.sh
 export PATH=$HOME/.cask/bin:$PATH:$HOME/.vim/plugged/vim-iced/bin
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -84,7 +88,6 @@ export PATH=$HOME/.cask/bin:$PATH:$HOME/.vim/plugged/vim-iced/bin
 export JAVA_HOME=$(/usr/libexec/java_home)
 export M2_HOME=`brew --prefix maven`/libexec
 export M2=`brew --prefix maven`/libexec/bin
-export HOMEBREW_GITHUB_API_TOKEN="3819bdf17e20a7b5f2068246920e90d0428547a4"
 
 export CLOJARS_USER=""
 export CLOJARS_PASS=""
