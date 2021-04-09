@@ -10,6 +10,7 @@ Plug 'liuchengxu/vim-which-key'
 Plug 'vim-scripts/listmaps.vim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
 
 """ Better looking status line
 Plug 'hoob3rt/lualine.nvim'
@@ -41,6 +42,8 @@ Plug 'onsails/lspkind-nvim'
 """ Workspace management
 Plug 'thaerkh/vim-workspace'
 let g:workspace_session_directory = $HOME . '/.vim/sessions/'
+
+Plug 'andymass/vim-matchup'
 
 "---------------------------------------------------------------------------
 " Aniseed
