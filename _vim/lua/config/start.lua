@@ -4,7 +4,7 @@ function _G.dump(...)
 end
 
 local lualine = require('lualine')
-lualine.status()
+lualine.setup()
 lualine.theme = 'gruvbox'
 
 require'nvim-web-devicons'.setup({default=true})
