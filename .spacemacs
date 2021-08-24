@@ -592,14 +592,14 @@ See the header of this file for more information."
         (cond
          ((eq (user/display-type) 'MBP)
           '(;;"Anonymous Pro"
-            "Fira Code"
+            "FiraCode Nerd Font"
             :size 13
             :weight normal
             :width normal
             :powerline-scale 1.4))
          (:else
           '(;;"Anonymous Pro"
-            "Fira Code"
+            "FiraCode Nerd Font"
             :size 13
             :weight normal
             :width normal
