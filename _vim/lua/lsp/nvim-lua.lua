@@ -13,6 +13,11 @@ local function setup(custom_attach_fn)
   -- set the path to the sumneko installation; if you previously installed via the now deprecated :LspInstall, use
   local sumneko_root_path = vim.fn.expand('~/.tools')..'/nvim/lsp/lua-language-server'
   local sumneko_binary = sumneko_root_path.."/bin/"..system_name.."/lua-language-server"
+  if vim.fn.filereadable(sumneko_binary) == 0 then
+  	print("Lua language server binary doesn't exist!")
+  	return
+  end
+
   require'lspconfig'.sumneko_lua.setup {
 	  on_attach = custom_attach_fn,
     cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};

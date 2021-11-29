@@ -3,25 +3,15 @@ function _G.dump(...)
     print(unpack(objects))
 end
 
-local lualine = require('lualine')
-lualine.setup()
-lualine.theme = 'gruvbox'
+-- local lualine = require('lualine')
+-- lualine.setup()
+-- lualine.theme = 'gruvbox'
 
-require'nvim-web-devicons'.setup({default=true})
+-- require('config/telescope')
 
-require'colorizer'.setup()
+-- require("config/nvim-compe")
 
-require('config/telescope')
-require("config/nvim-tree")
-require("config/nvim-compe")
+-- require'lspkind'.init()
+-- require('lsp/config')
 
-require'lspkind'.init()
-require('lsp/config')
-
-require('nvim-treesitter.configs').setup {
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-    disable = { "clojure" },  -- list of language that will be disabled
-  },
-}
-
+--require('config/which-key')

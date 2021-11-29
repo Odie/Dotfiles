@@ -1,3 +1,5 @@
+local wk = require("which-key")
+
 local map = function(type, key, value)
 	vim.fn.nvim_buf_set_keymap(0,type,key,value,{noremap = true, silent = true})
 end
@@ -26,11 +28,14 @@ local function custom_attach(client)
 	map("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>")
 	map("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>")
 
-	vim.api.nvim_command([[
-		let g:which_key_map.l = {'name' : '+lsp'}
-		let g:which_key_map.l.a = {'name' : '+action'}
-	]])
-
+	wk.register({
+		l = {
+			name = 'lsp',
+			a = {
+				name = 'action'
+			},
+		},
+	}, {buffer = false})
 
 end
 
