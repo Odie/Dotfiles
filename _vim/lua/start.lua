@@ -53,7 +53,8 @@ opt.timeoutlen  = 300
 -- Color scheme
 -----------------------------------------------------------
 g.background = "dark"
-g.colors_name = "gruvbox-material"
+--g.colors_name = "gruvbox-material"
+cmd([[colorscheme gruvbox-material]])
 
 -----------------------------------------------------------
 -- Basic settings
