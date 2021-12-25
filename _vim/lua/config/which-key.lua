@@ -68,11 +68,3 @@ wk.register({
     ["|"] = {"<cmd>Tabularize /<cr>", "align |"},
   },
 }, {mode = "v", prefix = "<leader>"})
-
--- wk.register({
---   ["<leader>nt"] = {
---     name = "tab",
---     n = {':tabnext', "Next tab"},
---     p = {':tabprev', "Prev tab"},
---   },
--- })

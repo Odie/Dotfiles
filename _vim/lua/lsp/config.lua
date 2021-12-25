@@ -1,7 +1,7 @@
 local wk = require("which-key")
 
 local map = function(type, key, value)
-	vim.fn.nvim_buf_set_keymap(0,type,key,value,{noremap = true, silent = true})
+	vim.api.nvim_buf_set_keymap(0,type,key,value,{noremap = true, silent = true})
 end
 
 local function custom_attach(client)
@@ -35,7 +35,7 @@ local function custom_attach(client)
 				name = 'action'
 			},
 		},
-	}, {buffer = false})
+	}, {buffer = vim.api.nvim_get_current_buf(), prefix = "<localleader>"})
 
 end
 
@@ -43,4 +43,6 @@ require("lsp/nvim-lua").setup(custom_attach)
 require'lspconfig'.zls.setup{
 	on_attach = custom_attach
 }
-
+require'lspconfig'.pyright.setup{
+	on_attach = custom_attach
+}
