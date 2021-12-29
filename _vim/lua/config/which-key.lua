@@ -16,6 +16,17 @@ wk.register({
     n = {'<cmd>bnext<cr>', 'Prev buffer'},
   },
 
+  D = { '<cmd>Dash<cr>', 'Search in Dash' },
+  d = {
+    name = 'Diagnostics',
+    t = { '<cmd>TroubleToggle<cr>', 'trouble' },
+    w = { '<cmd>TroubleToggle workspace_diagnostics<cr>', 'workspace' },
+    d = { '<cmd>TroubleToggle document_diagnostics<cr>', 'document' },
+    q = { '<cmd>TroubleToggle quickfix<cr>', 'quickfix' },
+    l = { '<cmd>TroubleToggle loclist<cr>', 'loclist' },
+    r = { '<cmd>TroubleToggle lsp_references<cr>', 'references' },
+  },
+
   f = {
     name = 'files',
 
