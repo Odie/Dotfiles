@@ -1,9 +1,14 @@
 local wk = require("which-key")
 
 wk.register({
-  ["/"] = {'<cmd>call esearch#init()<cr>', 'Search Project' },
+  ['/'] = {'<cmd>call esearch#init()<cr>', 'Search Project' },
 
   ['<TAB>'] = {'<c-^>','Last Buffer'},
+
+  ['<SPACE>'] = {
+    name = "Easy Motion"
+  },
+
   b = {
     name = "buffer",
     b = {'<cmd>Telescope buffers<cr>', 'Buffers'},
