@@ -68,6 +68,8 @@ u.nnoremap('<esc>', ':nohlsearch<return><esc>')
 
 opt.guifont = "FiraCode Nerd Font:h13"
 
+u.nnoremap('<c-v>', '"+p')
+u.nnoremap('<D-v>', '"+p')
 
 -----------------------------------------------------------
 -- Tab settings
@@ -79,10 +81,6 @@ opt.preserveindent = true
 opt.tabstop        = 4
 opt.softtabstop    = 4
 opt.shiftwidth     = 4
-
-if not g.gui_running then
-	g.clipboard = "unnamed"
-end
 
 -- Disable bells
 cmd([[
@@ -275,6 +273,7 @@ u.tnoremap("<C-H>", [[<C-\><C-n><C-w>h]])
 u.tnoremap("<C-J>", [[<C-\><C-n><C-w>j]])
 u.tnoremap("<C-K>", [[<C-\><C-n><C-w>k]])
 u.tnoremap("<C-L>", [[<C-\><C-n><C-w>l]])
+u.tnoremap("<ESC>", [[<C-\><C-n>]])
 
 u.nnoremap("<C-P>", "<cmd>lua require'odie.telescope'.find_files()<cr>")
 u.nnoremap("Q", "<Nop>")
