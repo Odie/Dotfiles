@@ -2,45 +2,23 @@
 -- Neovim API aliases
 -----------------------------------------------------------
 
---local map = vim.api.nvim_set_keymap  -- set global keymap
-local cmd   = vim.cmd     				-- execute Vim commands
-local exec  = vim.api.nvim_exec 	-- execute Vimscript
-local fn    = vim.fn       			  -- call Vim functions
-local g     = vim.g         			-- global variables
-local opt   = vim.opt         		-- global/buffer/windows-scoped options
-local api   = vim.api
-
-function noremap(key, val)
-	api.nvim_set_keymap('', key,  val, {noremap = true, silent = true})
-end
-
-function nnoremap(key, val)
-	api.nvim_set_keymap('n', key,  val, {noremap = true, silent = true})
-end
-
-function vnoremap(key, val)
-	api.nvim_set_keymap('v', key,  val, {noremap = true, silent = true})
-end
-
-function vnoremap(key, val)
-	api.nvim_set_keymap('i', key,  val, {noremap = true, silent = true})
-end
-
-function tnoremap(key, val)
-	api.nvim_set_keymap('t', key,  val, {noremap = true, silent = true})
-end
-
+local cmd	= vim.cmd				-- execute Vim commands
+local exec	= vim.api.nvim_exec		-- execute Vimscript
+local fn	= vim.fn				-- call Vim functions
+local g		= vim.g					-- global variables
+local opt	= vim.opt				-- global/buffer/windows-scoped options
+local api	= vim.api
+local u		= require("util")
 
 local runningNeovide = false
 if g.neovide then
 	runningNeovide = true
 end
 
-
 -----------------------------------------------------------
 -- General
 -----------------------------------------------------------
-nnoremap('<SPACE>', '<Nop>')
+u.nnoremap('<SPACE>', '<Nop>')
 g.mapleader      = " "    -- Leader key is Space
 g.maplocalleader = ","    -- Local leader is comma
 
@@ -86,7 +64,7 @@ opt.ignorecase = true          -- Search is case-insensitive
 opt.smartcase  = true          -- Unless we type in a caps letter somewhere
 
 -- Remove Search Highlighting on esc key
-nnoremap('<esc>', ':nohlsearch<return><esc>')
+u.nnoremap('<esc>', ':nohlsearch<return><esc>')
 
 opt.guifont = "FiraCode Nerd Font:h13"
 
@@ -281,27 +259,27 @@ cmd([[
 
 cmd([[inoremap <special> kj <Esc>]])
 
-noremap('j', 'gj')
-noremap('k', 'gk')
+u.noremap('j', 'gj')
+u.noremap('k', 'gk')
 
 -- Navigate windows faster
-nnoremap("<C-H>", "<C-W>h")
-nnoremap("<C-J>", "<C-W>j")
-nnoremap("<C-K>", "<C-W>k")
-nnoremap("<C-L>", "<C-W>l")
+u.nnoremap("<C-H>", "<C-W>h")
+u.nnoremap("<C-J>", "<C-W>j")
+u.nnoremap("<C-K>", "<C-W>k")
+u.nnoremap("<C-L>", "<C-W>l")
 if g.nvim then
-	nnoremap("<bs>", "<C-W>h")
+	u.nnoremap("<bs>", "<C-W>h")
 end
 
-tnoremap("<C-H>", [[<C-\><C-n><C-w>h]])
-tnoremap("<C-J>", [[<C-\><C-n><C-w>j]])
-tnoremap("<C-K>", [[<C-\><C-n><C-w>k]])
-tnoremap("<C-L>", [[<C-\><C-n><C-w>l]])
+u.tnoremap("<C-H>", [[<C-\><C-n><C-w>h]])
+u.tnoremap("<C-J>", [[<C-\><C-n><C-w>j]])
+u.tnoremap("<C-K>", [[<C-\><C-n><C-w>k]])
+u.tnoremap("<C-L>", [[<C-\><C-n><C-w>l]])
 
-nnoremap("<C-P>", "<cmd>lua require'odie.telescope'.find_files()<cr>")
-nnoremap("Q", "<Nop>")
+u.nnoremap("<C-P>", "<cmd>lua require'odie.telescope'.find_files()<cr>")
+u.nnoremap("Q", "<Nop>")
 
-nnoremap("<leader>bda", "<cmd>call DeleteHiddenBuffers()<cr>")
+u.nnoremap("<leader>bda", "<cmd>call DeleteHiddenBuffers()<cr>")
 
 cmd([[
 	nnoremap <silent> n n:call MaybeMiddle()<cr>:call HLNext(0.125)<cr>

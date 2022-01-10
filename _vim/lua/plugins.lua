@@ -21,11 +21,6 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	})
 end
 
-
-function nnoremap(key, val)
-	api.nvim_set_keymap('n', key,  val, {noremap = true, silent = true})
-end
-
 return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 
@@ -426,23 +421,24 @@ return require('packer').startup(function(use)
 
 	--- Jump to location in buffer faster
 	-- use 'Lokaltog/vim-easymotion'
-	use {
-		'phaazon/hop.nvim',
-		branch = 'v1', -- optional but strongly recommended
-		config = function()
-			require'hop'.setup { }
-
-			nnoremap('t', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>")
-			nnoremap('T', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>")
-			nnoremap('f', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>")
-			nnoremap('F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>")
-			nnoremap('<leader><leader>t', "<cmd>HopChar1<cr>")
-			nnoremap('<leader><leader>f', "<cmd>HopChar1<cr>")
-			nnoremap('<leader><leader>w', "<cmd>HopWord<cr>")
-			nnoremap('<leader><leader>/', "<cmd>HopPattern<cr>")
-
-		end
-	}
+	-- use {
+	-- 	'phaazon/hop.nvim',
+	-- 	branch = 'v1', -- optional but strongly recommended
+	-- 	config = function()
+	-- 		require'hop'.setup { }
+    --
+	-- 		nnoremap('t', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>")
+	-- 		nnoremap('T', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>")
+	-- 		nnoremap('f', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>")
+	-- 		nnoremap('F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>")
+	-- 		nnoremap('<leader><leader>t', "<cmd>HopChar1<cr>")
+	-- 		nnoremap('<leader><leader>f', "<cmd>HopChar1<cr>")
+	-- 		nnoremap('<leader><leader>w', "<cmd>HopWord<cr>")
+	-- 		nnoremap('<leader><leader>/', "<cmd>HopPattern<cr>")
+    --
+	-- 	end
+	-- }
+	use 'ggandor/lightspeed.nvim'
 
 	use 'terryma/vim-multiple-cursors'
 	use 'tpope/vim-surround'

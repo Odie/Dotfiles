@@ -1,2 +1,3 @@
-require("start")
+require("preamble")
 require("plugins")
+require("settings")
