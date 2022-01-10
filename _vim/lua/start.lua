@@ -88,7 +88,7 @@ opt.smartcase  = true          -- Unless we type in a caps letter somewhere
 -- Remove Search Highlighting on esc key
 nnoremap('<esc>', ':nohlsearch<return><esc>')
 
-g.guifont = "FiraCodeNerdFontComplete-Regular:h13"
+opt.guifont = "FiraCode Nerd Font:h13"
 
 
 -----------------------------------------------------------
