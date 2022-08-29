@@ -1,3 +1,7 @@
+if vim.g.vscode then
+	return
+end
+
 local wk = require("which-key")
 
 local map = function(type, key, value)
@@ -52,24 +56,32 @@ lsp_installer.settings{
 		},
 	},
 }
+
+local lsp_flags = {
+  -- This is the default in Nvim 0.7+
+  debounce_text_changes = 150,
+}
+
 lsp_installer.on_server_ready(function(server)
 	local opts = {
 		on_attach = on_attach,
 		capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-		flags = {
-			debounce_text_changes = 150,
-		},
+		flags = lsp_flags
 	}
 	server:setup(opts)
 end)
+
 
 -- require("lsp/nvim-lua").setup(on_attach)
 -- require'lspconfig'.zls.setup{
 -- 	on_attach = on_attach
 -- }
 -- require'lspconfig'.pyright.setup{
--- 	on_attach = on_attach
+-- 	on_attach = on_attach,
+-- 	flags = lsp_flags
 -- }
+
+
 
 -- diagnostics
 vim.diagnostic.config {

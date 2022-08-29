@@ -42,13 +42,13 @@ return require('packer').startup(function(use)
 
 	use {
 		'nvim-treesitter/nvim-treesitter',
-		run = ':TSUpdate',
+		--run = ':TSUpdate',
 		config = function()
 			require'nvim-treesitter.configs'.setup {
-				ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+				ensure_installed = {"c", "cpp", "lua"},
 				sync_install = false,
 				highlight = {
-					enable = true,							-- false will disable the whole extension
+					enable = true,	-- false will disable the whole extension
 					disable = { },	-- list of language that will be disabled
 					additional_vim_regex_highlighting = false,
 				},
@@ -61,6 +61,7 @@ return require('packer').startup(function(use)
 		'onsails/lspkind-nvim',
 		requires = {
 			'folke/which-key.nvim',
+			'neovim/nvim-lspconfig'
 		},
 		config = function()
 			require('lspkind').init()
@@ -484,6 +485,10 @@ return require('packer').startup(function(use)
 		cmd = {'Dash'}
 	}
 
+	use {
+		'sindrets/diffview.nvim',
+		requires = 'nvim-lua/plenary.nvim'
+	}
 	---------------------------------------------------------------------------
 	-- Lispy languages
 	---------------------------------------------------------------------------
