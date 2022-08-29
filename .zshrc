@@ -50,6 +50,22 @@ function phpunit()
 	`git-root`/vendor/bin/phpunit -c `git-root`/phpunit.xml
 }
 
+function mkvenv() {
+  VENV_NAME="${$1:=.venv}"
+  "python3 -m venv ${VENV_NAME}"
+}
+
+function python_venv() {
+  MYVENV=./venv
+  # when you cd into a folder that contains $MYVENV
+  [[ -d $MYVENV ]] && source $MYVENV/bin/activate > /dev/null 2>&1
+  # when you cd into a folder that doesn't
+  [[ ! -d $MYVENV ]] && deactivate > /dev/null 2>&1
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook chpwd python_venv
+
 # ------------------------ Faster navigation ----------------------------
 # Currently, things are implemented using fasd + fzf
 # -----------------------------------------------------------------------
