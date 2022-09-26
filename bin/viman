@@ -1,0 +1,61 @@
+#!env python3
+
+import sys
+import os
+from pathlib import Path
+
+config_dir = Path(os.path.expanduser('~/.config'))
+install_parent_dir = os.path.expanduser('~/.local/share')
+config_symlink = Path(config_dir, "nvim")
+install_symlink = Path(install_parent_dir, "nvim")
+
+config_candidates = list(config_dir.glob('nvim.*'))
+configs=[]
+for directory in config_candidates:
+    if directory.is_dir():
+        configs.append({
+            'name': directory.suffix[1:],
+            'config-dir': directory,
+            'install-dir': Path(install_parent_dir, directory.name)
+        })
+
+chosen_config_name=None
+
+if len(sys.argv) == 1:
+    print("These are the available configs:")
+    for c in configs:
+        print(f"  - {c['name']}")
+
+    chosen_config_name = input("Which config do you want to use: ")
+else:
+    chosen_config_name = sys.argv[1]
+
+matched_config=None
+for c in configs:
+    if chosen_config_name.lower() == c['name'].lower():
+        matched_config = c
+
+if matched_config is None:
+    print("That's not a valid choice")
+    sys.exit()
+
+print(matched_config)
+config_dir = matched_config['config-dir']
+install_dir = matched_config['install-dir']
+install_dir.mkdir(parents=True, exist_ok=True)
+
+if config_symlink.is_symlink():
+    config_symlink.unlink()
+else:
+    print(f"Oops... {config_symlink} is not a symlink")
+
+if install_symlink.is_symlink():
+    install_symlink.unlink()
+else:
+    print(f"Oops... {install_symlink} is not a symlink")
+
+print(f"{config_dir} => {config_symlink}")
+print(f"{install_dir} => {install_symlink}")
+os.symlink(config_dir, config_symlink)
+os.symlink(install_dir, install_symlink)
+#os.symlink(Path("/Users/Odie/target"), Path("/Users/Odie/src"))
