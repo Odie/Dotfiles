@@ -1,4 +1,4 @@
-vim.cmd [[packadd packer.nvim]]
+--vim.cmd [[packadd packer.nvim]]
 
 -- Automatically recompile plugins.lua on file write
 vim.cmd([[
@@ -8,21 +8,23 @@ vim.cmd([[
 	augroup end
 ]])
 
-local fn = vim.fn
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-	packer_bootstrap = fn.system({
-		"git",
-		"clone",
-		"--depth",
-		"1",
-		"https://github.com/wbthomason/packer.nvim",
-		install_path,
-	})
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
 end
+
+local packer_bootstrap = ensure_packer()
 
 return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
+
+	use 'lewis6991/impatient.nvim'
 
 	use {
 		'~/dev/vim/gitabra',
@@ -34,7 +36,8 @@ return require('packer').startup(function(use)
 
 	use {
 		"folke/trouble.nvim",
-		requires = "kyazdani42/nvim-web-devicons",
+
+		requires = {"kyazdani42/nvim-web-devicons", 'folke/lsp-colors.nvim'},
 		config = function()
 			require("trouble").setup {}
 		end
@@ -83,8 +86,6 @@ return require('packer').startup(function(use)
 			'hrsh7th/cmp-buffer',
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-cmdline',
-			-- 'hrsh7th/cmp-vsnip',
-			-- 'hrsh7th/vim-vsnip',
 		},
 
 		config = function()
@@ -94,10 +95,7 @@ return require('packer').startup(function(use)
 				snippet = {
 					-- REQUIRED - you must specify a snippet engine
 					expand = function(args)
-						-- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
 						require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-						-- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-						-- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
 					end,
 				},
 				mapping = {
@@ -112,10 +110,7 @@ return require('packer').startup(function(use)
 				},
 				sources = cmp.config.sources({
 					{ name = 'nvim_lsp' },
-					-- { name = 'vsnip' }, -- For vsnip users.
 					{ name = 'luasnip' }, -- For luasnip users.
-					-- { name = 'ultisnips' }, -- For ultisnips users.
-					-- { name = 'snippy' }, -- For snippy users.
 					{ name = 'buffer' },
 					{ name = 'path' },
 				})
@@ -129,12 +124,10 @@ return require('packer').startup(function(use)
 			})
 
 			-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-			cmp.setup.cmdline(':', {
-				sources = cmp.config.sources({
-					{ name = 'path' }
-				}, {
-					{ name = 'cmdline' }
-				})
+			require'cmp'.setup.cmdline(':', {
+				sources = {
+				  { name = 'cmdline' }
+				}
 			})
 
 			local lspkind = require('lspkind')
@@ -188,55 +181,9 @@ return require('packer').startup(function(use)
 	--	"<Leader>n" to toggle on and off
 	use {
 		'kyazdani42/nvim-tree.lua',
-		cmd = {"NvimTreeToggle"},
+		cmd = {"NvimTreeToggle", "NvimTreeFindFile", "NvimTreeFindFileToggle"},
 		config = function()
-			require'nvim-tree'.setup {
-				disable_netrw				= true,
-				hijack_netrw				= true,
-				open_on_setup				= false,
-				ignore_ft_on_setup	= {},
-				auto_close					= false,
-				open_on_tab					= false,
-				hijack_cursor				= false,
-				update_cwd					= false,
-				update_to_buf_dir		= {
-					enable = true,
-					auto_open = true,
-				},
-				diagnostics = {
-					enable = false,
-					icons = {
-						hint = "",
-						info = "",
-						warning = "",
-						error = "",
-					}
-				},
-				update_focused_file = {
-					enable			= false,
-					update_cwd	= false,
-					ignore_list = {}
-				},
-				system_open = {
-					cmd  = nil,
-					args = {}
-				},
-				filters = {
-					dotfiles = false,
-					custom = {}
-				},
-				view = {
-					width = 30,
-					height = 30,
-					hide_root_folder = false,
-					side = 'left',
-					auto_resize = false,
-					mappings = {
-						custom_only = false,
-						list = {}
-					}
-				}
-			}
+			require'nvim-tree'.setup {}
 
 			vim.g.nvim_tree_show_icons = {
 					git = 1,
@@ -413,6 +360,7 @@ return require('packer').startup(function(use)
 	--- Switch to alternative files quickly
 	use {
 		'nacitar/a.vim',
+		cmd={"A"}
 		--event = 'BufReadPre',
 	}
 
@@ -420,27 +368,7 @@ return require('packer').startup(function(use)
 	--- [b and ]b to switch to previous and next buffer
 	use 'tpope/vim-unimpaired'
 
-	--- Jump to location in buffer faster
-	-- use 'Lokaltog/vim-easymotion'
-	-- use {
-	-- 	'phaazon/hop.nvim',
-	-- 	branch = 'v1', -- optional but strongly recommended
-	-- 	config = function()
-	-- 		require'hop'.setup { }
-    --
-	-- 		nnoremap('t', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>")
-	-- 		nnoremap('T', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>")
-	-- 		nnoremap('f', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>")
-	-- 		nnoremap('F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>")
-	-- 		nnoremap('<leader><leader>t', "<cmd>HopChar1<cr>")
-	-- 		nnoremap('<leader><leader>f', "<cmd>HopChar1<cr>")
-	-- 		nnoremap('<leader><leader>w', "<cmd>HopWord<cr>")
-	-- 		nnoremap('<leader><leader>/', "<cmd>HopPattern<cr>")
-    --
-	-- 	end
-	-- }
-	use 'ggandor/lightspeed.nvim'
-
+	use 'ggandor/leap.nvim'
 	use 'terryma/vim-multiple-cursors'
 	use 'tpope/vim-surround'
 
@@ -632,7 +560,13 @@ return require('packer').startup(function(use)
 	-------------------------------------------------------------------------------
 	use 'flazz/vim-colorschemes'
 	use 'chriskempson/base16-vim'
-	use 'morhetz/gruvbox'
+	-- use 'morhetz/gruvbox'
+	use {
+		'ellisonleao/gruvbox.nvim',
+		config = function()
+			require("gruvbox").setup {}
+		end
+	}
 	use 'sainnhe/gruvbox-material'
 
 	-------------------------------------------------------------------------------
@@ -640,13 +574,16 @@ return require('packer').startup(function(use)
 	-------------------------------------------------------------------------------
 
 	--- Python syntax support
-	use {
-		'hdima/python-syntax',
-		ft = "python",
-	}
+	-- use {
+	-- 	'hdima/python-syntax',
+	-- 	ft = "python",
+	-- }
 
 	--- Syntax highlighting for blade templating language
-	use 'xsbeats/vim-blade'
+	use {
+	  'xsbeats/vim-blade',
+	  ft = "blade"
+  	}
 
 	--- Syntax highlighting for nimrod files
 	use {
@@ -655,12 +592,61 @@ return require('packer').startup(function(use)
 	}
 
 	--- Syntax highlighting for less files
-	use 'groenewege/vim-less'
+	use {
+	  'groenewege/vim-less',
+	  ft = "less"
+  	}
 
 	--- Syntax highlighting for markdown files
 	use {
 		'tpope/vim-markdown',
-		ft = "python",
+		ft = "markdown",
+	}
+
+	use {'hkupty/iron.nvim',
+	  	module = {"iron", "iron.core"},
+		config = function()
+			require("iron.core").setup {
+  	  	  	  config = {
+    			-- Whether a repl should be discarded or not
+    			scratch_repl = true,
+    			-- Your repl definitions come here
+    			repl_definition = {
+      	  	  	  sh = {
+        			command = {"zsh"}
+      	  	  	  }
+    			},
+    			-- How the repl window will be displayed
+    			-- See below for more information
+    			repl_open_cmd = require('iron.view').right("40%"),
+    			repl_definition = {
+    				-- Use ptpython for the repl
+      	  	  	  	python = require("iron.fts.python").ptpython
+    			},
+  	  	  	  },
+  	  	  	  -- Iron doesn't set keymaps by default anymore.
+  	  	  	  -- You can set them here or manually add keymaps to the functions in iron.core
+  	  	  	  keymaps = {
+    			-- send_motion = ",sc",
+    			-- visual_send = ",ev",
+    			-- send_file = ",ef",
+    			-- send_line = ",el",
+    			-- send_mark = ",em",
+    			-- mark_motion = ",mc",
+    			-- mark_visual = ",mc",
+    			-- remove_mark = ",md",
+    			-- cr = ",s<cr>",
+    			-- interrupt = ",s<space>",
+    			-- exit = ",sq",
+    			-- clear = ",cl",
+  	  	  	  },
+  	  	  	  -- If the highlight is on, you can change how it looks
+  	  	  	  -- For the available options, check nvim_set_hl
+  	  	  	  highlight = {
+    			italic = true
+  	  	  	  }
+			}
+		end
 	}
 
 	--- Python Linter
@@ -671,7 +657,7 @@ return require('packer').startup(function(use)
 	-- }
 
 	--- Syntax highlighting for swift
-	use 'keith/swift.vim'
+	-- use 'keith/swift.vim'
 
 
 	use {

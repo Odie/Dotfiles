@@ -42,7 +42,10 @@ wk.register({
     },
     f = {"<cmd>lua require'odie.telescope'.find_files()<cr>", "Find by name"},
     g = {"<cmd>lua require('telescope.builtin').live_grep({find_command = require'odie.telescope'.find_command})<cr>", "Grep in file"},
-    t = {'<cmd>NvimTreeToggle<cr>', 'File tree'},
+    -- t = {'<cmd>NvimTreeToggle<cr>', 'File tree'},
+    t = {'<cmd>NvimTreeFindFile<cr>', 'File tree'},
+    -- t = {'<cmd>NvimTreeFindFileToggle<cr>', 'File tree'},
+    n = {":echo expand('%:p')<cr>", "Show filename"}
   },
 
   g = {
@@ -71,6 +74,12 @@ wk.register({
   },
 
   q = {'<cmd>close<cr>', 'Close window'},
+
+  w = {
+    name = "window",
+    n = {"<C-w><C-w>", "next"}
+  }
+
 
 }, { prefix = "<leader>" })
 

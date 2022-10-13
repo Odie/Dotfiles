@@ -26,10 +26,8 @@ local function on_attach(client)
 	map('n','<leader>laa',	'<cmd>lua vim.lsp.buf.code_action()<CR>')
 	map('n','<leader>lah',	'<cmd>lua vim.lsp.buf.hover()<CR>')
 	map('n','<leader>lar',	'<cmd>lua vim.lsp.buf.rename()<CR>')
-	map('n','gl',	'<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>')
+	map('n','gl',	'<cmd>lua vim.diagnostic.open_float({scope="line"})<CR>')
 	map('n','<leader>=',	'<cmd>lua vim.lsp.buf.formatting()<CR>')
-	-- map('n','<leader>ai','<cmd>lua vim.lsp.buf.incoming_calls()<CR>')
-	-- map('n','<leader>ao','<cmd>lua vim.lsp.buf.outgoing_calls()<CR>')
 	map("n", "[d",	'<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')
 	map("n", "]d",	'<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
 
@@ -68,19 +66,60 @@ lsp_installer.on_server_ready(function(server)
 		capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 		flags = lsp_flags
 	}
+
+	if (server.name == "sumneko_lua") then
+		opts = {
+			on_attach = on_attach,
+			capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+			flags = lsp_flags,
+
+    	cmd = {vim.fn.stdpath("data").."/lsp_servers/sumneko_lua/extension/server/bin/lua-language-server"},
+
+    	settings = {
+      	Lua = {
+        	runtime = {
+          	-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+          	version = 'LuaJIT',
+          	-- -- Setup your lua path
+          	-- path = vim.split(package.path, ';'),
+        	},
+        	diagnostics = {
+          	-- Get the language server to recognize the `vim` global
+          	globals = {
+            	-- vim
+            	"vim",
+
+            	-- Busted
+            	"describe",
+            	"it",
+            	"before_each",
+            	"after_each",
+            	"teardown",
+            	"pending",
+            	"clear",
+
+            	-- Colorbuddy
+            	"Color",
+            	"c",
+            	"Group",
+            	"g",
+            	"s",
+
+            	-- Custom
+            	"RELOAD",
+          	},
+        	},
+        	workspace = {
+          	-- Make the server aware of Neovim runtime files
+          	library = vim.api.nvim_get_runtime_file("", true),
+
+        	},
+      	},
+    	},
+		}
+	end
 	server:setup(opts)
 end)
-
-
--- require("lsp/nvim-lua").setup(on_attach)
--- require'lspconfig'.zls.setup{
--- 	on_attach = on_attach
--- }
--- require'lspconfig'.pyright.setup{
--- 	on_attach = on_attach,
--- 	flags = lsp_flags
--- }
-
 
 
 -- diagnostics

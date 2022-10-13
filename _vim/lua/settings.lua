@@ -26,25 +26,30 @@ opt.termguicolors = true
 
 opt.ttimeoutlen = 100
 opt.timeoutlen  = 300
+-- cmd("set clipboard+=unnamedplus")
+opt.clipboard = "unnamedplus"
+
+-- interval for writing swap file to disk, also used by gitsigns
+opt.undofile = true
+opt.updatetime = 250
 
 -----------------------------------------------------------
 -- Color scheme
 -----------------------------------------------------------
 g.background = "dark"
 --g.colors_name = "gruvbox-material"
-cmd([[colorscheme gruvbox-material]])
+vim.cmd([[colorscheme gruvbox-material]])
+-- vim.cmd([[colorscheme gruvbox]])
 
 -----------------------------------------------------------
 -- Basic settings
 -----------------------------------------------------------
-opt.relativenumber = true     -- Show relative line numbers
+opt.relativenumber = false    -- Show relative line numbers
 opt.number         = true     -- Show line numbers
+opt.numberwidth = 2
+opt.ruler = false
 
--- Don't bother setting the cursorline if we're running neovide
--- The animated cursor makes is very clear where it is on the screen.
-if not runningNeovide then
-	g.cursorline = true         -- highlight current line
-end
+opt.cursorline     = true     -- highlight current line
 
 -- syntax on               " Always turn on syntax highlighting
 g.title     = true                 -- Sets terminal title
@@ -62,6 +67,8 @@ opt.incsearch  = true          -- Always do incremental search
 opt.hlsearch   = true          -- Highlight search results
 opt.ignorecase = true          -- Search is case-insensitive
 opt.smartcase  = true          -- Unless we type in a caps letter somewhere
+
+opt.mouse = "a"
 
 -- Remove Search Highlighting on esc key
 u.nnoremap('<esc>', ':nohlsearch<return><esc>')
@@ -122,7 +129,7 @@ cmd([[
 	augroup END
 ]])
 
-g.laststatus = 2		  		-- Always show statusline
+g.laststatus = 3		  		-- Always show statusline
 g.noshowmode = true			  -- Hide the default mode text (e.g. -- INSERT -- below the statusline)
 g.encoding   = "utf-8"		-- make sure we can display fancy characters correctly
 
@@ -298,12 +305,28 @@ cmd([[
 -- File type settings
 -- You will have bad experience for diagnostic messages when it's default 4000.
 -----------------------------------------------------------
-cmd([[
-	set updatetime=300
+-- cmd([[
+-- 	" don't give |ins-completion-menu| messages.
+-- 	set shortmess+=c
+-- ]])
 
-	" don't give |ins-completion-menu| messages.
-	set shortmess+=c
+-- disable nvim intro
+opt.shortmess:append "sI"
 
-	" always show signcolumns
-	set signcolumn=yes
-]])
+-- always show signcolumns
+opt.signcolumn = "yes"
+
+
+-----------------------------------------------------------
+-- "chmod u+x" on shebang files
+-----------------------------------------------------------
+vim.api.nvim_create_autocmd("BufWritePost", {
+	group = vim.api.nvim_create_augroup("AutoSetExeBit", {clear = true}),
+	callback = function()
+		local line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
+		if (string.find(line, "^#!")) then
+			vim.fn.jobstart({"chmod", "u+x", vim.fn.expand('%:p')})
+		end
+	end
+})
+
