@@ -756,5 +756,5 @@ local function toggleApp(appName)
 end
 
 hs.hotkey.bind({"cmd"}, "`", function()
-	toggleApp('Alacritty')
+	toggleApp('WezTerm')
 end)
