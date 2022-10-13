@@ -50,17 +50,45 @@ function phpunit()
 	`git-root`/vendor/bin/phpunit -c `git-root`/phpunit.xml
 }
 
+VENV_DEFAULT=".venv"
 function mkvenv() {
-  VENV_NAME="${$1:=.venv}"
-  "python3 -m venv ${VENV_NAME}"
+  local VENV_NAME="${1:-$VENV_DEFAULT}"
+  echo "Creating venv in $VENV_NAME"
+  PY3=`which python3`
+  $PY3 -m venv ${VENV_NAME}
 }
 
+
+VENV_CURRENT=""
 function python_venv() {
-  MYVENV=./venv
-  # when you cd into a folder that contains $MYVENV
-  [[ -d $MYVENV ]] && source $MYVENV/bin/activate > /dev/null 2>&1
-  # when you cd into a folder that doesn't
-  [[ ! -d $MYVENV ]] && deactivate > /dev/null 2>&1
+  # Grab the path to the current git project
+  local PROJ=`git-root 2> /dev/null` || ""
+
+  # If we are no longer in a project and venv seems active, deactivate now
+  if [[ -z $PROJ ]] then
+  	if [[ -d $VENV_CURRENT ]] then
+  	  deactivate > /dev/null 2>&1
+  	  VENV_CURRENT=""
+  	fi
+  	return
+  fi
+
+  # We in a git project, let's see if we can find a venv directory
+  local ENVDIR=$PROJ/$VENV_DEFAULT
+
+  # If a venv directory is present...
+  if [[ -d $ENVDIR ]] then
+  	if [[ $ENVDIR != $VENV_CURRENT ]] then
+  	  # Deactivate the venv we're currently in
+  	  [[ -d $VENV_CURRENT ]] && deactivate > /dev/null 2>&1
+
+  	  # Activate the new venv
+   	  source $ENVDIR/bin/activate > /dev/null 2>&1
+  	fi
+
+   	# Record the currently active venv
+   	VENV_CURRENT=$ENVDIR
+  fi
 }
 
 autoload -U add-zsh-hook
@@ -98,7 +126,7 @@ if [ -f "~/.secrets.rc" ]; then
 fi
 
 # Added by ~/.emacs.d/install.sh
-export PATH=$HOME/.cask/bin:$PATH:$HOME/.vim/plugged/vim-iced/bin
+export PATH=$HOME/bin:$HOME/.cask/bin:$PATH:$HOME/.vim/plugged/vim-iced/bin
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export JAVA_HOME=$(/usr/libexec/java_home)
@@ -115,3 +143,9 @@ export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-19.2.1/Content
 #export PATH="$HOME/.jenv/bin:$PATH"
 #eval "$(jenv init -)"
 export PATH="/usr/local/opt/llvm/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/Odie/.tools/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/Odie/.tools/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/Odie/.tools/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/Odie/.tools/google-cloud-sdk/completion.zsh.inc'; fi
