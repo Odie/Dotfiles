@@ -5,6 +5,9 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+# Report elapsed time of commands that ran over 5 seconds
+export TIMER_THRESHOLD=5
+
 # ------------------------ env initialization ----------------------------
 export LC_CTYPE=C
 export LC_ALL=en_US.UTF-8
