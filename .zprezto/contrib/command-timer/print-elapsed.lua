@@ -74,6 +74,43 @@ local function interpColor(startColor, endColor, percent)
   }
 end
 
+local function readable_duration(duration)
+  local sec = duration
+  local min = 0
+  local hr = 0
+  local day = 0
+
+  if(sec >= 120) then
+    min = math.floor(sec/60)
+    sec = sec % 60
+  end
+
+  if(min >= 120) then
+    hr = math.floor(min/60)
+    min = min % 60
+  end
+
+  if(hr >= 48) then
+    day = math.floor(hr/24)
+    hr = hr % 24
+  end
+
+  local output = {}
+  if(day > 0) then
+    table.insert(output, string.format("%d days", day))
+  end
+  if(hr > 0) then
+    table.insert(output, string.format("%d hours", hr))
+  end
+  if(min > 0) then
+    table.insert(output, string.format("%d mins", min))
+  end
+  if(sec > 0) then
+    table.insert(output, string.format("%.03f secs", sec))
+  end
+  return table.concat(output, " ")
+end
+
 local reset_fgbg = "\27[39;49m"
 local reset_fg = "\27[49m"
 local reset_color = "\27[0m"
@@ -96,4 +133,4 @@ local colorHSL = interpColor(startHSL, endHSL, percent)
 local r,g,b = hslToRgb(unpack(colorHSL))
 
 -- Print out the colorized elapsed time
-print(string.format("Elapsed: %s%.03f%s s", fg(r, g, b), elapsed, reset_color))
+print(string.format("Elapsed: %s%s%s", fg(r, g, b), readable_duration(elapsed), reset_color))
