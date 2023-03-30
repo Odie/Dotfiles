@@ -132,8 +132,8 @@ setopt AUTO_CD
 # Automatically pushd when we cd
 setopt AUTO_PUSHD
 
-if [ -f "~/.secrets.rc" ]; then
-  source "~/.secrets.rc"
+if [ -f "$HOME/.secrets.rc" ]; then
+  source "$HOME/.secrets.rc"
 fi
 
 # Added by ~/.emacs.d/install.sh
