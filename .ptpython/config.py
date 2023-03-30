@@ -7,13 +7,13 @@ from __future__ import unicode_literals
 from prompt_toolkit.filters import ViInsertMode
 from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
+from prompt_toolkit.styles import Style
 from pygments.token import Token
 
 from ptpython.layout import CompletionVisualisation
 
-__all__ = (
-    'configure',
-)
+
+__all__ = ["configure"]
 
 
 def configure(repl):
@@ -26,7 +26,7 @@ def configure(repl):
     repl.show_signature = True
 
     # Show docstring (bool).
-    repl.show_docstring = True
+    repl.show_docstring = False
 
     # Show the "[Meta+Enter] Execute" message when pressing [Enter] only
     # inserts a newline instead of executing the code.
@@ -48,7 +48,10 @@ def configure(repl):
     # When the sidebar is visible, also show the help text.
     repl.show_sidebar_help = True
 
-    # Highlight matching parethesis.
+    # Swap light/dark colors on or off
+    repl.swap_light_and_dark = False
+
+    # Highlight matching parentheses.
     repl.highlight_matching_parenthesis = True
 
     # Line wrapping. (Instead of horizontal scrolling.)
@@ -61,6 +64,10 @@ def configure(repl):
     # completion menu is shown.)
     repl.complete_while_typing = True
 
+    # Fuzzy and dictionary completion.
+    repl.enable_fuzzy_completion = False
+    repl.enable_dictionary_completion = False
+
     # Vi mode.
     repl.vi_mode = False
 
@@ -68,7 +75,7 @@ def configure(repl):
     repl.paste_mode = False
 
     # Use the classic prompt. (Display '>>>' instead of 'In [1]'.)
-    repl.prompt_style = 'classic'  # 'classic' or 'ipython'
+    repl.prompt_style = "classic"  # 'classic' or 'ipython'
 
     # Don't insert a blank line after the output.
     repl.insert_blank_line_after_output = False
@@ -85,7 +92,7 @@ def configure(repl):
     # based on the history.)
     repl.enable_auto_suggest = False
 
-    # Enable open-in-editor. Pressing C-X C-E in emacs mode or 'v' in
+    # Enable open-in-editor. Pressing C-x C-e in emacs mode or 'v' in
     # Vi navigation mode will open the input in the current editor.
     repl.enable_open_in_editor = True
 
@@ -101,50 +108,78 @@ def configure(repl):
     repl.enable_input_validation = True
 
     # Use this colorscheme for the code.
-    repl.use_code_colorscheme('monokai')
+    # Ptpython uses Pygments for code styling, so you can choose from Pygments'
+    # color schemes. See:
+    # https://pygments.org/docs/styles/
+    # https://pygments.org/demo/
+    repl.use_code_colorscheme('gruvbox-dark')
+	# repl.use_code_colorscheme("default")
+    # A colorscheme that looks good on dark backgrounds is 'native':
+    # repl.use_code_colorscheme("native")
 
-    # Enable 24bit True color. (Not all terminals support this. -- maybe check
-    # $TERM before changing.)
-    repl.true_color = True
+    # Set color depth (keep in mind that not all terminals support true color).
+
+    # repl.color_depth = "DEPTH_1_BIT"  # Monochrome.
+    # repl.color_depth = "DEPTH_4_BIT"  # ANSI colors only.
+    # repl.color_depth = "DEPTH_8_BIT"  # The default, 256 colors.
+    repl.color_depth = "DEPTH_24_BIT"  # True color.
+
+    # Min/max brightness
+    repl.min_brightness = 0.0  # Increase for dark terminal backgrounds.
+    repl.max_brightness = 1.0  # Decrease for light terminal backgrounds.
+
+    # Syntax.
+    repl.enable_syntax_highlighting = True
+
+    # Get into Vi navigation mode at startup
+    repl.vi_start_in_navigation_mode = False
+
+    # Preserve last used Vi input mode between main loop iterations
+    repl.vi_keep_last_used_mode = False
 
     # Install custom colorscheme named 'my-colorscheme' and use it.
     """
-    repl.install_ui_colorscheme('my-colorscheme', _custom_ui_colorscheme)
-    repl.use_ui_colorscheme('my-colorscheme')
+    repl.install_ui_colorscheme("my-colorscheme", Style.from_dict(_custom_ui_colorscheme))
+    repl.use_ui_colorscheme("my-colorscheme")
     """
+    repl.install_ui_colorscheme("my-colorscheme", Style.from_dict(_custom_ui_colorscheme))
+    repl.use_ui_colorscheme("my-colorscheme")
 
     # Add custom key binding for PDB.
-    @repl.add_key_binding(Keys.ControlB)
+    """
+    @repl.add_key_binding("c-b")
     def _(event):
-        ' Pressing Control-B will insert "pdb.set_trace()" '
-        event.cli.current_buffer.insert_text('\nimport pdb; pdb.set_trace()\n')
+        " Pressing Control-B will insert "pdb.set_trace()" "
+        event.cli.current_buffer.insert_text("\nimport pdb; pdb.set_trace()\n")
+    """
 
     # Typing ControlE twice should also execute the current command.
     # (Alternative for Meta-Enter.)
-    @repl.add_key_binding(Keys.ControlE, Keys.ControlE)
+    """
+    @repl.add_key_binding("c-e", "c-e")
     def _(event):
-        b = event.current_buffer
-        if b.accept_action.is_returnable:
-            b.accept_action.validate_and_handle(event.cli, b)
-
+        event.current_buffer.validate_and_handle()
+    """
 
     # Typing 'jj' in Vi Insert mode, should send escape. (Go back to navigation
     # mode.)
-    @repl.add_key_binding('j', 'j', filter=ViInsertMode())
+    """
+    @repl.add_key_binding("j", "j", filter=ViInsertMode())
     def _(event):
         " Map 'jj' to Escape. "
-        event.cli.input_processor.feed(KeyPress(Keys.Escape))
-
+        event.cli.key_processor.feed(KeyPress(Keys("escape")))
     """
+
     # Custom key binding for some simple autocorrection while typing.
+    """
     corrections = {
-        'impotr': 'import',
-        'pritn': 'print',
+        "impotr": "import",
+        "pritn": "print",
     }
 
-    @repl.add_key_binding(' ')
+    @repl.add_key_binding(" ")
     def _(event):
-        ' When a space is pressed. Check & correct word before cursor. '
+        " When a space is pressed. Check & correct word before cursor. "
         b = event.cli.current_buffer
         w = b.document.get_word_before_cursor()
 
@@ -153,16 +188,31 @@ def configure(repl):
                 b.delete_before_cursor(count=len(w))
                 b.insert_text(corrections[w])
 
-        b.insert_text(' ')
+        b.insert_text(" ")
     """
 
+    # Add a custom title to the status bar. This is useful when ptpython is
+    # embedded in other applications.
+    """
+    repl.title = "My custom prompt."
+    """
 
 # Custom colorscheme for the UI. See `ptpython/layout.py` and
 # `ptpython/style.py` for all possible tokens.
-_custom_ui_colorscheme = {
-    # Blue prompt.
-    Token.Layout.Prompt:                          'bg:#eeeeff #000000 bold',
+# _custom_ui_colorscheme = {
+#    # Blue prompt.
+#    "prompt": "bg:#eeeeff #000000 bold",
+#    # Make the status toolbar red.
+#    "status-toolbar": "bg:#ff0000 #000000",
+# }
 
-    # Make the status toolbar red.
-    Token.Toolbar.Status:                         'bg:#ff0000 #000000',
+_custom_ui_colorscheme = {
+    # Set the background color of the completion popup to black.
+    'completion-menu.completion': 'bg:#303030 #d5c4a1',
+
+    # Set the selected item in the completion popup to white text on a blue background.
+    'completion-menu.completion.current': 'bg:#80aa9e #ffffff',
+
+    # Set the scrollbar handle in the completion popup to gray.
+    'scrollbar.button': 'bg:#888888',
 }
