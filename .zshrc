@@ -68,25 +68,33 @@ function python_venv() {
   local PROJ=`git-root 2> /dev/null` || ""
 
   # If we are no longer in a project and venv seems active, deactivate now
-  if [[ -z $PROJ ]] then
+  if [[ -z $PROJ ]]; then
   	if [[ -d $VENV_CURRENT ]] then
   	  deactivate > /dev/null 2>&1
   	  VENV_CURRENT=""
   	fi
+    if [[ -n $CONDA_PREV_ENV ]] then
+      conda activate $CONDA_PREV_ENV
+      CONDA_PREV_ENV=""
+    fi
   	return
   fi
 
-  # We in a git project, let's see if we can find a venv directory
+  # We are in a git project, let's see if we can find a venv directory
   local ENVDIR=$PROJ/$VENV_DEFAULT
 
   # If a venv directory is present...
-  if [[ -d $ENVDIR ]] then
-  	if [[ $ENVDIR != $VENV_CURRENT ]] then
+  if [[ -d $ENVDIR ]]; then
+    CONDA_PREV_ENV=$CONDA_DEFAULT_ENV
+    if [[ -n CONDA_DEFAULT_ENV ]]; then
+      conda deactivate
+    fi
+  	if [[ $ENVDIR != $VENV_CURRENT ]]; then
   	  # Deactivate the venv we're currently in
   	  [[ -d $VENV_CURRENT ]] && deactivate > /dev/null 2>&1
 
   	  # Activate the new venv
-   	  source $ENVDIR/bin/activate > /dev/null 2>&1
+      source $ENVDIR/bin/activate > /dev/null 2>&1
   	fi
 
    	# Record the currently active venv
