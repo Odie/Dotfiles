@@ -1,5 +1,8 @@
 #! /bin/sh
 
+# `du` in human-readable with human readable sizes.
+# The file sizes are also correctly sorted numerically.
+
 du -k | sort -n | awk '
     function human(x) {
         s="kMGTEPYZ";
