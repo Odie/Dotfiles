@@ -17,4 +17,5 @@ return {
   font_size = 14,
   color_scheme = "Gruvbox dark, medium (base16)",
   keys = mykeys,
+  window_decorations = "RESIZE",
 }
