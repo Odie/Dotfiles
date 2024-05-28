@@ -1,4 +1,6 @@
-source ~/.profile
+if [[ -f ~/.profile ]]; then
+  source ~/.profile
+fi
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
@@ -59,6 +61,15 @@ function mkvenv() {
   echo "Creating venv in $VENV_NAME"
   PY3=`which python3`
   $PY3 -m venv ${VENV_NAME}
+
+  if [[ ! -d ".git" ]]; then
+    echo "Initializing a new Git repository..."
+    git init
+  else
+    echo "Git repository already exists."
+  fi
+
+  python_venv
 }
 
 
@@ -69,11 +80,11 @@ function python_venv() {
 
   # If we are no longer in a project and venv seems active, deactivate now
   if [[ -z $PROJ ]]; then
-  	if [[ -d $VENV_CURRENT ]] then
+  	if [[ -d $VENV_CURRENT ]]; then
   	  deactivate > /dev/null 2>&1
   	  VENV_CURRENT=""
   	fi
-    if [[ -n $CONDA_PREV_ENV ]] then
+    if [[ -n $CONDA_PREV_ENV ]]; then
       conda activate $CONDA_PREV_ENV
       CONDA_PREV_ENV=""
     fi
@@ -105,11 +116,13 @@ function python_venv() {
 autoload -U add-zsh-hook
 add-zsh-hook chpwd python_venv
 
+alias pyenv=python_venv
+
 # ------------------------ Faster navigation ----------------------------
 # Currently, things are implemented using fasd + fzf
 # -----------------------------------------------------------------------
 
-alias v='eval $FZF_DEFAULT_COMMAND | fzf | xargs nvim'
+alias v='eval $FZF_DEFAULT_COMMAND | fzf | xargs -I {} nvim "{}"'
 
 function fzf_jump_cd() {
   if [[ -z "$*" ]]; then
@@ -132,12 +145,13 @@ setopt AUTO_CD
 # Automatically pushd when we cd
 setopt AUTO_PUSHD
 
+# Import secrets
 if [ -f "$HOME/.secrets.rc" ]; then
   source "$HOME/.secrets.rc"
 fi
 
 # Added by ~/.emacs.d/install.sh
-export PATH=$HOME/bin:$HOME/.cask/bin:$PATH:$HOME/.vim/plugged/vim-iced/bin
+export PATH=$HOME/bin:$HOME/.local/bin:$HOME/.cask/bin:/opt/homebrew/bin:$PATH
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export JAVA_HOME=$(/usr/libexec/java_home)
@@ -150,13 +164,46 @@ export BOOT_JVM_OPTIONS="-XX:-OmitStackTraceInFastThrow -Xverify:none"
 export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-19.2.1/Contents/Home"
 
 # export PATH=$GRAALVM_HOME/bin:"$PATH"
-#export PATH=/usr/local/anaconda3/bin:"$PATH"
-#export PATH="$HOME/.jenv/bin:$PATH"
-#eval "$(jenv init -)"
+# export PATH=/usr/local/anaconda3/bin:"$PATH"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
 export PATH="/usr/local/opt/llvm/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/Odie/.tools/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/Odie/.tools/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/odie/.tools/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/odie/.tools/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/Odie/.tools/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/Odie/.tools/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/odie/.tools/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/odie/.tools/google-cloud-sdk/completion.zsh.inc'; fi
+
+source /Users/odie/.docker/init-zsh.sh || true # Added by Docker Desktop
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+pyenv
+
+# pnpm
+export PNPM_HOME="/Users/odie/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+export PATH="$HOME/.tools/zig-0.11:$PATH"
+
+# Mojo vars
+export MODULAR_HOME="/Users/odie/.modular"
+export PATH="/Users/odie/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
