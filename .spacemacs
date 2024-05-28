@@ -56,7 +56,9 @@ This function should only modify configuration layer settings."
               ;; clojure-enable-fancify-symbols t
               nrepl-buffer-name-show-port t
               clojure-enable-clj-refactor t
-              clojure-enable-linters 'clj-kondo)
+              clojure-enable-linters 'clj-kondo
+              clojure-backend 'lsp
+              )
      java
      octave
      html
@@ -109,7 +111,8 @@ This function should only modify configuration layer settings."
      ;;  						 "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
      ;;  						 (:exclude ".dir-locals.el" "test.el" "tests.el"))
      ;;             ))
-     (jenv :location (recipe :fetcher github :repo "shellbj/jenv.el"))
+
+     exec-path-from-shell
      )
 
    ;; A list of packages that cannot be updated.
@@ -225,6 +228,14 @@ It should only modify the values of Spacemacs settings."
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner 'official
+
+   ;; Scale factor controls the scaling (size) of the startup banner. Default
+   ;; value is `auto' for scaling the logo automatically to fit all buffer
+   ;; contents, to a maximum of the full image height and a minimum of 3 line
+   ;; heights. If set to a number (int or float) it is used as a constant
+   ;; scaling factor for the default logo size.
+   dotspacemacs-startup-banner-scale 'auto
+
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -395,7 +406,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
@@ -415,6 +426,11 @@ It should only modify the values of Spacemacs settings."
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-active-transparency 90
+
+   ;; A value from the range (0..100), in increasing opacity, which describes the
+   ;; transparency level of a frame background when it's active or selected. Transparency
+   ;; can be toggled through `toggle-background-transparency'. (default 90)
+   dotspacemacs-background-transparency 90
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's inactive or deselected.
@@ -530,7 +546,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
-   ;; Show trailing whitespace (default t)
+   ;; Color highlight trailing whitespace in all prog-mode and text-mode derived
+   ;; modes such as c++-mode, python-mode, emacs-lisp, html-mode, rst-mode etc.
+   ;; (default t)
    dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
@@ -675,25 +693,32 @@ See the header of this file for more information."
           ((equal frame-pos 'top-center)
            (set-frame-position (selected-frame) (center-frame-x) 0)))))
 
+(defun set-exec-path-from-shell-PATH ()
+  "Set up Emacs' `exec-path' and PATH environment variable to match
+that used by the user's shell.
+
+This is particularly useful under Mac OS X and macOS, where GUI
+apps are not started from a shell."
+  (interactive)
+  (let ((path-from-shell (replace-regexp-in-string
+                          "[ \t\n]*$" "" (shell-command-to-string
+                                          "$SHELL --login -c 'echo $PATH'"
+                                          ))))
+    (setenv "PATH" path-from-shell)
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+
 (defun user/spacemacs-init ()
   ;; (setq package-check-signature nil)
+  (set-exec-path-from-shell-PATH)
+
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
   (setq dotspacemacs-default-font
-        (cond
-         ((eq (user/display-type) 'MBP)
-          '(;;"Anonymous Pro"
-            "FiraCode Nerd Font"
-            :size 13
-            :weight normal
-            :width normal
-            :powerline-scale 1.4))
-         (:else
-          '(;;"Anonymous Pro"
-            "FiraCode Nerd Font"
-            :size 13
-            :weight normal
-            :width normal
-            :powerline-scale 1.4))))
+        '("FiraCode Nerd Font"
+          :size 13
+          :weight normal
+          :width normal
+          :powerline-scale 1.4))
   (if (fboundp 'mac-auto-operator-composition-mode)
       (mac-auto-operator-composition-mode))
   )
@@ -708,6 +733,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  ;;(fmakunbound 'use-package)
   )
 
 (defun user/after-evil-goto-mark (char &optional noerror)
@@ -777,20 +803,20 @@ before packages are loaded."
 
   ;; If we're using a graphical display, update the frame of the emacs application
   ;; so it's a reasonable size for the display as well as centered.
-  (when (display-graphic-p)
-    ;; Grab a config suitable for the current display
-    (let ((display-config (or (user/match-display-config user/display-configs)
-                              '((config-name . default)
-                                (frame-size . (100 . 10))
-                                (frame-position . (0 . 0))))))
+  ;; (when (display-graphic-p)
+  ;;   ;; Grab a config suitable for the current display
+  ;;   (let ((display-config (or (user/match-display-config user/display-configs)
+  ;;                             '((config-name . default)
+  ;;                               (frame-size . (100 . 10))
+  ;;                               (frame-position . (0 . 0))))))
 
-      ;; Apply the said config
-      (user/config-frame-for-display display-config)
+  ;;     ;; Apply the said config
+  ;;     (user/config-frame-for-display display-config)
 
-      ;; Perform any other custom behavior not handled by config-frame-for-display
-      (when (eq (alist-get 'config-name display-config) 'MBP)
-        ;; Go fullscreen on a MBP. There is otherwise too little room to work.
-        (spacemacs/toggle-fullscreen-frame))))
+  ;;     ;; Perform any other custom behavior not handled by config-frame-for-display
+  ;;     (when (eq (alist-get 'config-name display-config) 'MBP)
+  ;;       ;; Go fullscreen on a MBP. There is otherwise too little room to work.
+  ;;       (spacemacs/toggle-fullscreen-frame))))
 
   ;;;---------------------------------------------------------------------------
   ;;; Global editor behaviors
@@ -820,7 +846,12 @@ before packages are loaded."
     (global-set-key (kbd "C-k") 'evil-window-up)
     (global-set-key (kbd "C-l") 'evil-window-right)
 
-    (advice-add 'evil-goto-mark-line :after 'user/after-evil-goto-mark))
+    (advice-add 'evil-goto-mark-line :after 'user/after-evil-goto-mark)
+
+
+    (define-key evil-normal-state-map (kbd "gr") 'lsp-find-references)
+
+    )
 
   ;; Don't ask about symbolic links that links to version controlled files
   ;; More specifically, the .spacemacs file is under source control. Without this
@@ -1002,6 +1033,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(cider-jack-in-default 'clojure-cli)
  '(cider-pprint-fn 'fipp)
  '(cider-print-fn 'fipp)
  '(evil-want-Y-yank-to-eol nil)
