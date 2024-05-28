@@ -1,14 +1,83 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 if [[ -f ~/.profile ]]; then
   source ~/.profile
 fi
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
 fi
 
-# Report elapsed time of commands that ran over 5 seconds
-export TIMER_THRESHOLD=5
+# Start zinit
+export ZINIT_HOME="${XDA_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
+# source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+source "${ZINIT_HOME}/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+### End of Zinit's installer chunk
+
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light Aloxaf/fzf-tab
+zinit light joshskidmore/zsh-fzf-history-search
+
+# Load completions
+autoload -U compinit && compinit
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+# History
+HISTSIZE=5000
+HISTFILE=~/.zsh_history
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+# History search
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
+bindkey "^p" history-search-backward
+bindkey "^n" history-search-forward
+
+# Completion styling
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+
 
 # ------------------------ env initialization ----------------------------
 export LC_CTYPE=C
@@ -23,7 +92,8 @@ export EDITOR="${VISUAL} -f"
 export FZF_DEFAULT_COMMAND="rg --smart-case --files --hidden --follow --glob '!.git'"
 
 # ------------------------ fasd initialization ----------------------------
-eval "$(fasd --init auto)"
+# eval "$(fasd --init auto)"
+eval "$(zoxide init --cmd cd zsh)"
 
 # ------------------------ commandline utils  ----------------------------
 alias ls="eza" # list
@@ -44,10 +114,21 @@ alias dh="dirs -v"
 alias art="artisan"
 alias phpspec="vendor/bin/phpspec"
 alias codecept="vendor/bin/codecept"
+alias git-root="git rev-parse --show-toplevel"
 
 function grt()
 {
-	cd `git-root`
+  local root_dir
+
+  # Capture the output of the git-root alias
+  root_dir=$(git-root 2>/dev/null)
+
+  # Check if the git-root command was successful
+  if [ -n "$root_dir" ]; then
+      cd "$root_dir"
+  else
+      echo "Error: Current directory is not inside a Git repository."
+  fi
 }
 
 function phpunit()
@@ -69,12 +150,12 @@ function mkvenv() {
     echo "Git repository already exists."
   fi
 
-  python_venv
+  autoactivate_python_venv
 }
 
 
 VENV_CURRENT=""
-function python_venv() {
+function autoactivate_python_venv() {
   # Grab the path to the current git project
   local PROJ=`git-root 2> /dev/null` || ""
 
@@ -88,6 +169,7 @@ function python_venv() {
       conda activate $CONDA_PREV_ENV
       CONDA_PREV_ENV=""
     fi
+
   	return
   fi
 
@@ -114,9 +196,9 @@ function python_venv() {
 }
 
 autoload -U add-zsh-hook
-add-zsh-hook chpwd python_venv
+add-zsh-hook chpwd autoactivate_python_venv
 
-alias pyenv=python_venv
+alias activate_venv=autoactivate_python_venv
 
 # ------------------------ Faster navigation ----------------------------
 # Currently, things are implemented using fasd + fzf
@@ -126,9 +208,9 @@ alias v='eval $FZF_DEFAULT_COMMAND | fzf | xargs -I {} nvim "{}"'
 
 function fzf_jump_cd() {
   if [[ -z "$*" ]]; then
-    cd "$(fasd_cd -Rdl | fzf --no-sort | sed 's/^[0-9,.]* *//')"
+    cd "$(zoxide query -l | fzf --no-sort | sed 's/^[0-9,.]* *//')"
   else
-    fasd_cd -d "$@"
+    cd "$(zoxide query $@)"
   fi
 }
 
@@ -153,6 +235,7 @@ fi
 # Added by ~/.emacs.d/install.sh
 export PATH=$HOME/bin:$HOME/.local/bin:$HOME/.cask/bin:/opt/homebrew/bin:$PATH
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(fzf --zsh)"
 
 export JAVA_HOME=$(/usr/libexec/java_home)
 export M2_HOME=`brew --prefix maven`/libexec
@@ -192,7 +275,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-pyenv
+activate_venv
 
 # pnpm
 export PNPM_HOME="/Users/odie/Library/pnpm"
@@ -207,3 +290,4 @@ export PATH="$HOME/.tools/zig-0.11:$PATH"
 # Mojo vars
 export MODULAR_HOME="/Users/odie/.modular"
 export PATH="/Users/odie/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
+
