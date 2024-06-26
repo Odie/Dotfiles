@@ -36,15 +36,22 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
+## Setting global ice for all subsequent plugins (resets at end of zshrc)
 zinit ice depth=1; zinit light romkatv/powerlevel10k
-zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
-zinit light Aloxaf/fzf-tab
-zinit light joshskidmore/zsh-fzf-history-search
+zinit ice depth=1; zinit light zdharma-continuum/fast-syntax-highlighting    # Faster zsh syntax highlighting
+zinit ice depth=1; zinit light zsh-users/zsh-completions                     # Adds completion definitions
+zinit ice depth=1; zinit light zsh-users/zsh-autosuggestions                 # Suggest commands based on command history
+zinit ice depth=1; zinit light Aloxaf/fzf-tab                                # Integrates the fzf fuzzy finder with Zsh's tab completion
+zinit ice depth=1; zinit light joshskidmore/zsh-fzf-history-search           # Provides a way to search through command history using fzf
+zinit ice depth=1; zinit light jeffreytse/zsh-vi-mode                        # Add vim mode for line editing
+
+zinit snippet OMZP::sudo
+zinit snippet OMZP::command-not-found
 
 # Load completions
 autoload -U compinit && compinit
+
+zinit cdreplay -q
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
@@ -62,6 +69,8 @@ setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
+setopt complete_in_word
+
 
 # History search
 autoload -U up-line-or-beginning-search
@@ -74,10 +83,16 @@ bindkey "^p" history-search-backward
 bindkey "^n" history-search-forward
 
 # Completion styling
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' completer _extensions _complete _approximate
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
+
+# zstyle ':completion:*' menu select=1
+# zstyle ':completion:*' use-compctl true
+zstyle ':completion:*' verbose true
 
 # ------------------------ env initialization ----------------------------
 export LC_CTYPE=C
@@ -95,130 +110,10 @@ export FZF_DEFAULT_COMMAND="rg --smart-case --files --hidden --follow --glob '!.
 # eval "$(fasd --init auto)"
 eval "$(zoxide init --cmd cd zsh)"
 
-# ------------------------ commandline utils  ----------------------------
-alias ls="eza" # list
-alias la="eza -a" # list all, includes dot files
-alias ll="eza -lh" # long list, excludes dot files
-alias lla="eza -lha" # long list all, includes dot files
+# Automatically activate a python venv at '.venv' if available
+source $ZDOTDIR/auto_venv.zsh
+source $ZDOTDIR/aliases.zsh
 
-alias vim="nvim"
-alias vi="nvim"
-alias em='emacs'
-alias 'json'='python -mjson.tool'
-
-alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
-alias dnsflush="sudo killall -HUP mDNSResponder" # Flush DNS cache
-
-alias dh="dirs -v"
-
-alias art="artisan"
-alias phpspec="vendor/bin/phpspec"
-alias codecept="vendor/bin/codecept"
-alias git-root="git rev-parse --show-toplevel"
-
-function grt()
-{
-  local root_dir
-
-  # Capture the output of the git-root alias
-  root_dir=$(git-root 2>/dev/null)
-
-  # Check if the git-root command was successful
-  if [ -n "$root_dir" ]; then
-      cd "$root_dir"
-  else
-      echo "Error: Current directory is not inside a Git repository."
-  fi
-}
-
-function phpunit()
-{
-	`git-root`/vendor/bin/phpunit -c `git-root`/phpunit.xml
-}
-
-VENV_DEFAULT=".venv"
-function mkvenv() {
-  local VENV_NAME="${1:-$VENV_DEFAULT}"
-  echo "Creating venv in $VENV_NAME"
-  PY3=`which python3`
-  $PY3 -m venv ${VENV_NAME}
-
-  if [[ ! -d ".git" ]]; then
-    echo "Initializing a new Git repository..."
-    git init
-  else
-    echo "Git repository already exists."
-  fi
-
-  autoactivate_python_venv
-}
-
-
-VENV_CURRENT=""
-function autoactivate_python_venv() {
-  # Grab the path to the current git project
-  local PROJ=`git-root 2> /dev/null` || ""
-
-  # If we are no longer in a project and venv seems active, deactivate now
-  if [[ -z $PROJ ]]; then
-  	if [[ -d $VENV_CURRENT ]]; then
-  	  deactivate > /dev/null 2>&1
-  	  VENV_CURRENT=""
-  	fi
-    if [[ -n $CONDA_PREV_ENV ]]; then
-      conda activate $CONDA_PREV_ENV
-      CONDA_PREV_ENV=""
-    fi
-
-  	return
-  fi
-
-  # We are in a git project, let's see if we can find a venv directory
-  local ENVDIR=$PROJ/$VENV_DEFAULT
-
-  # If a venv directory is present...
-  if [[ -d $ENVDIR ]]; then
-    CONDA_PREV_ENV=$CONDA_DEFAULT_ENV
-    if [[ -n CONDA_DEFAULT_ENV ]]; then
-      conda deactivate
-    fi
-  	if [[ $ENVDIR != $VENV_CURRENT ]]; then
-  	  # Deactivate the venv we're currently in
-  	  [[ -d $VENV_CURRENT ]] && deactivate > /dev/null 2>&1
-
-  	  # Activate the new venv
-      source $ENVDIR/bin/activate > /dev/null 2>&1
-  	fi
-
-   	# Record the currently active venv
-   	VENV_CURRENT=$ENVDIR
-  fi
-}
-
-autoload -U add-zsh-hook
-add-zsh-hook chpwd autoactivate_python_venv
-
-alias activate_venv=autoactivate_python_venv
-
-# ------------------------ Faster navigation ----------------------------
-# Currently, things are implemented using fasd + fzf
-# -----------------------------------------------------------------------
-
-alias v='eval $FZF_DEFAULT_COMMAND | fzf | xargs -I {} nvim "{}"'
-
-function fzf_jump_cd() {
-  if [[ -z "$*" ]]; then
-    cd "$(zoxide query -l | fzf --no-sort | sed 's/^[0-9,.]* *//')"
-  else
-    cd "$(zoxide query $@)"
-  fi
-}
-
-alias z=fzf_jump_cd
-alias j=fzf_jump_cd
-
-alias gcob='git branch | fzf | xargs git checkout'
-alias rg='rg --smart-case --follow --hidden --glob "!.git"'
 # ------------------------ zsh options  ----------------------------
 
 # Accept 'dir' instead of 'cd dir'
@@ -232,8 +127,9 @@ if [ -f "$HOME/.secrets.rc" ]; then
   source "$HOME/.secrets.rc"
 fi
 
-# Added by ~/.emacs.d/install.sh
-export PATH=$HOME/bin:$HOME/.local/bin:$HOME/.cask/bin:/opt/homebrew/bin:$PATH
+eval $(/opt/homebrew/bin/brew shellenv)
+export PATH=$HOME/bin:$HOME/.local/bin:$PATH
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval "$(fzf --zsh)"
 
