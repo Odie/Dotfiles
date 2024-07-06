@@ -130,8 +130,7 @@ fi
 eval $(/opt/homebrew/bin/brew shellenv)
 export PATH=$HOME/bin:$HOME/.local/bin:$PATH
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-eval "$(fzf --zsh)"
+zvm_after_init_commands+=('[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh')
 
 export JAVA_HOME=$(/usr/libexec/java_home)
 export M2_HOME=`brew --prefix maven`/libexec
