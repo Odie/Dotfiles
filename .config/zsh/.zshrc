@@ -45,6 +45,7 @@ zinit ice depth=1; zinit light Aloxaf/fzf-tab                                # I
 zinit ice depth=1; zinit light joshskidmore/zsh-fzf-history-search           # Provides a way to search through command history using fzf
 zinit ice depth=1; zinit light jeffreytse/zsh-vi-mode                        # Add vim mode for line editing
 
+zinit snippet OMZP::macos
 zinit snippet OMZP::sudo
 zinit snippet OMZP::command-not-found
 
@@ -85,7 +86,6 @@ bindkey "^n" history-search-forward
 # Completion styling
 zstyle ':completion:*' completer _extensions _complete _approximate
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
