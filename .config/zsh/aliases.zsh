@@ -94,20 +94,25 @@ __zoxide_fzf_cd () {
 
     # Declare a local variable 'result'
     \builtin local result
+    \builtin local result_cnt
     
     # Get the current directory
     current_dir="$(__zoxide_pwd)"
     
     # List all current child directories
     # Use fzf to select the best match using the supplied parameter as the filter criteria
-    result=$(find . -mindepth 1 -maxdepth 1 -type d | fzf --filter="$*" | head -n 1)
-    
-    echo "$result"
-    # If a result is found, change directory to the result
-    if [[ -n "$result" ]]; then
-        __zoxide_cd "$result"
-    else
-        echo "No matching directory found."
+    result=$(find . -mindepth 1 -maxdepth 1 -type d | sed 's|^\./||' | fzf --filter="$*")
+    result_cnt=$(echo "$result" | wc -l) 
+
+    if [ -z "$result" ]; then
+      echo "No matching directory found."
+    elif [ "$result_cnt" -eq 1 ]; then
+      __zoxide_cd "$result"
+    elif [ "$result_cnt" -gt 1 ]; then
+      result=$(echo "$result" | fzf --height 10 --layout reverse)
+      if [ -n "$result" ]; then
+        cd "$result"
+      fi
     fi
   fi
 }
