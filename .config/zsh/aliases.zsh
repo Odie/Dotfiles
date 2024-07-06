@@ -76,3 +76,42 @@ function yy() {
 	fi
 	rm -f -- "$tmp"
 }
+
+__zoxide_fzf_cd () {
+  if [[ "$#" -eq 0 ]]
+  then
+    # Change directory to the home directory
+    __zoxide_cd ~
+  elif [[ "$#" -eq 1 ]] && {
+      # Check if the argument is a directory, the dash character, or a numeric argument with optional + or - prefix
+      [[ -d "$1" ]] || [[ "$1" = '-' ]] || [[ "$1" =~ ^[-+][0-9]$ ]]
+  }
+  then
+    # Change directory to the argument
+    __zoxide_cd "$1"
+  else
+    # Try to use fzf to figure out the best match child dreitory using fzf
+
+    # Declare a local variable 'result'
+    \builtin local result
+    
+    # Get the current directory
+    current_dir="$(__zoxide_pwd)"
+    
+    # List all current child directories
+    # Use fzf to select the best match using the supplied parameter as the filter criteria
+    result=$(find . -mindepth 1 -maxdepth 1 -type d | fzf --filter="$*" | head -n 1)
+    
+    echo "$result"
+    # If a result is found, change directory to the result
+    if [[ -n "$result" ]]; then
+        __zoxide_cd "$result"
+    else
+        echo "No matching directory found."
+    fi
+  fi
+}
+
+cd () {
+        __zoxide_fzf_cd "$@"
+}
