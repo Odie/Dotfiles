@@ -185,4 +185,4 @@ export PATH="$HOME/.tools/zig-0.11:$PATH"
 # Mojo vars
 export MODULAR_HOME="/Users/odie/.modular"
 export PATH="/Users/odie/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
-
+export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin/:$PATH"
