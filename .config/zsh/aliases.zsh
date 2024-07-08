@@ -23,6 +23,14 @@ alias codecept="vendor/bin/codecept"
 alias git-root="git rev-parse --show-toplevel"
 
 
+# ------------------------ Locate .zshrc --------------------------------
+# Work with .zshrc more easily
+# -----------------------------------------------------------------------
+export ZSHRC="$HOME/.config/zsh/.zshrc"
+alias zreload="source $ZSHRC"
+alias zedit="nvim $ZSHRC"
+
+
 # ------------------------ Faster navigation ----------------------------
 # Currently, things are implemented using fasd + fzf
 # -----------------------------------------------------------------------
