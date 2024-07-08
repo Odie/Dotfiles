@@ -99,9 +99,9 @@ export LC_CTYPE=C
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# export PATH=~/.cargo/bin:/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~/bin:~/.composer/vendor/bin:~/.rbenv/shims:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/libexec:$PATH
 export VISUAL="nvim"
 export EDITOR="${VISUAL} -f"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 # FZF should respect gitignore settings
 export FZF_DEFAULT_COMMAND="rg --smart-case --files --hidden --follow --glob '!.git'"
