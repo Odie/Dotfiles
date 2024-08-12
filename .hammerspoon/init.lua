@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 -- Reload configuration
 -------------------------------------------------------------------------------
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "R", function()
 	hs.reload()
 	hs.alert.show("Config loaded")
 end)
@@ -10,13 +10,13 @@ end)
 -- Deactivate Wifi (Discipline!)
 -------------------------------------------------------------------------------
 local function trim(s)
-	return s:match'^%s*(.*%S)' or ''
+	return s:match("^%s*(.*%S)") or ""
 end
 
 local function getWifiInterface()
 	local command = "/usr/sbin/networksetup -listallhardwareports | /usr/bin/awk '$3==\"Wi-Fi\" {getline; print $2}'"
-	command = io.popen(command, 'r')
-	local interfaceName = command:read('*all')
+	command = io.popen(command, "r")
+	local interfaceName = command:read("*all")
 	return trim(interfaceName)
 end
 
@@ -25,11 +25,10 @@ local function enableNetworkInterface(name, status)
 	os.execute(command)
 end
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
 	local interface = getWifiInterface()
 	enableNetworkInterface(interface, false)
 end)
-
 
 -------------------------------------------------------------------------------
 -- Maximize & Restore windows
@@ -48,25 +47,23 @@ local function maximizeOrRestoreWindow(window)
 	end
 end
 
-
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "M", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
 	local focusedWindow = hs.window.focusedWindow()
 	maximizeOrRestoreWindow(focusedWindow)
 end)
 
-
 -------------------------------------------------------------------------------
 -- Grid layout
 -------------------------------------------------------------------------------
-size_stops = {0.5, 0.33, 0.25}
+size_stops = { 0.5, 0.33, 0.25 }
 
 function shallowcopy(orig)
 	local orig_type = type(orig)
 	local copy
-	if orig_type == 'table' then
+	if orig_type == "table" then
 		copy = {}
 		for orig_key, orig_value in pairs(orig) do
-		copy[orig_key] = orig_value
+			copy[orig_key] = orig_value
 		end
 	else
 		copy = orig
@@ -75,14 +72,14 @@ function shallowcopy(orig)
 end
 
 function round(num, numDecimalPlaces)
-	local mult = 10^(numDecimalPlaces or 0)
+	local mult = 10 ^ (numDecimalPlaces or 0)
 	return math.floor(num * mult + 0.5) / mult
 end
 
 local function contains(tab, val)
 	for index, value in ipairs(tab) do
 		if value == val then
-		return true
+			return true
 		end
 	end
 
@@ -92,7 +89,7 @@ end
 local function indexof(tab, val)
 	for index, value in ipairs(tab) do
 		if value == val then
-		return index
+			return index
 		end
 	end
 
@@ -102,10 +99,10 @@ end
 -- Given a list of items to cycle through and the current value, return the next item in the list
 function cycleItems(items, val)
 	local idx = indexof(items, val)
-	if(idx == -1 or idx + 1 > #items) then
-	return items[1]
+	if idx == -1 or idx + 1 > #items then
+		return items[1]
 	else
-	return items[idx + 1]
+		return items[idx + 1]
 	end
 end
 
@@ -149,7 +146,6 @@ end
 --	window:setFrame(newFrame)
 -- end
 
-
 local function widthScreenFraction(window, fraction)
 	local fullFrame = window:screen():frame()
 	local windowFrame = window:frame()
@@ -167,29 +163,33 @@ end
 function gridInfoFromWindow(window)
 	local widthFraction = widthScreenFraction(window)
 	local heightFraction = heightScreenFraction(window)
-	local rowCount = math.floor(1.0/heightFraction)
-	local columnCount = math.floor(1.0/widthFraction)
+	local rowCount = math.floor(1.0 / heightFraction)
+	local columnCount = math.floor(1.0 / widthFraction)
 	local fullFrame = window:screen():frame()
 	local windowFrame = window:frame()
 	local cellHeight = round(fullFrame.h / rowCount, 0)
 	local cellWidth = round(fullFrame.w / columnCount, 0)
 
-	return {row = round(windowFrame.y / cellHeight, 0),
-	column = round(windowFrame.x / cellWidth, 0),
-	rowExact = windowFrame.y / cellHeight,
-	columnExact = windowFrame.x / cellWidth,
-	rowCount = rowCount,
-	columnCount = columnCount,
-	cellWidth = cellWidth,
-	cellHeight = cellHeight}
+	return {
+		row = round(windowFrame.y / cellHeight, 0),
+		column = round(windowFrame.x / cellWidth, 0),
+		rowExact = windowFrame.y / cellHeight,
+		columnExact = windowFrame.x / cellWidth,
+		rowCount = rowCount,
+		columnCount = columnCount,
+		cellWidth = cellWidth,
+		cellHeight = cellHeight,
+	}
 end
 
 function frameFromGridInfo(gridInfo)
 	local fullFrame = hs.window.focusedWindow():screen():frame()
-	return {x = gridInfo.cellWidth * gridInfo.column,
-	y = gridInfo.cellHeight * gridInfo.row,
-	w = gridInfo.cellWidth,
-	h = gridInfo.cellHeight}
+	return {
+		x = gridInfo.cellWidth * gridInfo.column,
+		y = gridInfo.cellHeight * gridInfo.row,
+		w = gridInfo.cellWidth,
+		h = gridInfo.cellHeight,
+	}
 end
 
 function frameAlignLeft(ref, target)
@@ -233,7 +233,7 @@ local function frameLeftMatches(ref, target)
 end
 
 local function frameCenterX(ref, target)
-	target.x = (ref.w - target.w)/2
+	target.x = (ref.w - target.w) / 2
 end
 
 -------------------------------------------------------------------------------
@@ -295,29 +295,27 @@ end
 -------------------------------------------------------------------------------
 -- Key bindings
 -------------------------------------------------------------------------------
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "HOME", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "HOME", function()
 	fwindowMoveToCenter()
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "END", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "END", function()
 	fwindowFullHeight()
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "help", function()
-end)
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "help", function() end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "PageUp", function()
-end)
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "PageUp", function() end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "forwarddelete", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "forwarddelete", function()
 	fwindowLeftHalf()
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "PageDown", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "PageDown", function()
 	fwindowRightHalf()
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "left", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
 	-- Move the focused window to the next cell to the left
 
 	local window = hs.window.focusedWindow()
@@ -334,22 +332,17 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "left", function()
 	if gridInfo.column ~= 0 then
 		gridInfo.column = math.max(gridInfo.column - 1, 0)
 		window:setFrame(frameFromGridInfo(gridInfo))
-
 	else
 		-- We're already at the left edge of the screen
 		-- Cycle the window size instead
 		local newFrame = window:frame()
-		frameSetWidthToReference(
-		window:screen():frame(),
-		newFrame,
-		cycleItems(size_stops, widthScreenFraction(window)));
+		frameSetWidthToReference(window:screen():frame(), newFrame, cycleItems(size_stops, widthScreenFraction(window)))
 
 		window:setFrame(newFrame)
 	end
-
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "right", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
 	local window = hs.window.focusedWindow()
 	local gridInfo = gridInfoFromWindow(window)
 
@@ -360,23 +353,19 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "right", function()
 	if gridInfo.column ~= gridInfo.columnCount - 1 then
 		gridInfo.column = math.min(gridInfo.column + 1, gridInfo.columnCount - 1)
 		window:setFrame(frameFromGridInfo(gridInfo))
-
 	else
 		local newFrame = window:frame()
 		local fullFrame = window:screen():frame()
-		frameSetWidthToReference(
-	fullFrame,
-	newFrame,
-	cycleItems(size_stops, widthScreenFraction(window)));
+		frameSetWidthToReference(fullFrame, newFrame, cycleItems(size_stops, widthScreenFraction(window)))
 
 		-- Since we're squishing the window towards a screen edge,
 		-- it makes sense to continue aligning to that edge
-		frameAlignRight(fullFrame, newFrame);
+		frameAlignRight(fullFrame, newFrame)
 		window:setFrame(newFrame)
 	end
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "up", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
 	local window = hs.window.focusedWindow()
 	local gridInfo = gridInfoFromWindow(window)
 
@@ -388,20 +377,16 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "up", function()
 	if gridInfo.row ~= 0 then
 		gridInfo.row = math.max(gridInfo.row - 1, 0)
 		window:setFrame(frameFromGridInfo(gridInfo))
-
 	else
 		local newFrame = window:frame()
 		local fullFrame = window:screen():frame()
-		frameSetHeightToReference(
-	fullFrame,
-	newFrame,
-	cycleItems(size_stops, heightScreenFraction(window)));
+		frameSetHeightToReference(fullFrame, newFrame, cycleItems(size_stops, heightScreenFraction(window)))
 
 		window:setFrame(newFrame)
 	end
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "down", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
 	local window = hs.window.focusedWindow()
 	local gridInfo = gridInfoFromWindow(window)
 
@@ -412,23 +397,17 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "down", function()
 	if gridInfo.row ~= gridInfo.rowCount - 1 then
 		gridInfo.row = math.min(gridInfo.row + 1, gridInfo.rowCount - 1)
 		window:setFrame(frameFromGridInfo(gridInfo))
-
 	else
 		local newFrame = window:frame()
 		local fullFrame = window:screen():frame()
-		frameSetHeightToReference(
-	fullFrame,
-	newFrame,
-	cycleItems(size_stops, heightScreenFraction(window)));
+		frameSetHeightToReference(fullFrame, newFrame, cycleItems(size_stops, heightScreenFraction(window)))
 
 		-- Since we're squishing the window towards a screen edge,
 		-- it makes sense to continue aligning to that edge
-		frameAlignBottom(fullFrame, newFrame);
+		frameAlignBottom(fullFrame, newFrame)
 		window:setFrame(newFrame)
 	end
 end)
-
-
 
 --------------------------------------------------------------------------------
 -- Custom key handling
@@ -447,7 +426,7 @@ if keyboardTap ~= nil then
 	keyboardTap:stop()
 end
 
-local keyboardTap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
+local keyboardTap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
 	if keyDispatch(event) then
 		return true
 	else
@@ -460,16 +439,18 @@ end)
 
 keyboardTap:start()
 
-local function clone (t) -- deep-copy a table
-	if type(t) ~= "table" then return t end
+local function clone(t) -- deep-copy a table
+	if type(t) ~= "table" then
+		return t
+	end
 	local meta = getmetatable(t)
 	local target = {}
 	for k, v in pairs(t) do
-	if type(v) == "table" then
-		target[k] = clone(v)
-	else
-		target[k] = v
-	end
+		if type(v) == "table" then
+			target[k] = clone(v)
+		else
+			target[k] = v
+		end
 	end
 	setmetatable(target, meta)
 	return target
@@ -482,7 +463,7 @@ local function flashRect(rect)
 	hs.timer.doAfter(1, function()
 		obj:hide(0.5)
 		hs.timer.doAfter(0.5, function()
-		obj:delete()
+			obj:delete()
 		end)
 	end)
 end
@@ -514,32 +495,32 @@ local function rectSetBottom(rect, value)
 end
 
 local function rectCenterX(rect, value)
-	return rect.x + rect.w/2
+	return rect.x + rect.w / 2
 end
 
 local function rectCenterY(rect, value)
-	return rect.y + rect.h/2
+	return rect.y + rect.h / 2
 end
 
 local function rectSetCenterX(rect, value)
-	rect.x = value - rect.w/2
+	rect.x = value - rect.w / 2
 	return rect
 end
 
 local function rectSetCenterY(rect, value)
-	rect.y = value - rect.h/2
+	rect.y = value - rect.h / 2
 	return rect
 end
 
 local function rectAlignY(rect, value, alignment)
 	if alignment == "center" then
-	return rectSetCenterY(rect, value)
+		return rectSetCenterY(rect, value)
 	elseif alignment == "top" then
-	return rectSetTop(rect, value)
+		return rectSetTop(rect, value)
 	elseif alignment == "bottom" then
-	return rectSetBottom(rect, value)
+		return rectSetBottom(rect, value)
 	else
-	return rect
+		return rect
 	end
 end
 
@@ -551,66 +532,48 @@ local function generateSnapHotspots()
 	local ann_size = 10
 	rects = {}
 
-	local rectPrototype = {x=screenFrame.x, y=screenFrame.y, w=corner_size, h=corner_size}
+	local rectPrototype = { x = screenFrame.x, y = screenFrame.y, w = corner_size, h = corner_size }
 
 	-- Corners
 	-- These are supposed to snap the window to quarter screen size
 	rects.top_left = clone(rectPrototype)
 
-	rects.top_right =
-		rectSetRight(
-	clone(rectPrototype),
-	rectRight(screenFrame))
+	rects.top_right = rectSetRight(clone(rectPrototype), rectRight(screenFrame))
 
-	rects.bottom_left =
-		rectSetBottom(
-	clone(rectPrototype),
-	rectBottom(screenFrame))
+	rects.bottom_left = rectSetBottom(clone(rectPrototype), rectBottom(screenFrame))
 
 	rects.bottom_right = clone(rectPrototype)
 	rectSetBottom(rects.bottom_right, rectBottom(screenFrame))
 	rectSetRight(rects.bottom_right, rectRight(screenFrame))
 
-
 	-- Edges
 	-- These are supposed to snap the window to half screen sizes
-	local sideEdgePrototype = {x=screenFrame.x, y=screenFrame.y, w=ann_size, h=screenFrame.h * 0.60}
-	rects.left_edge =
-		rectSetCenterY(
-	clone(sideEdgePrototype),
-	rectCenterY(screenFrame))
+	local sideEdgePrototype = { x = screenFrame.x, y = screenFrame.y, w = ann_size, h = screenFrame.h * 0.60 }
+	rects.left_edge = rectSetCenterY(clone(sideEdgePrototype), rectCenterY(screenFrame))
 
-	rects.right_edge =
-		rectSetRight(
-	clone(rects.left_edge),
-	rectRight(screenFrame))
+	rects.right_edge = rectSetRight(clone(rects.left_edge), rectRight(screenFrame))
 
-	rects.top_edge =
-		rectSetCenterX(
-	{x=screenFrame.x, y = screenFrame.y, w=screenFrame.w*0.75, h = ann_size},
-	rectCenterX(screenFrame))
+	rects.top_edge = rectSetCenterX(
+		{ x = screenFrame.x, y = screenFrame.y, w = screenFrame.w * 0.75, h = ann_size },
+		rectCenterX(screenFrame)
+	)
 
-	local sideSmallEdgePrototype = {x=screenFrame.x, y=screenFrame.y, w=ann_size, h=(rects.left_edge.y-screenFrame.y) * 0.75}
+	local sideSmallEdgePrototype =
+		{ x = screenFrame.x, y = screenFrame.y, w = ann_size, h = (rects.left_edge.y - screenFrame.y) * 0.75 }
 
-	rects.left_upper_edge =
-		rectSetCenterY(
-	clone(sideSmallEdgePrototype),
-	rectBottom(rects.top_left) + (rects.left_edge.y - rectBottom(rects.top_left))/2)
+	rects.left_upper_edge = rectSetCenterY(
+		clone(sideSmallEdgePrototype),
+		rectBottom(rects.top_left) + (rects.left_edge.y - rectBottom(rects.top_left)) / 2
+	)
 
-	rects.left_lower_edge =
-		rectSetCenterY(
-	clone(sideSmallEdgePrototype),
-	rectBottom(rects.left_edge) + (rects.bottom_left.y - rectBottom(rects.left_edge))/2)
+	rects.left_lower_edge = rectSetCenterY(
+		clone(sideSmallEdgePrototype),
+		rectBottom(rects.left_edge) + (rects.bottom_left.y - rectBottom(rects.left_edge)) / 2
+	)
 
-	rects.right_upper_edge =
-		rectSetRight(
-	clone(rects.left_upper_edge),
-	rectRight(screenFrame))
+	rects.right_upper_edge = rectSetRight(clone(rects.left_upper_edge), rectRight(screenFrame))
 
-	rects.right_lower_edge =
-		rectSetRight(
-	clone(rects.left_lower_edge),
-	rectRight(screenFrame))
+	rects.right_lower_edge = rectSetRight(clone(rects.left_lower_edge), rectRight(screenFrame))
 
 	return rects
 end
@@ -621,7 +584,7 @@ local memoize = require("memoize")
 -- 1. Don't have to regenerate the rects over and over again
 -- 2. Can compare rects using the == operator
 local getSnapHotspots = memoize(generateSnapHotspots)
-	hs.hotkey.bind({"cmd", "alt"}, "left", function()
+hs.hotkey.bind({ "cmd", "alt" }, "left", function()
 	local rects = getSnapHotspots()
 
 	for idx, rect in pairs(rects) do
@@ -649,7 +612,6 @@ end)
 --					return screen == w:screen() and pos:inside(w:frame())
 --	 end)
 -- end
-
 
 -- local function printWindows(windows)
 --	 print("vvvvv")
@@ -703,7 +665,6 @@ end)
 --		 print("has window:", win_id)
 --		 print("last win:", drag_last_win_id)
 
-
 --		 -- -- If the window is being dragged, then
 --		 -- -- 1. The mouse needs to be over the window
 --		 -- -- 2. The window is being moved
@@ -723,10 +684,9 @@ end)
 
 -- mouseTap:start()
 
-
 local printf = hs.printf
 local inspect = hs.inspect
-local printObj = function (obj)
+local printObj = function(obj)
 	printf(inspect(obj))
 end
 
@@ -755,6 +715,10 @@ local function toggleApp(appName)
 	end
 end
 
-hs.hotkey.bind({"cmd"}, "`", function()
-	toggleApp('WezTerm')
+hs.hotkey.bind({ "cmd" }, "`", function()
+	toggleApp("WezTerm")
+end)
+
+hs.hotkey.bind({ "alt" }, "space", function()
+	toggleApp("ChatGPT")
 end)
