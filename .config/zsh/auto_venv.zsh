@@ -1,5 +1,5 @@
-# This scrirpt will attempt to automatically activate an venv at '.env'
-# if it is avaiable upon cd'ing into it. When cd'ing out of it, it will
+# This script will attempt to automatically activate an venv at '.env'
+# if it is available upon cd'ing into it. When cd'ing out of it, it will
 # attempt to deactivate the environment again.
 
 VENV_DEFAULT=".venv"
@@ -23,7 +23,7 @@ function mkvenv() {
 VENV_CURRENT=""
 function autoactivate_python_venv() {
   # Grab the path to the current git project
-  local PROJ=`git-root 2> /dev/null` || ""
+  local PROJ=$(git rev-parse --show-toplevel 2> /dev/null) || ""
 
   # If we are no longer in a project and venv seems active, deactivate now
   if [[ -z $PROJ ]]; then
@@ -31,12 +31,34 @@ function autoactivate_python_venv() {
   	  deactivate > /dev/null 2>&1
   	  VENV_CURRENT=""
   	fi
-    if [[ -n $CONDA_PREV_ENV ]]; then
+    if [[ -n "$CONDA_PREV_ENV" ]]; then
       conda activate $CONDA_PREV_ENV
       CONDA_PREV_ENV=""
     fi
 
   	return
+  fi
+
+  # Check if .conda-env file exists for a Conda environment
+  if [[ -f "$PROJ/.conda-env" ]]; then
+    local CONDA_ENV_NAME=$(cat "$PROJ/.conda-env")
+
+    # Save the current Conda environment
+    CONDA_PREV_ENV=$CONDA_DEFAULT_ENV
+    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+      conda deactivate
+    fi
+
+    # Attempt to activate the specified Conda environment
+    conda activate "$CONDA_ENV_NAME" > /dev/null 2>&1
+    if [[ $? -eq 0 ]]; then
+      echo "Activated Conda environment: $CONDA_ENV_NAME"
+      VENV_CURRENT=""
+      return
+    else
+      echo "Error: Could not activate Conda environment '$CONDA_ENV_NAME'."
+      return 1
+    fi
   fi
 
   # We are in a git project, let's see if we can find a venv directory
@@ -45,8 +67,9 @@ function autoactivate_python_venv() {
   # If a venv directory is present...
   if [[ -d $ENVDIR ]]; then
     CONDA_PREV_ENV=$CONDA_DEFAULT_ENV
-    if [[ -n CONDA_DEFAULT_ENV ]]; then
+    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
       conda deactivate
+      CONDA_PREV_ENV=""
     fi
   	if [[ $ENVDIR != $VENV_CURRENT ]]; then
   	  # Deactivate the venv we're currently in
