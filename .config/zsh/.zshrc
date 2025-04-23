@@ -44,6 +44,7 @@ zinit ice depth=1; zinit light zsh-users/zsh-autosuggestions                 # S
 zinit ice depth=1; zinit light Aloxaf/fzf-tab                                # Integrates the fzf fuzzy finder with Zsh's tab completion
 zinit ice depth=1; zinit light joshskidmore/zsh-fzf-history-search           # Provides a way to search through command history using fzf
 zinit ice depth=1; zinit light jeffreytse/zsh-vi-mode                        # Add vim mode for line editing
+zinit ice depth=1; zinit light zsh-users/zsh-history-substring-search
 
 zinit snippet OMZP::macos
 zinit snippet OMZP::sudo
@@ -74,25 +75,36 @@ setopt complete_in_word
 
 
 # History search
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey "^[[A" up-line-or-beginning-search
-bindkey "^[[B" down-line-or-beginning-search
-bindkey "^p" history-search-backward
-bindkey "^n" history-search-forward
+function zvm_after_init() {
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+  bindkey "^p" history-substring-search-up
+  bindkey "^n" history-substring-search-down
+}
 
 # Completion styling
-zstyle ':completion:*' completer _extensions _complete _approximate
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+# zstyle ':completion:*' completer _extensions _complete _approximate
+# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# zstyle ':completion:*' menu no
+# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+# NOTE: don't use escape sequences here, fzf-tab will ignore them
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' switch-group '<' '>'
 
 # zstyle ':completion:*' menu select=1
 # zstyle ':completion:*' use-compctl true
-zstyle ':completion:*' verbose true
+# zstyle ':completion:*' verbose true
 
 # ------------------------ env initialization ----------------------------
 export LC_CTYPE=C
@@ -180,9 +192,14 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-export PATH="$HOME/.tools/zig-0.11:$PATH"
+# export PATH="$HOME/.tools/zig-0.11:$PATH"
 
 # Mojo vars
 export MODULAR_HOME="/Users/odie/.modular"
 export PATH="/Users/odie/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin/:$PATH"
+export PATH="$PATH:/Users/odie/.cache/lm-studio/bin"
+
+if command -v ngrok &>/dev/null; then
+  eval "$(ngrok completion)"
+fi

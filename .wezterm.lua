@@ -11,6 +11,16 @@ local keybinds = {
 		mods = "CMD|SHIFT",
 		action = wezterm.action.DecreaseFontSize,
 	},
+	{
+		key = "[",
+		mods = "CTRL|ALT",
+		action = wezterm.action.MoveTabRelative(-1),
+	},
+	{
+		key = "]",
+		mods = "CTRL|ALT",
+		action = wezterm.action.MoveTabRelative(1),
+	},
 }
 
 for i = 1, 8 do
@@ -24,7 +34,7 @@ end
 
 return {
 	initial_rows = 100,
-	initial_cols = 1000,
+	initial_cols = 300,
 	-- window_decorations = "NONE",
 	font_size = 14,
 	color_scheme = "Gruvbox dark, medium (base16)",
