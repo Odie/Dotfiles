@@ -722,3 +722,49 @@ end)
 hs.hotkey.bind({ "alt" }, "space", function()
 	toggleApp("ChatGPT")
 end)
+
+local spellcheckHotkey = hs.hotkey.bind({ "ctrl", "alt" }, "S", function()
+	hs.eventtap.keyStroke({ "cmd" }, "c") -- copy selected word
+	hs.timer.doAfter(0.2, function()
+		local original = hs.pasteboard.getContents()
+		if not original or original == "" then
+			return
+		end
+
+		print("The word to correct is:", original)
+
+		-- Run spellcheck Python script
+		local cmd = string.format("/opt/homebrew/bin/uv run --script ~/.config/spellcheck/spellcheck.py %s", original)
+
+		local handle = io.popen(cmd)
+		local result = handle:read("*a")
+		handle:close()
+
+		local suggestions = {}
+		for word in string.gmatch(result, "([^;]+)") do
+			table.insert(suggestions, word)
+		end
+
+		if #suggestions == 0 then
+			hs.alert.show("No suggestions found")
+			return
+		end
+
+		-- Show chooser to pick correction
+		local chooser = hs.chooser.new(function(choice)
+			if not choice then
+				return
+			end
+			hs.pasteboard.setContents(choice.text)
+			hs.eventtap.keyStroke({ "cmd" }, "v")
+		end)
+
+		local choices = {}
+		for _, word in ipairs(suggestions) do
+			table.insert(choices, { text = trim(word) })
+		end
+
+		chooser:choices(choices)
+		chooser:show()
+	end)
+end)
