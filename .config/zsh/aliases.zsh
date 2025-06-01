@@ -6,6 +6,8 @@ alias ls="eza" # list
 alias la="eza -a" # list all, includes dot files
 alias ll="eza -lh" # long list, excludes dot files
 alias lla="eza -lha" # long list all, includes dot files
+alias ltg="eza -lha --tree --git-ignore"
+alias lt="eza -lha --tree"
 
 alias vim="nvim"
 alias vi="nvim"

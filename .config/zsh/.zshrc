@@ -116,7 +116,8 @@ export LANG=en_US.UTF-8
 
 export VISUAL="nvim"
 export EDITOR="${VISUAL} -f"
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANPAGER="nvim +Man!"
+# export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 # FZF should respect gitignore settings
 export FZF_DEFAULT_COMMAND="rg --smart-case --files --hidden --follow --glob '!.git'"
@@ -144,8 +145,6 @@ fi
 
 eval $(/opt/homebrew/bin/brew shellenv)
 export PATH=$HOME/bin:$HOME/.local/bin:$PATH
-
-zvm_after_init_commands+=('[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh')
 
 export JAVA_HOME=$(/usr/libexec/java_home)
 export M2_HOME=`brew --prefix maven`/libexec
