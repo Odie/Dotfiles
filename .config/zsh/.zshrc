@@ -205,3 +205,6 @@ export PATH="$PATH:/Users/odie/.cache/lm-studio/bin"
 if command -v ngrok &>/dev/null; then
   eval "$(ngrok completion)"
 fi
+
+alias llm="uvx llm"
+source ~/.config/zsh/atuin.zsh
