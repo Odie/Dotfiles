@@ -1,4 +1,4 @@
-#!env python3
+#!/usr/bin/env python3
 
 import sys
 import os
@@ -58,4 +58,3 @@ print(f"{config_dir} => {config_symlink}")
 print(f"{install_dir} => {install_symlink}")
 os.symlink(config_dir, config_symlink)
 os.symlink(install_dir, install_symlink)
-#os.symlink(Path("/Users/Odie/target"), Path("/Users/Odie/src"))
