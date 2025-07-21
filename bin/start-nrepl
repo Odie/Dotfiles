@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Find the project root by looking for the .git directory
+find_project_root() {
+  local dir=$(pwd)
+  while [[ "$dir" != "/" ]]; do
+    if [[ -d "$dir/.git" ]]; then
+      echo "$dir"
+      return 0
+    fi
+    dir=$(dirname "$dir")
+  done
+  echo "Error: Could not find project root with a .git directory." >&2
+  return 1
+}
+
+# Main function
+main() {
+  local project_root
+  project_root=$(find_project_root) || exit 1
+
+  # Navigate to the project root
+  cd "$project_root" || exit 1
+
+  # Call the Clojure command
+  echo "Starting REPL at project root: $project_root"
+  clj -M:repl/conjure
+}
+
+main

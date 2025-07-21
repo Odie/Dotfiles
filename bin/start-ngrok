@@ -1,0 +1,2 @@
+#! env bash
+ngrok http --url=maximum-possibly-tapir.ngrok-free.app 8000

@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+
+import os
+import pwd
+import argparse
+
+
+def get_current_user_uid():
+    """Get the UID of the current user."""
+    return os.getuid()
+
+
+def find_non_owned_files(directory):
+    """Recursively find all files in the directory that are not owned by the current user."""
+    current_uid = get_current_user_uid()
+    non_owned_files = []
+
+    for root, _, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            try:
+                file_stat = os.stat(file_path)
+                if file_stat.st_uid != current_uid:
+                    file_owner = pwd.getpwuid(file_stat.st_uid).pw_name
+                    non_owned_files.append((file_path, file_owner))
+            except FileNotFoundError:
+                # Handle cases where files are removed during traversal
+                continue
+
+    return non_owned_files
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Find files not owned by the current user."
+    )
+    parser.add_argument("directory", type=str, help="Directory to scan.")
+    args = parser.parse_args()
+
+    non_owned_files = find_non_owned_files(args.directory)
+
+    if non_owned_files:
+        print("Files not owned by the current user:")
+        for file_path, owner in non_owned_files:
+            print(f"{file_path} (Owner: {owner})")
+    else:
+        print("All files in the directory belong to the current user.")
+
+
+if __name__ == "__main__":
+    main()
