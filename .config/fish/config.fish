@@ -2,6 +2,9 @@
 eval (/opt/homebrew/bin/brew shellenv)
 starship init fish | source
 
+# Enable VI mode
+fish_vi_key_bindings
+
 ######################################################################
 # Basic vars                                                         #
 ######################################################################

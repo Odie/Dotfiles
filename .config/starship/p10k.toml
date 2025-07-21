@@ -19,7 +19,6 @@ $character"""
 symbol = "─"
 
 [character]
-vimcmd_symbol = "[NORMAL ❯](#73cef4)"
 success_symbol = "[❯](green)"
 format = "$symbol "
 
